@@ -1,0 +1,98 @@
+using PuntoVenta.Domain.Entities;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+
+namespace PuntoVenta.Application.Interfaces
+{
+    /// <summary>
+    /// Interfaz genérica de repositorio para operaciones CRUD básicas
+    /// </summary>
+    public interface IGenericRepository<T> where T : class
+    {
+        Task<T> GetByIdAsync(int id);
+        Task<IEnumerable<T>> GetAllAsync();
+        Task<int> AddAsync(T entity);
+        Task UpdateAsync(T entity);
+        Task DeleteAsync(int id);
+        Task<bool> ExistsAsync(int id);
+    }
+
+    /// <summary>
+    /// Interfaz específica para Productos con búsquedas personalizadas
+    /// </summary>
+    public interface IProductRepository : IGenericRepository<Product>
+    {
+        Task<Product> GetByCodigoBarraAsync(string codigoBarra);
+        Task<IEnumerable<Product>> GetProductosConStockAsync();
+        Task<IEnumerable<Product>> SearchAsync(string searchTerm);
+        Task UpdateStockAsync(int productId, int cantidad);
+    }
+
+    /// <summary>
+    /// Interfaz para gestionar Usuarios
+    /// </summary>
+    public interface IUsuarioRepository
+    {
+        Task<Usuario> GetByIdAsync(string id);
+        Task<IEnumerable<Usuario>> GetAllAsync();
+        Task<int> AddAsync(Usuario entity);
+        Task UpdateAsync(Usuario entity);
+        Task DeleteAsync(string id);
+        Task<bool> ExistsAsync(string id);
+        Task<Usuario> GetByCorreoAsync(string correo);
+        Task<Usuario> GetByCedulaAsync(string cedula);
+        Task<IEnumerable<Usuario>> GetByRolAsync(int rolId);
+        Task<bool> ExisteCorreoAsync(string correo);
+        Task<bool> ExisteCedulaAsync(string cedula);
+    }
+
+    /// <summary>
+    /// Interfaz para gestionar Roles
+    /// </summary>
+    public interface IRolRepository : IGenericRepository<Rol>
+    {
+        Task<Rol> GetByNombreAsync(string nombre);
+    }
+
+    /// <summary>
+    /// Interfaz para gestionar Clientes
+    /// </summary>
+    public interface IClienteRepository : IGenericRepository<Cliente>
+    {
+        Task<Cliente> GetByDocumentoAsync(string documento);
+        Task<IEnumerable<Cliente>> SearchAsync(string searchTerm);
+    }
+
+    /// <summary>
+    /// Interfaz para gestionar Ventas
+    /// </summary>
+    public interface IVentaRepository : IGenericRepository<Venta>
+    {
+        Task<Venta> GetVentaConDetallesAsync(int id);
+        Task<IEnumerable<Venta>> GetVentasPorFechaAsync(DateTime desde, DateTime hasta);
+        Task<IEnumerable<Venta>> GetVentasPorUsuarioAsync(string usuarioId);
+        Task<IEnumerable<Venta>> GetVentasPorClienteAsync(int clienteId);
+        Task<string> GenerarNumeroFacturaAsync();
+    }
+
+    /// <summary>
+    /// Interfaz para gestionar Errores
+    /// </summary>
+    public interface IErrorLogRepository : IGenericRepository<ErrorLog>
+    {
+        Task<IEnumerable<ErrorLog>> GetErroresNoRevisadosAsync();
+        Task<IEnumerable<ErrorLog>> GetErroresPorFechaAsync(DateTime desde, DateTime hasta);
+        Task<IEnumerable<ErrorLog>> GetErroresPorUsuarioAsync(string usuarioId);
+    }
+
+    /// <summary>
+    /// Interfaz para gestionar Intentos de Login
+    /// </summary>
+    public interface IIntentosLoginRepository : IGenericRepository<IntentosLogin>
+    {
+        Task<IntentosLogin> GetByCorreoAsync(string correo);
+        Task IncrementarIntentosAsync(string correo, string ip, string userAgent);
+        Task ReiniciarIntentosAsync(string correo);
+        Task BloquearUsuarioAsync(string correo);
+    }
+}

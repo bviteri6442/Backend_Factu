@@ -1,0 +1,16 @@
+C:\Users\Usuario\Desktop\Proyectos WEB\ProyectoWEB\PuntoVenta.Application\bin\Debug\net8.0\PuntoVenta.Application.deps.json
+C:\Users\Usuario\Desktop\Proyectos WEB\ProyectoWEB\PuntoVenta.Application\bin\Debug\net8.0\PuntoVenta.Application.dll
+C:\Users\Usuario\Desktop\Proyectos WEB\ProyectoWEB\PuntoVenta.Application\bin\Debug\net8.0\PuntoVenta.Application.pdb
+C:\Users\Usuario\Desktop\Proyectos WEB\ProyectoWEB\PuntoVenta.Application\bin\Debug\net8.0\PuntoVenta.Domain.dll
+C:\Users\Usuario\Desktop\Proyectos WEB\ProyectoWEB\PuntoVenta.Application\bin\Debug\net8.0\PuntoVenta.Domain.pdb
+C:\Users\Usuario\Desktop\Proyectos WEB\ProyectoWEB\PuntoVenta.Application\obj\Debug\net8.0\PuntoVenta.Application.csproj.AssemblyReference.cache
+C:\Users\Usuario\Desktop\Proyectos WEB\ProyectoWEB\PuntoVenta.Application\obj\Debug\net8.0\PuntoVenta.Application.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Usuario\Desktop\Proyectos WEB\ProyectoWEB\PuntoVenta.Application\obj\Debug\net8.0\PuntoVenta.Application.AssemblyInfoInputs.cache
+C:\Users\Usuario\Desktop\Proyectos WEB\ProyectoWEB\PuntoVenta.Application\obj\Debug\net8.0\PuntoVenta.Application.AssemblyInfo.cs
+C:\Users\Usuario\Desktop\Proyectos WEB\ProyectoWEB\PuntoVenta.Application\obj\Debug\net8.0\PuntoVenta.Application.csproj.CoreCompileInputs.cache
+C:\Users\Usuario\Desktop\Proyectos WEB\ProyectoWEB\PuntoVenta.Application\obj\Debug\net8.0\PuntoVenta.Application.sourcelink.json
+C:\Users\Usuario\Desktop\Proyectos WEB\ProyectoWEB\PuntoVenta.Application\obj\Debug\net8.0\PuntoVen.7F2B0BCF.Up2Date
+C:\Users\Usuario\Desktop\Proyectos WEB\ProyectoWEB\PuntoVenta.Application\obj\Debug\net8.0\PuntoVenta.Application.dll
+C:\Users\Usuario\Desktop\Proyectos WEB\ProyectoWEB\PuntoVenta.Application\obj\Debug\net8.0\refint\PuntoVenta.Application.dll
+C:\Users\Usuario\Desktop\Proyectos WEB\ProyectoWEB\PuntoVenta.Application\obj\Debug\net8.0\PuntoVenta.Application.pdb
+C:\Users\Usuario\Desktop\Proyectos WEB\ProyectoWEB\PuntoVenta.Application\obj\Debug\net8.0\ref\PuntoVenta.Application.dll

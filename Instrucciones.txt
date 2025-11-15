@@ -1,0 +1,496 @@
+// Entidad: Producto (Facturación)
+namespace Dominio.Entidades.Inventario
+{
+    public class Producto
+    {
+        public int Id { get; set; }
+        public string Nombre { get; set; }
+        public string CodigoBarra { get; set; } // Unique
+        public decimal PrecioVenta { get; set; }
+        public int StockActual { get; set; }
+        public bool Activo { get; set; } = true;
+    }
+}
+
+// Entidad: Venta (Facturación)
+namespace Dominio.Entidades.Ventas
+{
+    public class Venta
+    {
+        public int Id { get; set; }
+        public DateTime FechaVenta { get; set; }
+        
+        // Relaciones con la seguridad
+        public string UsuarioId { get; set; } // FK del Cajero/Vendedor
+        // public Usuario Usuario { get; set; } // Navegacion
+
+        // Relaciones con el cliente
+        public int? ClienteId { get; set; } // FK
+        // public Cliente Cliente { get; set; } // Navegacion
+
+        public decimal TotalImpuesto { get; set; }
+        public decimal TotalVenta { get; set; }
+
+        public ICollection<DetalleVenta> Detalles { get; set; }
+    }
+}
+
+--------------------------------------------------
+
+// Capa de Infraestructura
+using Dominio.Entidades.Inventario;
+using Dominio.Entidades.Ventas;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
+
+namespace Infraestructura.Persistencia
+{
+    // Usamos IdentityDbContext para incluir las tablas de seguridad (Usuario, Rol) por defecto
+    public class ApplicationDbContext : IdentityDbContext
+    {
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+            : base(options)
+        {
+        }
+
+        // Tablas de Facturación
+        public DbSet<Producto> Productos { get; set; }
+        public DbSet<Cliente> Clientes { get; set; }
+        public DbSet<Venta> Ventas { get; set; }
+        public DbSet<DetalleVenta> DetallesVenta { get; set; }
+
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+            
+            // Configuración de clave compuesta para DetalleVenta
+            modelBuilder.Entity<DetalleVenta>()
+                .HasKey(dv => new { dv.VentaId, dv.ProductoId });
+
+            // Configuraciones de unicidad, índices, etc. (Ej. CodigoBarra)
+            modelBuilder.Entity<Producto>()
+                .HasIndex(p => p.CodigoBarra)
+                .IsUnique();
+        }
+    }
+}
+
+---------------------------------------------------------
+
+# En el proyecto Infraestructura
+dotnet add package Microsoft.EntityFrameworkCore.SqlServer
+dotnet add package Microsoft.EntityFrameworkCore.Tools
+dotnet add package Microsoft.AspNetCore.Identity.EntityFrameworkCore
+dotnet add package PuntoVenta.Aplicacion # Referencia al proyecto
+
+------------------------------------------------------
+
+// Archivo: ServiceCollectionExtensions.cs (en Infraestructura)
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Configuration;
+using Microsoft.EntityFrameworkCore;
+using Infraestructura.Persistencia; // Donde está ApplicationDbContext
+
+public static class ServiceCollectionExtensions
+{
+    public static IServiceCollection AddInfrastructureServices(
+        this IServiceCollection services, 
+        IConfiguration configuration)
+    {
+        // 1. CONEXIÓN A LA BASE DE DATOS
+        var connectionString = configuration.GetConnectionString("DefaultConnection");
+        
+        services.AddDbContext<ApplicationDbContext>(options =>
+            options.UseSqlServer(connectionString,
+                b => b.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)));
+
+        // 2. CONFIGURACIÓN DE SEGURIDAD (IDENTITY)
+        // Agregamos las tablas de seguridad al DbContext
+        services.AddIdentityCore<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+            .AddRoles<IdentityRole>() // Para poder usar Roles
+            .AddEntityFrameworkStores<ApplicationDbContext>(); // Conecta Identity con EF Core
+            
+        // 3. REGISTRO DE REPOSITORIOS (Se verá en el siguiente paso)
+        // services.AddScoped<IProductoRepository, ProductoRepository>(); 
+
+        return services;
+    }
+}
+
+-------------------------------------------------------------
+
+{
+  "ConnectionStrings": {
+    "DefaultConnection": "Server=(localdb)\\mssqllocaldb;Database=PuntoVentaDb;Trusted_Connection=True;MultipleActiveResultSets=true"
+  },
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning"
+    }
+  },
+  "AllowedHosts": "*"
+}
+------------------------------------------------------------------
+
+using Infraestructura; // Namespace donde está ServiceCollectionExtensions
+using Infraestructura.Persistencia; // Necesario para la migración
+
+var builder = WebApplication.CreateBuilder(args);
+
+// 1. Agregar Servicios de Infraestructura (DB, Identity, Repositorios)
+builder.Services.AddInfrastructureServices(builder.Configuration);
+
+// 2. Configurar la API (Controladores)
+builder.Services.AddControllers();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen(); // Para probar la API
+
+var app = builder.Build();
+
+// Configure the HTTP request pipeline.
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
+
+app.UseHttpsRedirection();
+
+// 3. Middleware de Autenticación y Autorización
+app.UseAuthentication(); 
+app.UseAuthorization();
+
+app.MapControllers();
+
+app.Run();
+
+-------------------------------------------------------------------------
+
+# Ejecutar en la terminal, en el directorio raíz de la solución
+dotnet ef migrations add InitialMigration --project PuntoVenta.Infraestructura --startup-project PuntoVenta.Presentacion
+
+# Aplicar la migración (crea la DB y las tablas)
+dotnet ef database update --project PuntoVenta.Infraestructura --startup-project PuntoVenta.Presentacion
+
+-------------------------------------------------------------------------
+
+dotnet add package Microsoft.AspNetCore.Authentication.JwtBearer
+
+------------------------------------------------------------------------
+
+// Archivo: Program.cs (PuntoVenta.Presentacion)
+
+// ... código anterior
+
+// NOTA: Añadir esta sección ANTES de app.UseAuthorization();
+
+// Lectura de la clave secreta desde appsettings.json
+var jwtSettings = builder.Configuration.GetSection("JwtSettings");
+var key = Encoding.ASCII.GetBytes(jwtSettings["SecretKey"]); // Asegúrese de que esta clave sea larga y secreta
+
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    options.RequireHttpsMetadata = false;
+    options.SaveToken = true;
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(key),
+        ValidateIssuer = false, // En producción se debería validar
+        ValidateAudience = false // En producción se debería validar
+    };
+});
+
+// Asegúrese que app.UseAuthentication() y app.UseAuthorization() estén en el pipeline:
+// app.UseAuthentication();
+// app.UseAuthorization();
+
+var app = builder.Build();
+
+// …
+
+-------------------------------------------------
+
+{
+  "Logging": { ... },
+  "AllowedHosts": "*",
+  "ConnectionStrings": { ... },
+  "JwtSettings": {
+    "SecretKey": "EstaEsUnaClaveSuperSecretaDeAlMenos32CaracteresParaFirmarJWT" // ¡Debe ser una clave fuerte!
+  }
+}
+
+--------------------------------------------------
+
+// Archivo: LoginQuery.cs (PuntoVenta.Aplicacion)
+using MediatR; // Asumimos el uso de MediatR para manejar comandos/queries
+
+public class LoginQuery : IRequest<AuthResponse>
+{
+    public string Email { get; set; }
+    public string Password { get; set; }
+}
+
+public class AuthResponse
+{
+    public bool Exitoso { get; set; }
+    public string Token { get; set; }
+    public string Rol { get; set; }
+    public string Mensaje { get; set; }
+}
+
+--------------------------------------------------
+
+// Archivo: AuthController.cs (PuntoVenta.Presentacion)
+using MediatR;
+using Microsoft.AspNetCore.Mvc;
+using PuntoVenta.Aplicacion.Usuarios.Queries; // Donde está LoginQuery
+
+[Route("api/auth")]
+[ApiController]
+public class AuthController : ControllerBase
+{
+    private readonly IMediator _mediator;
+
+    public AuthController(IMediator mediator)
+    {
+        _mediator = mediator;
+    }
+
+    [HttpPost("login")]
+    public async Task<IActionResult> Login([FromBody] LoginQuery query)
+    {
+        var result = await _mediator.Send(query);
+
+        if (!result.Exitoso)
+        {
+            return Unauthorized(new { message = result.Mensaje });
+        }
+
+        return Ok(result);
+    }
+}
+
+-----------------------------------
+
+// Archivo: UsuariosController.cs (PuntoVenta.Presentacion)
+using MediatR;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+
+[Authorize(Roles = "Administrador")] // Solo usuarios con el Rol 'Administrador' pueden acceder a este controlador
+[Route("api/usuarios")]
+[ApiController]
+public class UsuariosController : ControllerBase
+{
+    private readonly IMediator _mediator;
+
+    public UsuariosController(IMediator mediator)
+    {
+        _mediator = mediator;
+    }
+
+    // Endpoint para crear un nuevo usuario
+    [HttpPost]
+    public async Task<IActionResult> CrearUsuario([FromBody] CrearUsuarioCommand command)
+    {
+        var userId = await _mediator.Send(command);
+        return CreatedAtAction(nameof(ObtenerUsuario), new { id = userId }, null);
+    }
+
+    // Endpoint para obtener un usuario por ID
+    [HttpGet("{id}")]
+    public async Task<IActionResult> ObtenerUsuario(string id)
+    {
+        // Implementar un Handler de Query para obtener el usuario
+        // var userDto = await _mediator.Send(new GetUsuarioQuery { Id = id });
+        // return Ok(userDto);
+        return Ok($"Detalles del usuario {id}");
+    }
+    
+    // ... Agregar endpoints para PUT (Editar Rol) y DELETE
+}
+
+---------------------------------------
+
+// Archivo: IProductoRepository.cs (PuntoVenta.Aplicacion/Interfaces)
+
+using PuntoVenta.Dominio.Entidades.Inventario;
+
+public interface IProductoRepository
+{
+    // Operaciones de Escritura (Solo Administrador)
+    Task<int> AddAsync(Producto producto);
+    Task UpdateAsync(Producto producto);
+    Task DeleteAsync(int id);
+    
+    // Operaciones de Lectura (Admin y Cajero)
+    Task<Producto> GetByIdAsync(int id);
+    Task<IEnumerable<Producto>> GetAllAsync();
+}
+
+-----------------------------------------
+
+// Archivo: CrearProductoCommand.cs (PuntoVenta.Aplicacion/Productos/Commands)
+
+using MediatR;
+
+public class CrearProductoCommand : IRequest<int>
+{
+    public string Nombre { get; set; }
+    public string CodigoBarra { get; set; }
+    public decimal PrecioVenta { get; set; }
+    public int StockInicial { get; set; }
+}
+
+public class ActualizarProductoCommand : IRequest<Unit>
+{
+    public int Id { get; set; }
+    public string Nombre { get; set; }
+    public decimal PrecioVenta { get; set; }
+    // Asumimos que la actualización de stock se hace por un caso de uso separado (movimiento de inventario)
+}
+
+public class EliminarProductoCommand : IRequest<Unit>
+{
+    public int Id { get; set; }
+}
+
+--------------------------------------------
+
+// Archivo: ProductoRepository.cs (PuntoVenta.Infraestructura/Repositorios)
+
+using PuntoVenta.Aplicacion.Interfaces;
+using PuntoVenta.Dominio.Entidades.Inventario;
+using Infraestructura.Persistencia;
+using Microsoft.EntityFrameworkCore;
+
+public class ProductoRepository : IProductoRepository
+{
+    private readonly ApplicationDbContext _context;
+
+    public ProductoRepository(ApplicationDbContext context)
+    {
+        _context = context;
+    }
+    
+    public async Task<int> AddAsync(Producto producto)
+    {
+        await _context.Productos.AddAsync(producto);
+        await _context.SaveChangesAsync();
+        return producto.Id;
+    }
+    
+    // Simplificado
+    public async Task UpdateAsync(Producto producto)
+    {
+        _context.Productos.Update(producto);
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task DeleteAsync(int id)
+    {
+        var producto = await _context.Productos.FindAsync(id);
+        if (producto != null)
+        {
+            _context.Productos.Remove(producto);
+            await _context.SaveChangesAsync();
+        }
+    }
+    
+    // ... Implementación de Lectura
+    public async Task<IEnumerable<Producto>> GetAllAsync()
+    {
+        return await _context.Productos.Where(p => p.Activo).ToListAsync();
+    }
+    
+    public async Task<Producto> GetByIdAsync(int id)
+    {
+        return await _context.Productos.FindAsync(id);
+    }
+}
+
+---------------------------------------
+
+// Archivo: ServiceCollectionExtensions.cs (PuntoVenta.Infraestructura)
+
+// ... en el método AddInfrastructureServices
+// 3. REGISTRO DE REPOSITORIOS
+services.AddScoped<IProductoRepository, ProductoRepository>(); 
+// …
+
+----------------------------------------
+
+// Archivo: ProductosController.cs (PuntoVenta.Presentacion/Controllers)
+
+using MediatR;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+
+[Authorize] // Solo usuarios autenticados pueden acceder al catálogo (Cajero o Admin)
+[Route("api/productos")]
+[ApiController]
+public class ProductosController : ControllerBase
+{
+    private readonly IMediator _mediator;
+
+    public ProductosController(IMediator mediator)
+    {
+        _mediator = mediator;
+    }
+
+    // GET: api/productos (Lectura - Catálogo de productos)
+    [HttpGet]
+    public async Task<IActionResult> GetProductos()
+    {
+        // Se llama al GetProductosQueryHandler en la Capa de Aplicacion
+        // var productos = await _mediator.Send(new GetProductosQuery());
+        return Ok(new { Message = "Lista de Productos (Visible para Admin y Cajero)" }); 
+    }
+
+    // =============================================================
+    // Operaciones que modifican el Inventario (Solo Administrador)
+    // =============================================================
+
+    // POST: api/productos (Crear un nuevo producto)
+    [Authorize(Roles = "Administrador")] 
+    [HttpPost]
+    public async Task<IActionResult> CrearProducto([FromBody] CrearProductoCommand command)
+    {
+        // Se llama al CrearProductoCommandHandler en la Capa de Aplicacion
+        var id = await _mediator.Send(command);
+        return CreatedAtAction(nameof(GetProductos), new { id = id }, new { Message = $"Producto creado con ID: {id}" });
+    }
+    
+    // PUT: api/productos/5 (Actualizar datos de un producto)
+    [Authorize(Roles = "Administrador")] 
+    [HttpPut("{id}")]
+    public async Task<IActionResult> ActualizarProducto(int id, [FromBody] ActualizarProductoCommand command)
+    {
+        if (id != command.Id) return BadRequest();
+        
+        // Se llama al ActualizarProductoCommandHandler en la Capa de Aplicacion
+        await _mediator.Send(command);
+        return NoContent();
+    }
+
+    // DELETE: api/productos/5 (Eliminar/desactivar un producto)
+    [Authorize(Roles = "Administrador")] 
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> EliminarProducto(int id)
+    {
+        // Se llama al EliminarProductoCommandHandler en la Capa de Aplicacion
+        await _mediator.Send(new EliminarProductoCommand { Id = id });
+        return NoContent();
+    }
+}
+
+---------------------------------------
+

@@ -1,0 +1,361 @@
+SOFTWARE A UTILIZAR:
+
+1. BACK-END: ASPNET Core 8.0 o superior.
+   ✓ IMPLEMENTADO: ASP.NET Core 8.0
+   
+2. FRONT-END: Blazor, Angular, React, Vue.js, Svelte u otra tecnologia de Front-End.
+   ⏳ PENDIENTE: Seleccionar y configurar tecnología de Front-End
+   
+3. BASE DE DATOS (RELACIONAL): Cualquier base de datos.
+   ✓ IMPLEMENTADO: SQL Server (LocalDB) - appsettings.json configurado
+   ✓ ORM: Entity Framework Core
+
+NOTA: Para la autenticacion, autorizacion y notificaciones se puede utilizar tecnologias como
+Firebase, Supabase u otras, siempre y cuando no haya que pagar.
+✓ IMPLEMENTADO: Autenticación JWT (JSON Web Token) configurada en Program.cs
+
+-------------------------------------------------------------------------------
+
+. Realizar el desarrollo del proyecto utilizando una arquitectura de software (por ejemplo, programación por capas, clean architecture, hexagonal, etc.) para obtener software de calidad, que sea facil de entender, facilitar el trabajo en grupo, sea escalable, simplificar el mantenimiento y el control de errores, que sea facil de testear.
+. El proyecto debe implementar obligatoriamente una capa de servicios con REST (Web API), esta capa es la única que el front-end debe consumir.
+
+PUNTO DE VENTA (WEB)-NO ES UN CARRITO DE COMPRAS
+Un orden de venta es el nombre generico que se da al software utilizado para recoger los pedidos de sus clientes (FACTURACION). La funcion de este software es permitir realizar la facturacion via una aplicacion (aplicación web en este caso), de todos los articulos (productos, inventario) que desean comprar los clientes. Cuando el cliente ha seleccionado fisicamente los productos deseados, puede pasar a la "caja-punto de venta" y pagar para que se proceda al proceso de la FACTURACION.
+
+Se pide entonces desarrollar un sistema web que permita disponer de un sistema de facturación de compras simple (o lo que seria un sistema de ventas simple) CONSIDERANDO aspectos de gestión de la seguridad como la autenticacion y la autorizacion (ES DECIR ES NECESARIO CONSIDERAR ASPECTOS COMO: ADMINISTRAR USUARIOS, ROLES, VALIDACIÓN PARA EL INGRESO AL PROYECTO, ETC.) No se debe MOSTRAR imagenes para los productos a vender en el FRONT-END WEB porque no es un carrito de compras.
+
+ESTO ES LO IMPORTANTE
+
+La aplicación debe tener la siguiente funcionalidad:
+
+. Realizar el desarrollo del proyecto utilizando una arquitectura de software (por ejemplo,
+programación por capas, clean architecture, hexagonal, etc.) para obtener software de calidad,
+que sea facil de entender, facilitar el trabajo en grupo, sea escalable, simplificar el mantenimiento
+y el control de errores, que sea facil de testear.
+. El proyecto debe implementar obligatoriamente una capa de servicios con REST (Web API),
+esta capa es la única que el front-end debe consumir.
+
+PUNTO DE VENTA (WEB)-NO ES UN CARRITO DE COMPRAS
+Un orden de venta es el nombre generico que se da al software utilizado para recoger los pedidos de
+sus clientes (FACTURACION). La funcion de este software es permitir realizar la facturacion via
+una aplicacion (aplicación web en este caso), de todos los articulos (productos, inventario) que desean
+comprar los clientes. Cuando el cliente ha seleccionado fisicamente los productos deseados, puede
+pasar a la "caja-punto de venta" y pagar para que se proceda al proceso de la FACTURACION.
+
+Se pide entonces desarrollar un sistema web que permita disponer de un sistema de facturación de
+compras simple (o lo que seria un sistema de ventas simple) CONSIDERANDO aspectos de gestión
+de la seguridad como la autenticacion y la autorizacion (ES DECIR ES NECESARIO
+CONSIDERAR ASPECTOS COMO: ADMINISTRAR USUARIOS, ROLES, VALIDACIÓN
+PARA EL INGRESO AL PROYECTO, ETC.) No se debe MOSTRAR imagenes para los
+productos a vender en el FRONT-END WEB porque no es un carrito de compras.
+
+La aplicación debe tener la siguiente funcionalidad:
+
+Requisito
+
+--------------------------------------------------
+1. - Implemente un Modelo Entidad Relación que se ajuste al desarrollo utilizando principios de normalizacion. Se puede usar un modelo ya existente. El modelo debe considerar la seguridad para la administracion de usuarios, roles de acceso a la aplicación, considerar minimo 2 roles (Administradores, con acceso total al sistema. Rol de Usuarios, con acceso solo de lectura a las diferentes tablas ).
+
+--------------------------------------------------
+
+2. - Permitir crear una orden de venta con sus respectivos CAMPOS y TABLAS de forma logica.
+
+--------------------------------------------------
+
+3. - Un producto debería aparecer una sola vez en la orden. (No se debe permitir duplicarlo).
+
+--------------------------------------------------
+
+4. - Calcular totales, subtotales e IVA (segun sea necesario)
+
+--------------------------------------------------
+
+5. - Editar SOLO los campos que sean necesarios, el resto bloquear (desactivar).
+
+--------------------------------------------------
+
+6. - VALIDAR los campos para el ingreso de datos, esto es solo letras, solo números, no permitir valores en blanco, formatos para correo electrónico, validar cédula, donde sea necesario, y todas las validaciones que sean logicas y necesarias. Esto para todo el proyecto.
+
+--------------------------------------------------
+
+7. - Tener en cuenta la disminucion AUTOMATICA del inventario en la tabla correspondiente (productos).
+
+--------------------------------------------------
+
+8. - Los productos para vender (a mostrar) deberian ser SOLO los que tienen stock mayor que cero y no los que no tengan stock (stock en 0).
+
+--------------------------------------------------
+
+9. - En la venta, no permitir vender mas de lo que se tiene en stock de un producto seleccionado (validar).
+
+--------------------------------------------------
+
+10. - Permitir eliminar un producto de la venta (orden de venta), esto lógicamente se debe realizar antes de almacenar (guardar) la orden de venta (Factura).
+
+--------------------------------------------------
+
+11. - Permitir actualizar un producto (cambiar por otro producto) de la orden de venta, sin perder el resto de los datos, esto se debe hacer antes de almacenar (guardar) la orden de venta (Factura) lógicamente.
+
+--------------------------------------------------
+
+12. - Crear una página web que, dada una orden de venta realizada (guardada), muestre el encabezado y el detalle de la ORDEN DE VENTAS (Factura) creada. Es decir, reconstruir una factura y visualizar en PDF para su posterior descarga e impresión.
+
+--------------------------------------------------
+
+13. - El diseño de la interfaz de usuario deberá cumplir estándares de usabilidad y facilidad de uso.
+
+--------------------------------------------------
+
+14. - Control de Errores y mensajes personalizados de acuerdo con la situacion. Almacenar los errores para una posterior revisión (por ejemplo, para dar soporte técnico).
+
+--------------------------------------------------
+
+15. - Para buscar un cliente o un producto se debe realizar mediante una ventana emergente para una busqueda inteligente que busque por todos los campos de la consulta (SELECT), además estas ventanas deben paginar por bloques para optimizar la recuperación de datos.
+
+--------------------------------------------------
+
+16. - Utilizar buenas practicas de programacion y codigo limpio. TODO EN INGLES.
+
+--------------------------------------------------
+
+17. - Utilizar transacciones y concurrencia (optimista u pesimista) donde sea necesario según analisis. Mostrar los mensajes en el front-end de la transacción completada o fallida.
+
+--------------------------------------------------
+
+18. - La primera pantalla debe ser una pantalla de validación (Login) que valide contra la base de datos o contra algun sistema de autenticacion (como Firebase, Supabase etc.) que deber, el usuario (correo electronico) y la clave, la clave debe tener en cualquier orden, minimo una letra mayúscula, un minúscula, un numero y un carácter especial. La longitud de la clave debe ser de minimo 4 caracteres y maximo 10) y una vez que se valide se ingresa al sistema de facturacion.
+
+--------------------------------------------------
+
+19. - Dentro del sistema se debe tener la funcionalidad para que el admninistrador del sistema le permita administrar (CRUD) los roles y usuarios. Al crear un usuario de debe asignar a un rol especifico (Rol de: Administradores o Usuarios), para que pueda realizar la venta (Campos minimos para la tabla de
+usuarios: cédula, clave, correo).
+
+NOTA: Se puede utilizar alguna librería para la gestión de la seguridad, por ejemplo, Identity
+de ASPNET Core.
+
+--------------------------------------------------
+
+20. - Para la seguridad se debe usar JWT (JSON Web Token) con el propósito de transmitir información de forma segura y efectiva entre un determinado emisor y su respectivo receptor. JWT es utilizado por las aplicaciones para validar la identidad de un determinado usuario.
+
+--------------------------------------------------
+
+21. - Es obligatorio realizar el mantenimiento (CRUD y busquedas inteligentes por todos los campos) de todas las tablas del modelo de datos. 
+
+--------------------------------------------------
+
+22. -Realizar una programación por capas con una arquitectura de Software (No utilizar MVC como arquitectura). Se puede utilizar MVC como parte de la arquitectura por capas.
+
+--------------------------------------------------
+
+23. - Para todo se debe usar servicios REST para trabajar con el BACK-END desde el FRONT END WEB, es decir, crear una capa de servicios en la arquitectura por capas, para que el cliente web unicamente utilicen los servicios REST de la capa de servicios.
+
+-------------------------------------------------
+
+24. - Publicar la aplicacion BACK-END, FRONT-END (y la base de datos alternativamente si se desea) en alguna plataforma Cloud (Puede ser en alguna plataforma libre o de prueba que no sea necesario pagar hasta revisar el trabajo).
+
+--------------------------------------------------
+
+25. - Si el usuario digita de forma incorrecta los datos de ingreso en la pantalla de login por 3 veces consecutivas, el sistema debe bloquearse para el usuario correspondiente. El Administrador debe entonces poder ingresar al sistema y desbloquear al usuario bloqueado.
+
+--------------------------------------------------
+26. - Los errores personalizados se deben almacenar en la base de datos con la informacion y datos necesarios y lógicos (Por ejemplo: error, linea del error, fecha, pantalla, evento, etc.) para una posterior revision y dar el soporte tecnico cuando el usuario lo requiera.
+
+Crear un reporte en el front-end para visualizar estos errores.
+--------------------------------------------------
+27. - Crear un Script SQL o utilizar algun framework que permita generar datos de prueba de por lo menos 100.000 registros en las tablas de clientes y productos y la tabla donde se guardan las ventas. Probar el rendimiento de la aplicación web al realizar o consultar las ventas realizadas.
+
+NOTA: Puesto que no hay servicios gratis que permitan almacenar la cantidad de datos requeridas (100.000 registros) se debe probar este punto en un servidor local (por facilidad es necesario que este requisito se implemente en otro servidor que no se haya publicado).
+
+--------------------------------------------------
+
+28. - Probar que el proyecto funcione y se muestre correctamente en por lo menos 2 navegadores Web.
+
+--------------------------------------------------
+
+============================================================================================
+ESTADO ACTUAL DEL PROYECTO - 15 de Noviembre de 2025
+============================================================================================
+
+✓ COMPLETADO / EN PROGRESO / ⏳ PENDIENTE
+
+ARQUITECTURA Y BASE DE DATOS:
+✓ 1. Modelo Entidad Relación implementado
+   - Entidades creadas: Cliente, DetalleVenta, Product, Venta
+   - Tabla de Usuarios (pendiente detalles de roles)
+   - Tabla de Roles (pendiente)
+   - Entity Framework Core configurado
+   - Migrations: 20251115120000_InitialMigration.cs
+
+ORDEN DE VENTA Y PRODUCTOS:
+✓ 2. Estructura de tablas para órdenes de venta (Venta, DetalleVenta)
+✓ 3. Entidad DetalleVenta para evitar duplicidad de productos
+✓ 4. Campos para cálculo de totales, subtotales e IVA
+⏳ 5. Edición selectiva de campos - PENDIENTE implementación en controladores
+✓ 6. Validaciones básicas - PARCIAL (necesita completarse)
+   - Atributos de validación en entidades
+   - Validaciones personalizadas en controladores
+⏳ 7. Disminución automática de inventario - PENDIENTE en comando UpdateProduct
+✓ 8. Mostrar solo productos con stock > 0 - PENDIENTE filtro en GetProductsQuery
+⏳ 9. Validación de stock máximo en venta - PENDIENTE
+⏳ 10. Eliminar producto de venta (antes de guardar) - PENDIENTE
+⏳ 11. Actualizar producto de venta - PENDIENTE
+
+REPORTES Y FACTURACIÓN:
+⏳ 12. Página de visualización de factura en PDF - PENDIENTE
+   - Necesita librería de generación de PDF (iText, SelectPdf, etc.)
+
+INTERFAZ DE USUARIO:
+⏳ 13. Diseño de interfaz de usuario - PENDIENTE
+   - Front-End no iniciado
+   - Estándares de usabilidad a considerar
+
+CONTROL DE ERRORES:
+⏳ 14. Almacenamiento de errores en BD - PENDIENTE
+   - Crear tabla ErrorLog
+   - Implementar middleware de manejo de excepciones
+
+BÚSQUEDAS INTELIGENTES:
+⏳ 15. Ventanas emergentes con búsqueda inteligente - PENDIENTE
+   - Implementar en Front-End
+   - Paginación en controladores
+
+CALIDAD DE CÓDIGO:
+✓ 16. Buenas prácticas y código limpio - EN PROGRESO
+   - Estructura por capas implementada (Domain, Application, Infrastructure, Api)
+   - CQRS pattern en features
+   - Nombres en inglés verificados
+
+TRANSACCIONES Y CONCURRENCIA:
+⏳ 17. Transacciones y concurrencia - PENDIENTE
+   - Implementar en comandos de modificación
+   - Mensajes de estado en Front-End
+
+AUTENTICACIÓN Y AUTORIZACIÓN:
+✓ 18. Login con validaciones de contraseña - EN PROGRESO
+   - JWT implementado en Program.cs
+   - Falta: Validación de políticas de contraseña (mayús, minús, número, especial)
+   - Falta: Bloqueo de usuario después de 3 intentos
+   
+⏳ 19. Administración de usuarios y roles (CRUD) - PENDIENTE
+   - Falta: Controlador UsuariosController completo
+   - Falta: Controlador RolesController
+   - Falta: Asignación de roles a usuarios
+   - Falta: Usar Identity de ASP.NET Core
+
+✓ 20. JWT implementado - CONFIGURADO
+   - Token signing key: EstaEsUnaClaveSuperSecretaDeAlMenos32CaracteresParaFirmarJWT
+   - Nota: Cambiar en producción a variable de entorno
+
+MANTENIMIENTO DE DATOS:
+✓ 21. CRUD y búsquedas inteligentes - EN PROGRESO
+   - ProductController implementado (parcial)
+   - Falta: UsuariosController completo
+   - Falta: Búsquedas avanzadas en todos los controladores
+
+✓ 22. Arquitectura por capas - IMPLEMENTADA
+   - Domain, Application, Infrastructure, Api
+   - CQRS con Queries y Commands
+   - No se usa MVC como arquitectura principal
+
+✓ 23. Servicios REST - EN IMPLEMENTACIÓN
+   - Controllers creados: AuthController, ProductController, UsuariosController
+   - Falta completar operaciones
+
+DESPLIEGUE EN CLOUD:
+⏳ 24. Publicación en plataforma Cloud - PENDIENTE
+   - Opciones: Azure, Heroku, AWS, Railway, Vercel, etc.
+
+SEGURIDAD ADICIONAL:
+⏳ 25. Bloqueo de usuario después de 3 intentos fallidos - PENDIENTE
+   - Implementar en LoginQuery/AuthController
+   - Tabla UsuarioIntento para rastrear intentos
+
+⏳ 26. Almacenamiento de errores personalizados - PENDIENTE
+   - Crear tabla ErrorLog
+   - Implementar middleware de excepciones
+   - Crear reporte en Front-End
+
+PRUEBAS DE RENDIMIENTO:
+⏳ 27. Generador de datos de prueba (100.000 registros) - PENDIENTE
+   - Script SQL o Seed data en Entity Framework
+   - Pruebas de rendimiento en servidor local
+   - Análisis de índices en BD
+
+COMPATIBILIDAD:
+⏳ 28. Pruebas en 2 navegadores web - PENDIENTE
+   - Requiere Front-End completado
+
+============================================================================================
+PROGRESO REALIZADO - 15 de Noviembre de 2025 (Iteración 3)
+============================================================================================
+
+✓ COMPLETADO EN ESTA ITERACIÓN:
+
+1. ENTIDADES DEL DOMAIN (COMPLETAS):
+   ✓ Usuario - con cedula, correo, contraseña, roles, bloqueo, etc.
+   ✓ Rol - para manejo de permisos (Administrador, Usuario)
+   ✓ ErrorLog - para almacenar errores del sistema
+   ✓ IntentosLogin - para rastrear intentos fallidos y bloqueos
+   ✓ Product - actualizado con precio costo, stock mínimo, descripciones
+   ✓ Cliente - con validación de documento único
+   ✓ Venta - con número de factura, IVA, estado
+   ✓ DetalleVenta - con descuentos
+
+2. REPOSITORIOS (COMPLETOS):
+   ✓ GenericRepository<T> - base para operaciones CRUD
+   ✓ ProductRepository - búsquedas por código de barras, stock
+   ✓ UsuarioRepository - búsquedas por email, cedula, rol
+   ✓ RolRepository - gestión de roles
+   ✓ ClienteRepository - búsquedas inteligentes
+   ✓ VentaRepository - generación de número de factura
+   ✓ ErrorLogRepository - consultas de errores
+   ✓ IntentosLoginRepository - manejo de bloqueos (3 intentos)
+   ✓ UnitOfWork - patrón Unit of Work implementado
+
+3. DTOs PARA VALIDACIONES (COMPLETOS):
+   ✓ UsuarioDto - Create, Update, Response
+   ✓ RolDto - Create, Update, Response
+   ✓ ProductoDto - Create, Update, Response
+   ✓ ClienteDto - Create, Update, Response
+   ✓ VentaDto - Create, Response con detalles
+   ✓ DetalleVentaDto - para detalles de ventas
+
+4. AUTENTICACIÓN Y AUTORIZACIÓN:
+   ✓ LoginQueryHandler - con BCrypt, 3 intentos, bloqueo
+   ✓ JWT generado con 24 horas de validez
+   ✓ Claims con ID, email, nombre, cédula, rol
+   ✓ CreateUsuarioCommandHandler - crear usuarios con hash
+
+5. CONTROLADORES API REST:
+   ✓ AuthController - login y registro
+   ✓ UsuariosController - CRUD completo, búsqueda, desbloqueo
+   ✓ RolesController - CRUD de roles
+   ✓ ProductController - CRUD existente (mejorable)
+
+6. CONFIGURACIONES:
+   ✓ Program.cs - CORS habilitado, JWT, MediatR configurado
+   ✓ ApplicationDbContext - con todas las relaciones y índices
+   ✓ Migrations - 20251115140000_AddEntitiesAndEnhancements.cs
+   ✓ ServiceCollectionExtensions - todos los repositorios registrados
+   ✓ Identity personalizado con políticas de contraseña
+
+============================================================================================
+PRÓXIMAS ACCIONES PRIORITARIAS:
+============================================================================================
+
+1. ✓ Entidades y Repositorios - COMPLETADO
+2. ✓ DTOs y Validaciones - COMPLETADO  
+3. ✓ Autenticación - COMPLETADO (Login, 3 intentos, BCrypt)
+4. ✓ Controladores básicos - COMPLETADO
+
+5. SIGUIENTE ETAPA:
+   - Crear Queries y Commands para órdenes de venta (Ventas CRUD)
+   - Validar stock automáticamente
+   - Crear tabla/controlador de reporte de errores
+   - Implementar middleware de manejo de excepciones
+   - Generar PDF de facturas (iTextSharp o SelectPdf)
+   - Implementar búsquedas con paginación
+   - Seleccionar y configurar Front-End (Angular o React)
+   - Crear seed data con 100.000 registros (Bogus)
+   - Desplegar en Cloud (Azure, Heroku, Railway)
+
+============================================================================================

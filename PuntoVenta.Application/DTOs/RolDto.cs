@@ -1,0 +1,46 @@
+using System.ComponentModel.DataAnnotations;
+
+namespace PuntoVenta.Application.DTOs
+{
+    /// <summary>
+    /// DTO para crear un Rol
+    /// </summary>
+    public class CreateRolDto
+    {
+        [Required(ErrorMessage = "El nombre del rol es requerido")]
+        [StringLength(100, MinimumLength = 3, ErrorMessage = "El nombre debe tener entre 3 y 100 caracteres")]
+
+    public string? Nombre { get; set; }
+
+        [StringLength(500, ErrorMessage = "La descripción no puede exceder 500 caracteres")]
+    public string? Descripcion { get; set; }
+    }
+
+    /// <summary>
+    /// DTO para actualizar un Rol
+    /// </summary>
+    public class UpdateRolDto
+    {
+        public int Id { get; set; }
+
+        [StringLength(100, MinimumLength = 3, ErrorMessage = "El nombre debe tener entre 3 y 100 caracteres")]
+        public string? Nombre { get; set; }
+
+        [StringLength(500, ErrorMessage = "La descripción no puede exceder 500 caracteres")]
+        public string? Descripcion { get; set; }
+
+        public bool? Activo { get; set; }
+    }
+
+    /// <summary>
+    /// DTO para respuesta de Rol
+    /// </summary>
+    public class RolResponseDto
+    {
+        public int Id { get; set; }
+        public string? Nombre { get; set; }
+        public string? Descripcion { get; set; }
+        public bool Activo { get; set; }
+        public DateTime FechaCreacion { get; set; }
+    }
+}

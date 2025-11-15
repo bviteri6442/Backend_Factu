@@ -1,0 +1,306 @@
+using Microsoft.EntityFrameworkCore.Migrations;
+
+#nullable disable
+
+namespace PuntoVenta.Infrastructure.Migrations
+{
+    /// <inheritdoc />
+    public partial class AddEntitiesAndEnhancements : Migration
+    {
+        /// <inheritdoc />
+        protected override void Up(MigrationBuilder migrationBuilder)
+        {
+            // Crear tabla Rol
+            migrationBuilder.CreateTable(
+                name: "Roles",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Nombre = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Descripcion = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Activo = table.Column<bool>(type: "bit", nullable: false),
+                    FechaCreacion = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Roles", x => x.Id);
+                });
+
+            // Crear tabla Usuario
+            migrationBuilder.CreateTable(
+                name: "Usuarios",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Cedula = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    Correo = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    NombreCompleto = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Contrasena = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Activo = table.Column<bool>(type: "bit", nullable: false),
+                    FechaBloqueo = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    RazonBloqueo = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    FechaCreacion = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    FechaUltimoLogin = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    RolId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Usuarios", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Usuarios_Roles_RolId",
+                        column: x => x.RolId,
+                        principalTable: "Roles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            // Crear tabla ErrorLog
+            migrationBuilder.CreateTable(
+                name: "ErrorLogs",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    TipoError = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Mensaje = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    StackTrace = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Fuente = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    NumeroLinea = table.Column<int>(type: "int", nullable: true),
+                    Pantalla = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UsuarioId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Evento = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DatosAdicionales = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    NivelSeveridad = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    FechaError = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Revisado = table.Column<bool>(type: "bit", nullable: false),
+                    NotasSoporte = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ErrorLogs", x => x.Id);
+                });
+
+            // Crear tabla IntentosLogin
+            migrationBuilder.CreateTable(
+                name: "IntentosLogin",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Correo = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    NumeroIntentosFallidos = table.Column<int>(type: "int", nullable: false),
+                    FechaUltimoIntento = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DireccionIP = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UserAgent = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Bloqueado = table.Column<bool>(type: "bit", nullable: false),
+                    FechaBloqueo = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_IntentosLogin", x => x.Id);
+                });
+
+            // Crear índices
+            migrationBuilder.CreateIndex(
+                name: "IX_Usuarios_Cedula",
+                table: "Usuarios",
+                column: "Cedula",
+                unique: true,
+                filter: "[Cedula] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Usuarios_Correo",
+                table: "Usuarios",
+                column: "Correo",
+                unique: true,
+                filter: "[Correo] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Usuarios_RolId",
+                table: "Usuarios",
+                column: "RolId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_IntentosLogin_Correo",
+                table: "IntentosLogin",
+                column: "Correo");
+
+            // Actualizar tabla Producto
+            migrationBuilder.AddColumn<string>(
+                name: "Descripcion",
+                table: "Productos",
+                type: "nvarchar(max)",
+                nullable: true);
+
+            migrationBuilder.AddColumn<decimal>(
+                name: "PrecioCosto",
+                table: "Productos",
+                type: "decimal(18,2)",
+                nullable: false,
+                defaultValue: 0m);
+
+            migrationBuilder.AddColumn<int>(
+                name: "StockMinimo",
+                table: "Productos",
+                type: "int",
+                nullable: false,
+                defaultValue: 10);
+
+            migrationBuilder.AddColumn<DateTime>(
+                name: "FechaActualizacion",
+                table: "Productos",
+                type: "datetime2",
+                nullable: false,
+                defaultValue: new DateTime(2025, 11, 15, 12, 0, 0, 0, DateTimeKind.Utc));
+
+            migrationBuilder.AddColumn<DateTime>(
+                name: "FechaCreacion",
+                table: "Productos",
+                type: "datetime2",
+                nullable: false,
+                defaultValue: new DateTime(2025, 11, 15, 12, 0, 0, 0, DateTimeKind.Utc));
+
+            // Actualizar tabla Cliente
+            migrationBuilder.AddColumn<bool>(
+                name: "Activo",
+                table: "Clientes",
+                type: "bit",
+                nullable: false,
+                defaultValue: true);
+
+            migrationBuilder.AddColumn<DateTime>(
+                name: "FechaCreacion",
+                table: "Clientes",
+                type: "datetime2",
+                nullable: false,
+                defaultValue: new DateTime(2025, 11, 15, 12, 0, 0, 0, DateTimeKind.Utc));
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Clientes_Documento",
+                table: "Clientes",
+                column: "Documento",
+                unique: true,
+                filter: "[Documento] IS NOT NULL");
+
+            // Actualizar tabla Venta
+            migrationBuilder.AddColumn<string>(
+                name: "NumeroFactura",
+                table: "Ventas",
+                type: "nvarchar(max)",
+                nullable: true);
+
+            migrationBuilder.AddColumn<decimal>(
+                name: "Subtotal",
+                table: "Ventas",
+                type: "decimal(18,2)",
+                nullable: false,
+                defaultValue: 0m);
+
+            migrationBuilder.AddColumn<decimal>(
+                name: "PorcentajeIVA",
+                table: "Ventas",
+                type: "decimal(18,2)",
+                nullable: false,
+                defaultValue: 19m);
+
+            migrationBuilder.AddColumn<string>(
+                name: "Estado",
+                table: "Ventas",
+                type: "nvarchar(max)",
+                nullable: true,
+                defaultValue: "Completada");
+
+            migrationBuilder.AddColumn<string>(
+                name: "Observaciones",
+                table: "Ventas",
+                type: "nvarchar(max)",
+                nullable: true);
+
+            // Actualizar tabla DetalleVenta
+            migrationBuilder.AddColumn<decimal>(
+                name: "Descuento",
+                table: "DetallesVenta",
+                type: "decimal(18,2)",
+                nullable: false,
+                defaultValue: 0m);
+        }
+
+        /// <inheritdoc />
+        protected override void Down(MigrationBuilder migrationBuilder)
+        {
+            // Remover columnas de DetalleVenta
+            migrationBuilder.DropColumn(
+                name: "Descuento",
+                table: "DetallesVenta");
+
+            // Remover columnas de Venta
+            migrationBuilder.DropColumn(
+                name: "NumeroFactura",
+                table: "Ventas");
+
+            migrationBuilder.DropColumn(
+                name: "Subtotal",
+                table: "Ventas");
+
+            migrationBuilder.DropColumn(
+                name: "PorcentajeIVA",
+                table: "Ventas");
+
+            migrationBuilder.DropColumn(
+                name: "Estado",
+                table: "Ventas");
+
+            migrationBuilder.DropColumn(
+                name: "Observaciones",
+                table: "Ventas");
+
+            // Remover índice y columnas de Cliente
+            migrationBuilder.DropIndex(
+                name: "IX_Clientes_Documento",
+                table: "Clientes");
+
+            migrationBuilder.DropColumn(
+                name: "Activo",
+                table: "Clientes");
+
+            migrationBuilder.DropColumn(
+                name: "FechaCreacion",
+                table: "Clientes");
+
+            // Remover columnas de Producto
+            migrationBuilder.DropColumn(
+                name: "Descripcion",
+                table: "Productos");
+
+            migrationBuilder.DropColumn(
+                name: "PrecioCosto",
+                table: "Productos");
+
+            migrationBuilder.DropColumn(
+                name: "StockMinimo",
+                table: "Productos");
+
+            migrationBuilder.DropColumn(
+                name: "FechaActualizacion",
+                table: "Productos");
+
+            migrationBuilder.DropColumn(
+                name: "FechaCreacion",
+                table: "Productos");
+
+            // Remover tablas
+            migrationBuilder.DropTable(
+                name: "ErrorLogs");
+
+            migrationBuilder.DropTable(
+                name: "IntentosLogin");
+
+            migrationBuilder.DropTable(
+                name: "Usuarios");
+
+            migrationBuilder.DropTable(
+                name: "Roles");
+        }
+    }
+}

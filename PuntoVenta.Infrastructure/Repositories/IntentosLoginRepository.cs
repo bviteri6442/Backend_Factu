@@ -1,0 +1,94 @@
+using PuntoVenta.Application.Interfaces;
+using PuntoVenta.Domain.Entities;
+using PuntoVenta.Infrastructure.Persistencia;
+using Microsoft.EntityFrameworkCore;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace PuntoVenta.Infrastructure.Repositories
+{
+    /// <summary>
+    /// Repositorio para gestionar intentos de login
+    /// </summary>
+    public class IntentosLoginRepository : GenericRepository<IntentosLogin>, IIntentosLoginRepository
+    {
+        public IntentosLoginRepository(ApplicationDbContext context) : base(context)
+        {
+        }
+
+        public async Task<IntentosLogin> GetByCorreoAsync(string correo)
+        {
+            return await _dbSet.FirstOrDefaultAsync(il => il.Correo == correo);
+        }
+
+        public async Task IncrementarIntentosAsync(string correo, string ip, string userAgent)
+        {
+            var intento = await GetByCorreoAsync(correo);
+
+            if (intento == null)
+            {
+                intento = new IntentosLogin
+                {
+                    Correo = correo,
+                    NumeroIntentosFallidos = 1,
+                    FechaUltimoIntento = DateTime.UtcNow,
+                    DireccionIP = ip,
+                    UserAgent = userAgent
+                };
+                await AddAsync(intento);
+            }
+            else
+            {
+                intento.NumeroIntentosFallidos++;
+                intento.FechaUltimoIntento = DateTime.UtcNow;
+                intento.DireccionIP = ip;
+                intento.UserAgent = userAgent;
+
+                // Bloquear después de 3 intentos fallidos
+                if (intento.NumeroIntentosFallidos >= 3)
+                {
+                    intento.Bloqueado = true;
+                    intento.FechaBloqueo = DateTime.UtcNow;
+                }
+
+                await UpdateAsync(intento);
+            }
+        }
+
+        public async Task ReiniciarIntentosAsync(string correo)
+        {
+            var intento = await GetByCorreoAsync(correo);
+            if (intento != null)
+            {
+                intento.NumeroIntentosFallidos = 0;
+                intento.Bloqueado = false;
+                intento.FechaBloqueo = null;
+                await UpdateAsync(intento);
+            }
+        }
+
+        public async Task BloquearUsuarioAsync(string correo)
+        {
+            var intento = await GetByCorreoAsync(correo);
+            if (intento == null)
+            {
+                intento = new IntentosLogin
+                {
+                    Correo = correo,
+                    NumeroIntentosFallidos = 3,
+                    Bloqueado = true,
+                    FechaBloqueo = DateTime.UtcNow,
+                    FechaUltimoIntento = DateTime.UtcNow
+                };
+                await AddAsync(intento);
+            }
+            else
+            {
+                intento.Bloqueado = true;
+                intento.FechaBloqueo = DateTime.UtcNow;
+                await UpdateAsync(intento);
+            }
+        }
+    }
+}
