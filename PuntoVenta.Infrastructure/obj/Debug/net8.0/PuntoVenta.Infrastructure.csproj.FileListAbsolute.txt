@@ -18,3 +18,23 @@ C:\Users\Usuario\Desktop\Proyectos WEB\ProyectoWEB\PuntoVenta.Infrastructure\obj
 C:\Users\Usuario\Desktop\Proyectos WEB\ProyectoWEB\PuntoVenta.Infrastructure\obj\Debug\net8.0\PuntoVenta.Infrastructure.pdb
 C:\Users\Usuario\Desktop\Proyectos WEB\ProyectoWEB\PuntoVenta.Infrastructure\obj\Debug\net8.0\PuntoVenta.Infrastructure.genruntimeconfig.cache
 C:\Users\Usuario\Desktop\Proyectos WEB\ProyectoWEB\PuntoVenta.Infrastructure\obj\Debug\net8.0\ref\PuntoVenta.Infrastructure.dll
+C:\Users\LEGIO\Documents\QUINTO\TECNOLO. Y DESA. WEB\WEB_ProyectoFinal\PuntoVenta.Infrastructure\bin\Debug\net8.0\PuntoVenta.Infrastructure.deps.json
+C:\Users\LEGIO\Documents\QUINTO\TECNOLO. Y DESA. WEB\WEB_ProyectoFinal\PuntoVenta.Infrastructure\bin\Debug\net8.0\PuntoVenta.Infrastructure.runtimeconfig.json
+C:\Users\LEGIO\Documents\QUINTO\TECNOLO. Y DESA. WEB\WEB_ProyectoFinal\PuntoVenta.Infrastructure\bin\Debug\net8.0\PuntoVenta.Infrastructure.dll
+C:\Users\LEGIO\Documents\QUINTO\TECNOLO. Y DESA. WEB\WEB_ProyectoFinal\PuntoVenta.Infrastructure\bin\Debug\net8.0\PuntoVenta.Infrastructure.pdb
+C:\Users\LEGIO\Documents\QUINTO\TECNOLO. Y DESA. WEB\WEB_ProyectoFinal\PuntoVenta.Infrastructure\bin\Debug\net8.0\PuntoVenta.Application.dll
+C:\Users\LEGIO\Documents\QUINTO\TECNOLO. Y DESA. WEB\WEB_ProyectoFinal\PuntoVenta.Infrastructure\bin\Debug\net8.0\PuntoVenta.Domain.dll
+C:\Users\LEGIO\Documents\QUINTO\TECNOLO. Y DESA. WEB\WEB_ProyectoFinal\PuntoVenta.Infrastructure\bin\Debug\net8.0\PuntoVenta.Application.pdb
+C:\Users\LEGIO\Documents\QUINTO\TECNOLO. Y DESA. WEB\WEB_ProyectoFinal\PuntoVenta.Infrastructure\bin\Debug\net8.0\PuntoVenta.Domain.pdb
+C:\Users\LEGIO\Documents\QUINTO\TECNOLO. Y DESA. WEB\WEB_ProyectoFinal\PuntoVenta.Infrastructure\obj\Debug\net8.0\PuntoVenta.Infrastructure.csproj.AssemblyReference.cache
+C:\Users\LEGIO\Documents\QUINTO\TECNOLO. Y DESA. WEB\WEB_ProyectoFinal\PuntoVenta.Infrastructure\obj\Debug\net8.0\PuntoVenta.Infrastructure.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\LEGIO\Documents\QUINTO\TECNOLO. Y DESA. WEB\WEB_ProyectoFinal\PuntoVenta.Infrastructure\obj\Debug\net8.0\PuntoVenta.Infrastructure.AssemblyInfoInputs.cache
+C:\Users\LEGIO\Documents\QUINTO\TECNOLO. Y DESA. WEB\WEB_ProyectoFinal\PuntoVenta.Infrastructure\obj\Debug\net8.0\PuntoVenta.Infrastructure.AssemblyInfo.cs
+C:\Users\LEGIO\Documents\QUINTO\TECNOLO. Y DESA. WEB\WEB_ProyectoFinal\PuntoVenta.Infrastructure\obj\Debug\net8.0\PuntoVenta.Infrastructure.csproj.CoreCompileInputs.cache
+C:\Users\LEGIO\Documents\QUINTO\TECNOLO. Y DESA. WEB\WEB_ProyectoFinal\PuntoVenta.Infrastructure\obj\Debug\net8.0\PuntoVenta.Infrastructure.sourcelink.json
+C:\Users\LEGIO\Documents\QUINTO\TECNOLO. Y DESA. WEB\WEB_ProyectoFinal\PuntoVenta.Infrastructure\obj\Debug\net8.0\PuntoVen.8CF7491E.Up2Date
+C:\Users\LEGIO\Documents\QUINTO\TECNOLO. Y DESA. WEB\WEB_ProyectoFinal\PuntoVenta.Infrastructure\obj\Debug\net8.0\PuntoVenta.Infrastructure.dll
+C:\Users\LEGIO\Documents\QUINTO\TECNOLO. Y DESA. WEB\WEB_ProyectoFinal\PuntoVenta.Infrastructure\obj\Debug\net8.0\refint\PuntoVenta.Infrastructure.dll
+C:\Users\LEGIO\Documents\QUINTO\TECNOLO. Y DESA. WEB\WEB_ProyectoFinal\PuntoVenta.Infrastructure\obj\Debug\net8.0\PuntoVenta.Infrastructure.pdb
+C:\Users\LEGIO\Documents\QUINTO\TECNOLO. Y DESA. WEB\WEB_ProyectoFinal\PuntoVenta.Infrastructure\obj\Debug\net8.0\PuntoVenta.Infrastructure.genruntimeconfig.cache
+C:\Users\LEGIO\Documents\QUINTO\TECNOLO. Y DESA. WEB\WEB_ProyectoFinal\PuntoVenta.Infrastructure\obj\Debug\net8.0\ref\PuntoVenta.Infrastructure.dll
