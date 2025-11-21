@@ -1,0 +1,24 @@
+﻿using PuntoVenta.Application.Interfaces;
+using PuntoVenta.Domain.Entities;
+using PuntoVenta.Infrastructure.Persistencia;
+using Microsoft.EntityFrameworkCore;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace PuntoVenta.Infrastructure.Repositories
+{
+    /// <summary>
+    /// Repositorio para gestionar Roles
+    /// </summary>
+    public class RolRepository : GenericRepository<Rol>, IRolRepository
+    {
+        public RolRepository(ApplicationDbContext context) : base(context)
+        {
+        }
+
+        public async Task<Rol> GetByNombreAsync(string nombre)
+        {
+            return await _dbSet.FirstOrDefaultAsync(r => r.Nombre == nombre && r.Activo);
+        }
+    }
+}

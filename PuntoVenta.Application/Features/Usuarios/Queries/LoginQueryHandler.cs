@@ -69,11 +69,10 @@ namespace PuntoVenta.Application.Features.Usuarios.Queries
 
                 // Verificar contraseña (BCrypt)
                 bool esContrasenValida = false;
-                if (!string.IsNullOrEmpty(usuario.Contrasena))
+                if (!string.IsNullOrEmpty(usuario.ContrasenaHash)) // Changed from Contrasena to ContrasenaHash
                 {
                     // Usar BCrypt para verificar
-                    esContrasenValida = request.Contrasena == usuario.Contrasena || 
-                        BCrypt.Net.BCrypt.Verify(request.Contrasena, usuario.Contrasena);
+                    esContrasenValida = BCrypt.Net.BCrypt.Verify(request.Contrasena, usuario.ContrasenaHash);
                 }
                 
                 if (!esContrasenValida)
@@ -102,7 +101,7 @@ namespace PuntoVenta.Application.Features.Usuarios.Queries
                 response.Token = token;
                 response.UsuarioId = usuario.Id;
                 response.NombreUsuario = usuario.NombreCompleto;
-                response.Rol = usuario.Rol?.Nombre;
+                response.Rol = usuario.RolNombre; // Changed from usuario.Rol?.Nombre to usuario.RolNombre (denormalized)
                 response.Mensaje = "Login exitoso";
             }
             catch (Exception ex)
@@ -128,7 +127,7 @@ namespace PuntoVenta.Application.Features.Usuarios.Queries
                     new Claim(ClaimTypes.Email, usuario.Correo ?? ""),
                     new Claim(ClaimTypes.Name, usuario.NombreCompleto ?? ""),
                     new Claim("Cedula", usuario.Cedula ?? ""),
-                    new Claim(ClaimTypes.Role, usuario.Rol?.Nombre ?? "Usuario")
+                    new Claim(ClaimTypes.Role, usuario.RolNombre ?? "Usuario") // Changed from usuario.Rol?.Nombre
                 }),
                 Expires = DateTime.UtcNow.AddHours(24),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)

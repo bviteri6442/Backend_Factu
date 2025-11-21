@@ -1,8 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
-using Microsoft.EntityFrameworkCore;
 using PuntoVenta.Infrastructure.Persistencia;
-using Microsoft.AspNetCore.Identity;
 using PuntoVenta.Application.Interfaces;
 using PuntoVenta.Infrastructure.Repositories;
 
@@ -14,41 +12,19 @@ namespace PuntoVenta.Infrastructure
             this IServiceCollection services,
             IConfiguration configuration)
         {
-            var connectionString = configuration.GetConnectionString("DefaultConnection");
+            // Register MongoDB Context
+            services.AddSingleton<MongoDbContext>();
 
-            services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(connectionString,
-                    b => b.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)));
-
-            services.AddIdentityCore<IdentityUser>(options =>
-            {
-                options.SignIn.RequireConfirmedAccount = false;
-                
-                // Configurar políticas de contraseña más estrictas
-                options.Password.RequiredLength = 4;
-                options.Password.RequireDigit = true;
-                options.Password.RequireLowercase = true;
-                options.Password.RequireUppercase = true;
-                options.Password.RequireNonAlphanumeric = true;
-                
-                // Lockout configuración
-                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(30);
-                options.Lockout.MaxFailedAccessAttempts = 3;
-                options.Lockout.AllowedForNewUsers = true;
-            })
-                .AddRoles<IdentityRole>()
-                .AddEntityFrameworkStores<ApplicationDbContext>();
-
-            // Registrar Repositorios
+            // Register Repositories
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<IUsuarioRepository, UsuarioRepository>();
             services.AddScoped<IRolRepository, RolRepository>();
             services.AddScoped<IClienteRepository, ClienteRepository>();
-            services.AddScoped<IVentaRepository, VentaRepository>();
+            services.AddScoped<IFacturaRepository, FacturaRepository>(); // Changed from IVentaRepository
             services.AddScoped<IErrorLogRepository, ErrorLogRepository>();
             services.AddScoped<IIntentosLoginRepository, IntentosLoginRepository>();
             
-            // Registrar Unit of Work
+            // Register Unit of Work
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             return services;

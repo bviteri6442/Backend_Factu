@@ -1,0 +1,52 @@
+﻿using MediatR;
+using PuntoVenta.Application.Interfaces;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
+
+namespace PuntoVenta.Application.Features.Ventas.Commands
+{
+    public class UpdateVentaCommandHandler : IRequestHandler<UpdateVentaCommand, bool>
+    {
+        private readonly IUnitOfWork _unitOfWork;
+
+        public UpdateVentaCommandHandler(IUnitOfWork unitOfWork)
+        {
+            _unitOfWork = unitOfWork;
+        }
+
+        public async Task<bool> Handle(UpdateVentaCommand request, CancellationToken cancellationToken)
+        {
+            try
+            {
+                // Changed: Use Facturas instead of Ventas (MongoDB migration)
+                var factura = await _unitOfWork.Facturas.GetByIdAsync(request.VentaId.ToString());
+
+                if (factura == null)
+                {
+                    throw new Exception($"Factura con ID {request.VentaId} no encontrada");
+                }
+
+                // Update allowed fields
+                if (!string.IsNullOrEmpty(request.Observaciones))
+                {
+                    factura.Observaciones = request.Observaciones;
+                }
+
+                if (!string.IsNullOrEmpty(request.Estado))
+                {
+                    factura.Estado = request.Estado;
+                }
+
+                await _unitOfWork.Facturas.UpdateAsync(factura);
+                await _unitOfWork.SaveChangesAsync();
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error al actualizar factura: {ex.Message}");
+            }
+        }
+    }
+}

@@ -307,3 +307,11 @@ C:\Users\LEGIO\Documents\QUINTO\TECNOLO. Y DESA. WEB\WEB_ProyectoFinal\PuntoVent
 C:\Users\LEGIO\Documents\QUINTO\TECNOLO. Y DESA. WEB\WEB_ProyectoFinal\PuntoVenta.Api\obj\Debug\net8.0\PuntoVenta.Api.pdb
 C:\Users\LEGIO\Documents\QUINTO\TECNOLO. Y DESA. WEB\WEB_ProyectoFinal\PuntoVenta.Api\obj\Debug\net8.0\PuntoVenta.Api.genruntimeconfig.cache
 C:\Users\LEGIO\Documents\QUINTO\TECNOLO. Y DESA. WEB\WEB_ProyectoFinal\PuntoVenta.Api\obj\Debug\net8.0\ref\PuntoVenta.Api.dll
+C:\Users\LEGIO\Documents\QUINTO\TECNOLO. Y DESA. WEB\Backend_Factu\PuntoVenta.Api\obj\Debug\net8.0\PuntoVenta.Api.csproj.AssemblyReference.cache
+C:\Users\LEGIO\Documents\QUINTO\TECNOLO. Y DESA. WEB\Backend_Factu\PuntoVenta.Api\obj\Debug\net8.0\rpswa.dswa.cache.json
+C:\Users\LEGIO\Documents\QUINTO\TECNOLO. Y DESA. WEB\Backend_Factu\PuntoVenta.Api\obj\Debug\net8.0\PuntoVenta.Api.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\LEGIO\Documents\QUINTO\TECNOLO. Y DESA. WEB\Backend_Factu\PuntoVenta.Api\obj\Debug\net8.0\PuntoVenta.Api.AssemblyInfoInputs.cache
+C:\Users\LEGIO\Documents\QUINTO\TECNOLO. Y DESA. WEB\Backend_Factu\PuntoVenta.Api\obj\Debug\net8.0\PuntoVenta.Api.AssemblyInfo.cs
+C:\Users\LEGIO\Documents\QUINTO\TECNOLO. Y DESA. WEB\Backend_Factu\PuntoVenta.Api\obj\Debug\net8.0\PuntoVenta.Api.csproj.CoreCompileInputs.cache
+C:\Users\LEGIO\Documents\QUINTO\TECNOLO. Y DESA. WEB\Backend_Factu\PuntoVenta.Api\obj\Debug\net8.0\PuntoVenta.Api.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\LEGIO\Documents\QUINTO\TECNOLO. Y DESA. WEB\Backend_Factu\PuntoVenta.Api\obj\Debug\net8.0\PuntoVenta.Api.sourcelink.json

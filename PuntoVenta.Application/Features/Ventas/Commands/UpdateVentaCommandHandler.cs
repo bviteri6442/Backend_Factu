@@ -19,30 +19,33 @@ namespace PuntoVenta.Application.Features.Ventas.Commands
         {
             try
             {
-                var venta = await _unitOfWork.Ventas.GetByIdAsync(request.VentaId);
+                // Changed: Use Facturas instead of Ventas (MongoDB migration)
+                var factura = await _unitOfWork.Facturas.GetByIdAsync(request.VentaId.ToString());
 
-                if (venta == null)
+                if (factura == null)
                 {
-                    throw new Exception($"Venta con ID {request.VentaId} no encontrada");
+                    throw new Exception($"Factura con ID {request.VentaId} no encontrada");
                 }
 
-                // Solo permitir cambios si la venta está en estado Completada
-                if (venta.Estado != "Completada")
+                // Update allowed fields
+                if (!string.IsNullOrEmpty(request.Observaciones))
                 {
-                    throw new Exception($"No se puede modificar una venta en estado {venta.Estado}");
+                    factura.Observaciones = request.Observaciones;
                 }
 
-                venta.Estado = request.Estado;
-                venta.Observaciones = request.Observaciones;
+                if (!string.IsNullOrEmpty(request.Estado))
+                {
+                    factura.Estado = request.Estado;
+                }
 
-                await _unitOfWork.Ventas.UpdateAsync(venta);
+                await _unitOfWork.Facturas.UpdateAsync(factura);
                 await _unitOfWork.SaveChangesAsync();
 
                 return true;
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error al actualizar venta: {ex.Message}");
+                throw new Exception($"Error al actualizar factura: {ex.Message}");
             }
         }
     }

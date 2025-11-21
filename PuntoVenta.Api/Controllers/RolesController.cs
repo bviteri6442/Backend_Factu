@@ -29,7 +29,7 @@ namespace PuntoVenta.Api.Controllers
                 var roles = await _unitOfWork.Roles.GetAllAsync();
                 var rolesDto = roles.Select(r => new RolResponseDto
                 {
-                    Id = r.Id,
+                    Id = r.Id, // string (MongoDB ObjectId)
                     Nombre = r.Nombre,
                     Descripcion = r.Descripcion,
                     Activo = r.Activo,
@@ -48,7 +48,7 @@ namespace PuntoVenta.Api.Controllers
         /// Obtener rol por ID
         /// </summary>
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetRol(int id)
+        public async Task<IActionResult> GetRol(string id) // Changed from int to string
         {
             try
             {
@@ -90,8 +90,8 @@ namespace PuntoVenta.Api.Controllers
             {
                 var rol = new Rol
                 {
-                    Nombre = createRolDto.Nombre,
-                    Descripcion = createRolDto.Descripcion,
+                    Nombre = createRolDto.Nombre ?? string.Empty,
+                    Descripcion = createRolDto.Descripcion ?? string.Empty,
                     Activo = true,
                     FechaCreacion = DateTime.UtcNow
                 };
@@ -111,7 +111,7 @@ namespace PuntoVenta.Api.Controllers
         /// Actualizar rol
         /// </summary>
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateRol(int id, [FromBody] UpdateRolDto updateRolDto)
+        public async Task<IActionResult> UpdateRol(string id, [FromBody] UpdateRolDto updateRolDto) // Changed from int to string
         {
             if (!ModelState.IsValid)
             {
@@ -150,7 +150,7 @@ namespace PuntoVenta.Api.Controllers
         /// Desactivar rol
         /// </summary>
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteRol(int id)
+        public async Task<IActionResult> DeleteRol(string id) // Changed from int to string
         {
             try
             {

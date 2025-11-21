@@ -19,21 +19,22 @@ namespace PuntoVenta.Application.Features.Ventas.Commands
         {
             try
             {
-                var venta = await _unitOfWork.Ventas.GetByIdAsync(request.VentaId);
+                // Cambiado: Usar Facturas en lugar de Ventas (migración de MongoDB)
+                var factura = await _unitOfWork.Facturas.GetFacturaConDetallesAsync(request.VentaId.ToString());
 
-                if (venta == null)
+                if (factura == null)
                 {
-                    throw new Exception($"Venta con ID {request.VentaId} no encontrada");
+                    throw new Exception($"Factura con ID {request.VentaId} no encontrada");
                 }
 
-                // Solo permitir eliminar ventas en estado Cancelada o completadas muy antiguas
-                if (venta.Estado != "Cancelada" && venta.Estado != "Anulada")
+                // Solo permitir eliminar facturas en estado Cancelada o Anulada
+                if (factura.Estado != "Cancelada" && factura.Estado != "Anulada")
                 {
-                    throw new Exception($"No se puede eliminar una venta en estado {venta.Estado}");
+                    throw new Exception($"No se puede eliminar una factura en estado {factura.Estado}");
                 }
 
-                // Restaurar stock de productos si se elimina una venta
-                foreach (var detalle in venta.Detalles)
+                // Restaurar stock de productos si se elimina una factura
+                foreach (var detalle in factura.Detalles)
                 {
                     var producto = await _unitOfWork.Productos.GetByIdAsync(detalle.ProductoId);
                     if (producto != null)
@@ -43,14 +44,14 @@ namespace PuntoVenta.Application.Features.Ventas.Commands
                     }
                 }
 
-                await _unitOfWork.Ventas.DeleteAsync(request.VentaId);
+                await _unitOfWork.Facturas.DeleteAsync(factura.Id);
                 await _unitOfWork.SaveChangesAsync();
 
                 return true;
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error al eliminar venta: {ex.Message}");
+                throw new Exception($"Error al eliminar factura: {ex.Message}");
             }
         }
     }

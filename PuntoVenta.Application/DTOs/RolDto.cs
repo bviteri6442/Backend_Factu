@@ -9,11 +9,10 @@ namespace PuntoVenta.Application.DTOs
     {
         [Required(ErrorMessage = "El nombre del rol es requerido")]
         [StringLength(100, MinimumLength = 3, ErrorMessage = "El nombre debe tener entre 3 y 100 caracteres")]
-
-    public string? Nombre { get; set; }
+        public string? Nombre { get; set; }
 
         [StringLength(500, ErrorMessage = "La descripción no puede exceder 500 caracteres")]
-    public string? Descripcion { get; set; }
+        public string? Descripcion { get; set; }
     }
 
     /// <summary>
@@ -21,7 +20,7 @@ namespace PuntoVenta.Application.DTOs
     /// </summary>
     public class UpdateRolDto
     {
-        public int Id { get; set; }
+        public string? Id { get; set; } // Changed from int to string for MongoDB ObjectId
 
         [StringLength(100, MinimumLength = 3, ErrorMessage = "El nombre debe tener entre 3 y 100 caracteres")]
         public string? Nombre { get; set; }
@@ -37,7 +36,7 @@ namespace PuntoVenta.Application.DTOs
     /// </summary>
     public class RolResponseDto
     {
-        public int Id { get; set; }
+        public string Id { get; set; } = string.Empty; // Changed from int to string for MongoDB ObjectId
         public string? Nombre { get; set; }
         public string? Descripcion { get; set; }
         public bool Activo { get; set; }

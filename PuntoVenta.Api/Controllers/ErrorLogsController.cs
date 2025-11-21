@@ -88,7 +88,7 @@ namespace PuntoVenta.Api.Controllers
         /// Obtiene un error específico por ID
         /// </summary>
         [HttpGet("{id}")]
-        public async Task<ActionResult<dynamic>> GetErrorLogById(int id)
+        public async Task<ActionResult<dynamic>> GetErrorLogById(string id) // Changed from int to string
         {
             try
             {
@@ -127,7 +127,7 @@ namespace PuntoVenta.Api.Controllers
         /// Marca un error como revisado
         /// </summary>
         [HttpPut("{id}/revisar")]
-        public async Task<ActionResult<bool>> MarcarComoRevisado(int id)
+        public async Task<ActionResult<bool>> MarcarComoRevisado(string id) // Changed from int to string
         {
             try
             {
@@ -219,7 +219,7 @@ namespace PuntoVenta.Api.Controllers
 
                 foreach (var error in erroresEliminar)
                 {
-                    await _unitOfWork.ErrorLogs.DeleteAsync(error.Id);
+                    await _unitOfWork.ErrorLogs.DeleteAsync(error.Id); // error.Id is now string
                 }
 
                 await _unitOfWork.SaveChangesAsync();

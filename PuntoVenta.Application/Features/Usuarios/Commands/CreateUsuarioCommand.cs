@@ -9,6 +9,6 @@ namespace PuntoVenta.Application.Features.Usuarios.Commands
         public string? Correo { get; set; }
         public string? NombreCompleto { get; set; }
         public string? Contrasena { get; set; }
-        public int RolId { get; set; }
+        public string RolId { get; set; } = string.Empty; // Changed from int to string for MongoDB ObjectId
     }
 }

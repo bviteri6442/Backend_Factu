@@ -1,0 +1,121 @@
+﻿using MongoDB.Driver;
+using PuntoVenta.Application.Interfaces;
+using PuntoVenta.Infrastructure.Persistencia;
+using System;
+using System.Threading.Tasks;
+
+namespace PuntoVenta.Infrastructure.Repositories
+{
+    /// <summary>
+    /// MongoDB Unit of Work implementation with transaction support
+    /// </summary>
+    public class UnitOfWork : IUnitOfWork
+    {
+        private readonly MongoDbContext _context;
+        private IClientSessionHandle? _session;
+
+        private IProductRepository? _productRepository;
+        private IUsuarioRepository? _usuarioRepository;
+        private IRolRepository? _rolRepository;
+        private IClienteRepository? _clienteRepository;
+        private IFacturaRepository? _facturaRepository;
+        private IErrorLogRepository? _errorLogRepository;
+        private IIntentosLoginRepository? _intentosLoginRepository;
+
+        public UnitOfWork(MongoDbContext context)
+        {
+            _context = context;
+        }
+
+        public IProductRepository Productos
+        {
+            get
+            {
+                return _productRepository ??= new ProductRepository(_context);
+            }
+        }
+
+        public IUsuarioRepository Usuarios
+        {
+            get
+            {
+                return _usuarioRepository ??= new UsuarioRepository(_context);
+            }
+        }
+
+        public IRolRepository Roles
+        {
+            get
+            {
+                return _rolRepository ??= new RolRepository(_context);
+            }
+        }
+
+        public IClienteRepository Clientes
+        {
+            get
+            {
+                return _clienteRepository ??= new ClienteRepository(_context);
+            }
+        }
+
+        public IFacturaRepository Facturas
+        {
+            get
+            {
+                return _facturaRepository ??= new FacturaRepository(_context);
+            }
+        }
+
+        public IErrorLogRepository ErrorLogs
+        {
+            get
+            {
+                return _errorLogRepository ??= new ErrorLogRepository(_context);
+            }
+        }
+
+        public IIntentosLoginRepository IntentosLogin
+        {
+            get
+            {
+                return _intentosLoginRepository ??= new IntentosLoginRepository(_context);
+            }
+        }
+
+        // MongoDB doesn't require SaveChangesAsync (auto-commit per operation)
+        public async Task<int> SaveChangesAsync()
+        {
+            // MongoDB writes are atomic by default
+            return await Task.FromResult(0);
+        }
+
+        public async Task BeginTransactionAsync()
+        {
+            _session = _context.StartSession();
+            _session.StartTransaction();
+            await Task.CompletedTask;
+        }
+
+        public async Task CommitTransactionAsync()
+        {
+            if (_session != null)
+            {
+                await _session.CommitTransactionAsync();
+            }
+        }
+
+        public async Task RollbackTransactionAsync()
+        {
+            if (_session != null)
+            {
+                await _session.AbortTransactionAsync();
+            }
+        }
+
+        public void Dispose()
+        {
+            _session?.Dispose();
+        }
+    }
+}

@@ -1,0 +1,34 @@
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Configuration;
+using PuntoVenta.Infrastructure.Persistencia;
+using PuntoVenta.Application.Interfaces;
+using PuntoVenta.Infrastructure.Repositories;
+
+namespace PuntoVenta.Infrastructure
+{
+    public static class ServiceCollectionExtensions
+    {
+        public static IServiceCollection AddInfrastructureServices(
+            this IServiceCollection services,
+            IConfiguration configuration)
+        {
+            // Register MongoDB Context
+            services.AddSingleton<MongoDbContext>();
+
+            // Register Repositories
+            services.AddScoped<IProductRepository, ProductRepository>();
+            services.AddScoped<IUsuarioRepository, UsuarioRepository>();
+            services.AddScoped<IRolRepository, RolRepository>();
+            services.AddScoped<IClienteRepository, ClienteRepository>();
+            services.AddScoped<IVentaRepository, VentaRepository>();
+            services.AddScoped<IErrorLogRepository, ErrorLogRepository>();
+            services.AddScoped<IIntentosLoginRepository, IntentosLoginRepository>();
+            
+            // Register Unit of Work
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+            return services;
+        }
+    }
+}
+

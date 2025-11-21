@@ -13,7 +13,7 @@ namespace PuntoVenta.Application.Interfaces
         IUsuarioRepository Usuarios { get; }
         IRolRepository Roles { get; }
         IClienteRepository Clientes { get; }
-        IVentaRepository Ventas { get; }
+        IFacturaRepository Facturas { get; } // Cambiado de IVentaRepository a IFacturaRepository
         IErrorLogRepository ErrorLogs { get; }
         IIntentosLoginRepository IntentosLogin { get; }
 

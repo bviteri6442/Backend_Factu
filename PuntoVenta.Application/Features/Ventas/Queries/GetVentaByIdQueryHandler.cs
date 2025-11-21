@@ -22,32 +22,33 @@ namespace PuntoVenta.Application.Features.Ventas.Queries
         {
             try
             {
-                var venta = await _unitOfWork.Ventas.GetByIdAsync(request.VentaId);
+                // Changed: Use Facturas instead of Ventas (MongoDB migration)
+                var factura = await _unitOfWork.Facturas.GetFacturaConDetallesAsync(request.VentaId.ToString());
 
-                if (venta == null)
+                if (factura == null)
                 {
-                    throw new Exception($"Venta con ID {request.VentaId} no encontrada");
+                    throw new Exception($"Factura con ID {request.VentaId} no encontrada");
                 }
 
                 var resultado = new VentaDetailResponseDto
                 {
-                    VentaId = venta.Id,
-                    NumeroFactura = venta.NumeroFactura,
-                    FechaVenta = venta.FechaVenta,
-                    UsuarioId = venta.UsuarioId,
-                    UsuarioNombre = null,
-                    ClienteId = venta.ClienteId,
-                    ClienteNombre = venta.Cliente?.Nombre,
-                    Subtotal = venta.Subtotal,
-                    PorcentajeIVA = venta.PorcentajeIVA,
-                    TotalImpuesto = venta.TotalImpuesto,
-                    TotalVenta = venta.TotalVenta,
-                    Estado = venta.Estado,
-                    Observaciones = venta.Observaciones,
-                    Detalles = venta.Detalles?.Select(d => new DetalleVentaResponseDto
+                    VentaId = request.VentaId,
+                    NumeroFactura = factura.NumeroFactura,
+                    FechaVenta = factura.FechaVenta,
+                    UsuarioId = factura.UsuarioId,
+                    UsuarioNombre = factura.UsuarioNombre,
+                    ClienteId = !string.IsNullOrEmpty(factura.ClienteId) && int.TryParse(factura.ClienteId, out int cId) ? cId : (int?)null,
+                    ClienteNombre = factura.ClienteNombre,
+                    Subtotal = factura.Subtotal,
+                    PorcentajeIVA = factura.PorcentajeIVA,
+                    TotalImpuesto = factura.TotalImpuesto,
+                    TotalVenta = factura.TotalVenta,
+                    Estado = factura.Estado,
+                    Observaciones = factura.Observaciones,
+                    Detalles = factura.Detalles?.Select(d => new DetalleVentaResponseDto
                     {
-                        ProductoId = d.ProductoId,
-                        ProductoNombre = d.Producto != null ? d.Producto.Nombre : null,
+                        ProductoId = int.TryParse(d.ProductoId, out int pId) ? pId : 0,
+                        ProductoNombre = d.ProductoNombre,
                         Cantidad = d.Cantidad,
                         PrecioUnitario = d.PrecioUnitario,
                         Descuento = d.Descuento,
@@ -59,7 +60,7 @@ namespace PuntoVenta.Application.Features.Ventas.Queries
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error al obtener venta: {ex.Message}");
+                throw new Exception($"Error al obtener factura: {ex.Message}");
             }
         }
     }

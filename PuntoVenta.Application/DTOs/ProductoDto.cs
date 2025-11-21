@@ -9,14 +9,14 @@ namespace PuntoVenta.Application.DTOs
     {
         [Required(ErrorMessage = "El nombre del producto es requerido")]
         [StringLength(200, MinimumLength = 3, ErrorMessage = "El nombre debe tener entre 3 y 200 caracteres")]
-    public string? Nombre { get; set; }
+        public string? Nombre { get; set; }
 
         [Required(ErrorMessage = "El código de barras es requerido")]
         [StringLength(50, MinimumLength = 3, ErrorMessage = "El código de barras debe tener entre 3 y 50 caracteres")]
-    public string? CodigoBarra { get; set; }
+        public string? CodigoBarra { get; set; }
 
         [StringLength(500, ErrorMessage = "La descripción no puede exceder 500 caracteres")]
-    public string? Descripcion { get; set; }
+        public string? Descripcion { get; set; }
 
         [Required(ErrorMessage = "El precio de costo es requerido")]
         [Range(0.01, double.MaxValue, ErrorMessage = "El precio de costo debe ser mayor a 0")]
@@ -39,13 +39,13 @@ namespace PuntoVenta.Application.DTOs
     /// </summary>
     public class UpdateProductoDto
     {
-        public int Id { get; set; }
+        public string? Id { get; set; } // Changed from int to string for MongoDB ObjectId
 
         [StringLength(200, MinimumLength = 3, ErrorMessage = "El nombre debe tener entre 3 y 200 caracteres")]
-    public string? Nombre { get; set; }
+        public string? Nombre { get; set; }
 
-    [StringLength(500, ErrorMessage = "La descripción no puede exceder 500 caracteres")]
-    public string? Descripcion { get; set; }
+        [StringLength(500, ErrorMessage = "La descripción no puede exceder 500 caracteres")]
+        public string? Descripcion { get; set; }
 
         [Range(0.01, double.MaxValue, ErrorMessage = "El precio de costo debe ser mayor a 0")]
         public decimal? PrecioCosto { get; set; }
@@ -67,7 +67,7 @@ namespace PuntoVenta.Application.DTOs
     /// </summary>
     public class ProductoResponseDto
     {
-        public int Id { get; set; }
+        public string Id { get; set; } = string.Empty; // Changed from int to string for MongoDB ObjectId
         public string? Nombre { get; set; }
         public string? CodigoBarra { get; set; }
         public string? Descripcion { get; set; }

@@ -22,13 +22,13 @@ namespace PuntoVenta.Application.Features.Usuarios.Commands
             try
             {
                 // Validar que no exista usuario con el mismo correo
-                if (await _unitOfWork.Usuarios.ExisteCorreoAsync(request.Correo))
+                if (await _unitOfWork.Usuarios.ExisteCorreoAsync(request.Correo ?? string.Empty))
                 {
                     throw new Exception("Ya existe un usuario con este correo");
                 }
 
                 // Validar que no exista usuario con la misma cédula
-                if (await _unitOfWork.Usuarios.ExisteCedulaAsync(request.Cedula))
+                if (await _unitOfWork.Usuarios.ExisteCedulaAsync(request.Cedula ?? string.Empty))
                 {
                     throw new Exception("Ya existe un usuario con esta cédula");
                 }
@@ -40,21 +40,18 @@ namespace PuntoVenta.Application.Features.Usuarios.Commands
                     throw new Exception("El rol especificado no existe");
                 }
 
-                // Generar ID único para el usuario
-                var usuarioId = Guid.NewGuid().ToString();
-
                 // Hash de contraseña usando BCrypt
                 var contraseniaHasheada = BCrypt.Net.BCrypt.EnhancedHashPassword(request.Contrasena, HashType.SHA384);
 
                 // Crear nuevo usuario
                 var nuevoUsuario = new Usuario
                 {
-                    Id = usuarioId,
-                    Cedula = request.Cedula,
-                    Correo = request.Correo,
-                    NombreCompleto = request.NombreCompleto,
-                    Contrasena = contraseniaHasheada,
+                    Cedula = request.Cedula ?? string.Empty,
+                    Correo = request.Correo ?? string.Empty,
+                    NombreCompleto = request.NombreCompleto ?? string.Empty,
+                    ContrasenaHash = contraseniaHasheada, // Cambiado de Contrasena a ContrasenaHash
                     RolId = request.RolId,
+                    RolNombre = rol.Nombre, // Desnormalizar nombre del rol para MongoDB
                     Activo = true,
                     FechaCreacion = DateTime.UtcNow
                 };

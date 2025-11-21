@@ -22,61 +22,53 @@ namespace PuntoVenta.Application.Features.Ventas.Queries
         {
             try
             {
-                var ventas = await _unitOfWork.Ventas.GetAllAsync();
+                // Changed: Use Facturas instead of Ventas (MongoDB migration)
+                var facturas = await _unitOfWork.Facturas.GetAllAsync();
 
-                // Aplicar filtros
-                var ventasFiltradas = ventas.AsQueryable();
+                // Apply filters
+                var query = facturas.AsEnumerable();
 
                 if (request.FechaInicio.HasValue)
                 {
-                    ventasFiltradas = ventasFiltradas.Where(v => v.FechaVenta >= request.FechaInicio.Value);
+                    query = query.Where(v => v.FechaVenta >= request.FechaInicio.Value);
                 }
 
                 if (request.FechaFin.HasValue)
                 {
-                    ventasFiltradas = ventasFiltradas.Where(v => v.FechaVenta <= request.FechaFin.Value);
+                    query = query.Where(v => v.FechaVenta <= request.FechaFin.Value);
                 }
 
                 if (!string.IsNullOrEmpty(request.UsuarioId))
                 {
-                    ventasFiltradas = ventasFiltradas.Where(v => v.UsuarioId == request.UsuarioId);
-                }
-
-                if (request.ClienteId.HasValue)
-                {
-                    ventasFiltradas = ventasFiltradas.Where(v => v.ClienteId == request.ClienteId.Value);
+                    query = query.Where(v => v.UsuarioId == request.UsuarioId);
                 }
 
                 if (!string.IsNullOrEmpty(request.Estado))
                 {
-                    ventasFiltradas = ventasFiltradas.Where(v => v.Estado == request.Estado);
+                    query = query.Where(v => v.Estado == request.Estado);
                 }
 
-                var resultado = ventasFiltradas
-                    .Select(v => new VentaResponseDto
-                    {
-                        VentaId = v.Id,
-                        NumeroFactura = v.NumeroFactura,
-                        FechaVenta = v.FechaVenta,
-                        UsuarioId = v.UsuarioId,
-                        UsuarioNombre = null,
-                        ClienteId = v.ClienteId,
-                        ClienteNombre = v.Cliente != null ? v.Cliente.Nombre : null,
-                        Subtotal = v.Subtotal,
-                        PorcentajeIVA = v.PorcentajeIVA,
-                        TotalImpuesto = v.TotalImpuesto,
-                        TotalVenta = v.TotalVenta,
-                        Estado = v.Estado,
-                        Observaciones = v.Observaciones
-                    })
-                    .OrderByDescending(v => v.FechaVenta)
-                    .ToList();
+                // Map to DTO
+                var resultado = query.Select(f => new VentaResponseDto
+                {
+                    VentaId = int.TryParse(f.Id, out int id) ? id : 0, // Temporary conversion
+                    NumeroFactura = f.NumeroFactura,
+                    FechaVenta = f.FechaVenta,
+                    UsuarioId = f.UsuarioId,
+                    UsuarioNombre = f.UsuarioNombre,
+                    ClienteId = !string.IsNullOrEmpty(f.ClienteId) && int.TryParse(f.ClienteId, out int cId) ? cId : (int?)null,
+                    ClienteNombre = f.ClienteNombre,
+                    Subtotal = f.Subtotal,
+                    TotalImpuesto = f.TotalImpuesto,
+                    TotalVenta = f.TotalVenta,
+                    Estado = f.Estado
+                }).ToList();
 
                 return resultado;
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error al obtener ventas: {ex.Message}");
+                throw new Exception($"Error al obtener facturas: {ex.Message}");
             }
         }
     }

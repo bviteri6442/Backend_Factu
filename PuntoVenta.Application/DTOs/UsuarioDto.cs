@@ -9,11 +9,11 @@ namespace PuntoVenta.Application.DTOs
     {
         [Required(ErrorMessage = "El correo es requerido")]
         [EmailAddress(ErrorMessage = "El formato del correo no es válido")]
-    public string? Correo { get; set; }
+        public string? Correo { get; set; }
 
         [Required(ErrorMessage = "La contraseña es requerida")]
         [StringLength(10, MinimumLength = 4, ErrorMessage = "La contraseña debe tener entre 4 y 10 caracteres")]
-    public string? Contrasena { get; set; }
+        public string? Contrasena { get; set; }
     }
 
     /// <summary>
@@ -23,24 +23,24 @@ namespace PuntoVenta.Application.DTOs
     {
         [Required(ErrorMessage = "La cédula es requerida")]
         [RegularExpression(@"^\d{6,10}$", ErrorMessage = "La cédula debe contener entre 6 y 10 dígitos")]
-    public string? Cedula { get; set; }
+        public string? Cedula { get; set; }
 
         [Required(ErrorMessage = "El correo es requerido")]
         [EmailAddress(ErrorMessage = "El formato del correo no es válido")]
-    public string? Correo { get; set; }
+        public string? Correo { get; set; }
 
         [Required(ErrorMessage = "El nombre completo es requerido")]
         [StringLength(150, MinimumLength = 3, ErrorMessage = "El nombre debe tener entre 3 y 150 caracteres")]
-    public string? NombreCompleto { get; set; }
+        public string? NombreCompleto { get; set; }
 
         [Required(ErrorMessage = "La contraseña es requerida")]
         [StringLength(10, MinimumLength = 4, ErrorMessage = "La contraseña debe tener entre 4 y 10 caracteres")]
         [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$",
             ErrorMessage = "La contraseña debe contener al menos una mayúscula, una minúscula, un número y un carácter especial")]
-    public string? Contrasena { get; set; }
+        public string? Contrasena { get; set; }
 
         [Required(ErrorMessage = "El rol es requerido")]
-        public int RolId { get; set; }
+        public string RolId { get; set; } = string.Empty; // Changed from int to string for MongoDB ObjectId
     }
 
     /// <summary>
@@ -48,15 +48,15 @@ namespace PuntoVenta.Application.DTOs
     /// </summary>
     public class UpdateUsuarioDto
     {
-        public int Id { get; set; }
+        public string? Id { get; set; } // Changed from int to string for MongoDB ObjectId
 
         [StringLength(150, MinimumLength = 3, ErrorMessage = "El nombre debe tener entre 3 y 150 caracteres")]
-    public string? NombreCompleto { get; set; }
+        public string? NombreCompleto { get; set; }
 
-    [EmailAddress(ErrorMessage = "El formato del correo no es válido")]
-    public string? Correo { get; set; }
+        [EmailAddress(ErrorMessage = "El formato del correo no es válido")]
+        public string? Correo { get; set; }
 
-        public int? RolId { get; set; }
+        public string? RolId { get; set; } // Changed from int? to string? for MongoDB ObjectId
 
         public bool? Activo { get; set; }
     }
@@ -74,6 +74,7 @@ namespace PuntoVenta.Application.DTOs
         public DateTime? FechaBloqueo { get; set; }
         public DateTime FechaCreacion { get; set; }
         public DateTime? FechaUltimoLogin { get; set; }
-        public RolResponseDto? Rol { get; set; }
+        public string? RolNombre { get; set; } // MongoDB denormalizes rol data
+        public string? RolId { get; set; }
     }
 }

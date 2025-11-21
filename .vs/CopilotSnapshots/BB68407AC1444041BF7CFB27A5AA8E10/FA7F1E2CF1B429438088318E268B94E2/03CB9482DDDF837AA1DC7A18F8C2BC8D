@@ -1,0 +1,66 @@
+﻿using MediatR;
+using PuntoVenta.Application.Interfaces;
+using PuntoVenta.Application.DTOs;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+
+namespace PuntoVenta.Application.Features.Ventas.Queries
+{
+    public class GetVentaByIdQueryHandler : IRequestHandler<GetVentaByIdQuery, VentaDetailResponseDto>
+    {
+        private readonly IUnitOfWork _unitOfWork;
+
+        public GetVentaByIdQueryHandler(IUnitOfWork unitOfWork)
+        {
+            _unitOfWork = unitOfWork;
+        }
+
+        public async Task<VentaDetailResponseDto> Handle(GetVentaByIdQuery request, CancellationToken cancellationToken)
+        {
+            try
+            {
+                var venta = await _unitOfWork.Ventas.GetByIdAsync(request.VentaId);
+
+                if (venta == null)
+                {
+                    throw new Exception($"Venta con ID {request.VentaId} no encontrada");
+                }
+
+                var resultado = new VentaDetailResponseDto
+                {
+                    VentaId = venta.Id,
+                    NumeroFactura = venta.NumeroFactura,
+                    FechaVenta = venta.FechaVenta,
+                    UsuarioId = venta.UsuarioId,
+                    UsuarioNombre = null,
+                    ClienteId = venta.ClienteId,
+                    ClienteNombre = venta.Cliente?.Nombre,
+                    Subtotal = venta.Subtotal,
+                    PorcentajeIVA = venta.PorcentajeIVA,
+                    TotalImpuesto = venta.TotalImpuesto,
+                    TotalVenta = venta.TotalVenta,
+                    Estado = venta.Estado,
+                    Observaciones = venta.Observaciones,
+                    Detalles = venta.Detalles?.Select(d => new DetalleVentaResponseDto
+                    {
+                        ProductoId = d.ProductoId,
+                        ProductoNombre = d.Producto != null ? d.Producto.Nombre : null,
+                        Cantidad = d.Cantidad,
+                        PrecioUnitario = d.PrecioUnitario,
+                        Descuento = d.Descuento,
+                        Total = d.Total
+                    }).ToList() ?? new List<DetalleVentaResponseDto>()
+                };
+
+                return resultado;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error al obtener venta: {ex.Message}");
+            }
+        }
+    }
+}

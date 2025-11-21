@@ -1,28 +1,28 @@
+using MongoDB.Driver;
 using PuntoVenta.Application.Interfaces;
 using PuntoVenta.Infrastructure.Persistencia;
-using Microsoft.EntityFrameworkCore.Storage;
 using System;
 using System.Threading.Tasks;
 
 namespace PuntoVenta.Infrastructure.Repositories
 {
     /// <summary>
-    /// Implementación del patrón Unit of Work para gestionar transacciones y repositorios
+    /// MongoDB Unit of Work implementation with transaction support
     /// </summary>
     public class UnitOfWork : IUnitOfWork
     {
-        private readonly ApplicationDbContext _context;
-        private IDbContextTransaction? _transaction;
+        private readonly MongoDbContext _context;
+        private IClientSessionHandle? _session;
 
         private IProductRepository? _productRepository;
         private IUsuarioRepository? _usuarioRepository;
         private IRolRepository? _rolRepository;
         private IClienteRepository? _clienteRepository;
-        private IVentaRepository? _ventaRepository;
+        private IFacturaRepository? _facturaRepository;
         private IErrorLogRepository? _errorLogRepository;
-        private IIntentosLoginRepository? _intentosLogin_repository;
+        private IIntentosLoginRepository? _intentosLoginRepository;
 
-        public UnitOfWork(ApplicationDbContext context)
+        public UnitOfWork(MongoDbContext context)
         {
             _context = context;
         }
@@ -59,11 +59,11 @@ namespace PuntoVenta.Infrastructure.Repositories
             }
         }
 
-        public IVentaRepository Ventas
+        public IFacturaRepository Facturas
         {
             get
             {
-                return _ventaRepository ??= new VentaRepository(_context);
+                return _facturaRepository ??= new FacturaRepository(_context);
             }
         }
 
@@ -79,62 +79,43 @@ namespace PuntoVenta.Infrastructure.Repositories
         {
             get
             {
-                return _intentosLogin_repository ??= new IntentosLoginRepository(_context);
+                return _intentosLoginRepository ??= new IntentosLoginRepository(_context);
             }
         }
 
+        // MongoDB doesn't require SaveChangesAsync (auto-commit per operation)
         public async Task<int> SaveChangesAsync()
         {
-            return await _context.SaveChangesAsync();
+            // MongoDB writes are atomic by default
+            return await Task.FromResult(0);
         }
 
         public async Task BeginTransactionAsync()
         {
-            _transaction = await _context.Database.BeginTransactionAsync();
+            _session = _context.StartSession();
+            _session.StartTransaction();
+            await Task.CompletedTask;
         }
 
         public async Task CommitTransactionAsync()
         {
-            try
+            if (_session != null)
             {
-                await _context.SaveChangesAsync();
-                await _transaction?.CommitAsync();
-            }
-            catch
-            {
-                await RollbackTransactionAsync();
-                throw;
-            }
-            finally
-            {
-                if (_transaction != null)
-                {
-                    await _transaction.DisposeAsync();
-                    _transaction = null;
-                }
+                await _session.CommitTransactionAsync();
             }
         }
 
         public async Task RollbackTransactionAsync()
         {
-            try
+            if (_session != null)
             {
-                await _transaction?.RollbackAsync();
-            }
-            finally
-            {
-                if (_transaction != null)
-                {
-                    await _transaction.DisposeAsync();
-                    _transaction = null;
-                }
+                await _session.AbortTransactionAsync();
             }
         }
 
         public void Dispose()
         {
-            _transaction?.Dispose();
-            _context?.Dispose();
+            _session?.Dispose();
         }
     }
 }

@@ -40,14 +40,8 @@ namespace PuntoVenta.Api.Controllers
                     FechaBloqueo = u.FechaBloqueo,
                     FechaCreacion = u.FechaCreacion,
                     FechaUltimoLogin = u.FechaUltimoLogin,
-                    Rol = u.Rol != null ? new RolResponseDto
-                    {
-                        Id = u.Rol.Id,
-                        Nombre = u.Rol.Nombre,
-                        Descripcion = u.Rol.Descripcion,
-                        Activo = u.Rol.Activo,
-                        FechaCreacion = u.Rol.FechaCreacion
-                    } : null
+                    RolId = u.RolId,
+                    RolNombre = u.RolNombre // MongoDB denormalized data
                 }).ToList();
 
                 return Ok(usuariosDto);
@@ -82,7 +76,9 @@ namespace PuntoVenta.Api.Controllers
                     Activo = usuario.Activo,
                     FechaBloqueo = usuario.FechaBloqueo,
                     FechaCreacion = usuario.FechaCreacion,
-                    FechaUltimoLogin = usuario.FechaUltimoLogin
+                    FechaUltimoLogin = usuario.FechaUltimoLogin,
+                    RolId = usuario.RolId,
+                    RolNombre = usuario.RolNombre
                 };
 
                 return Ok(usuarioDto);
@@ -119,12 +115,14 @@ namespace PuntoVenta.Api.Controllers
                 if (!string.IsNullOrEmpty(updateUsuarioDto.Correo))
                     usuario.Correo = updateUsuarioDto.Correo;
 
-                if (updateUsuarioDto.RolId.HasValue)
+                if (!string.IsNullOrEmpty(updateUsuarioDto.RolId))
                 {
-                    var rol = await _unitOfWork.Roles.GetByIdAsync(updateUsuarioDto.RolId.Value);
+                    var rol = await _unitOfWork.Roles.GetByIdAsync(updateUsuarioDto.RolId);
                     if (rol == null)
                         return BadRequest(new { mensaje = "Rol no válido" });
-                    usuario.RolId = updateUsuarioDto.RolId.Value;
+                    
+                    usuario.RolId = updateUsuarioDto.RolId;
+                    usuario.RolNombre = rol.Nombre; // Update denormalized field
                 }
 
                 if (updateUsuarioDto.Activo.HasValue)
@@ -184,7 +182,7 @@ namespace PuntoVenta.Api.Controllers
                 }
 
                 usuario.FechaBloqueo = null;
-                usuario.RazonBloqueo = null;
+                usuario.RazonBloqueo = string.Empty;
                 await _unitOfWork.Usuarios.UpdateAsync(usuario);
 
                 // Reiniciar intentos de login

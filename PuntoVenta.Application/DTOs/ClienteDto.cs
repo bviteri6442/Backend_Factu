@@ -32,7 +32,7 @@ namespace PuntoVenta.Application.DTOs
     /// </summary>
     public class UpdateClienteDto
     {
-        public int Id { get; set; }
+        public string? Id { get; set; } // Cambiado de int a string para compatibilidad con MongoDB ObjectId
 
         [StringLength(200, MinimumLength = 3, ErrorMessage = "El nombre debe tener entre 3 y 200 caracteres")]
     public string? Nombre { get; set; }
@@ -56,7 +56,7 @@ namespace PuntoVenta.Application.DTOs
     /// </summary>
     public class ClienteResponseDto
     {
-    public int Id { get; set; }
+        public string Id { get; set; } = string.Empty; // Cambiado de int a string para compatibilidad con MongoDB ObjectId
     public string? Nombre { get; set; }
     public string? Documento { get; set; }
     public string? Direccion { get; set; }

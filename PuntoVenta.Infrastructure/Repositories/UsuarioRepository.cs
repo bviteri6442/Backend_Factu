@@ -1,101 +1,102 @@
+using MongoDB.Driver;
 using PuntoVenta.Application.Interfaces;
 using PuntoVenta.Domain.Entities;
 using PuntoVenta.Infrastructure.Persistencia;
-using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace PuntoVenta.Infrastructure.Repositories
 {
     /// <summary>
-    /// Repositorio para gestionar Usuarios
+    /// MongoDB repository for Usuario entity
     /// </summary>
     public class UsuarioRepository : IUsuarioRepository
     {
-        protected readonly ApplicationDbContext _context;
-        protected readonly DbSet<Usuario> _dbSet;
+        private readonly IMongoCollection<Usuario> _collection;
+        private readonly MongoDbContext _context;
 
-        public UsuarioRepository(ApplicationDbContext context)
+        public UsuarioRepository(MongoDbContext context)
         {
             _context = context;
-            _dbSet = context.Set<Usuario>();
+            _collection = context.Usuarios;
         }
 
-        public async Task<Usuario> GetByIdAsync(string id)
+        public async Task<Usuario?> GetByIdAsync(string id)
         {
-            return await _dbSet
-                .Include(u => u.Rol)
-                .FirstOrDefaultAsync(u => u.Id == id);
+            var filter = Builders<Usuario>.Filter.Eq("_id", MongoDB.Bson.ObjectId.Parse(id));
+            return await _collection.Find(filter).FirstOrDefaultAsync();
         }
 
         public async Task<IEnumerable<Usuario>> GetAllAsync()
         {
-            return await _dbSet
-                .Include(u => u.Rol)
-                .Where(u => u.Activo)
-                .ToListAsync();
+            var filter = Builders<Usuario>.Filter.Eq(u => u.Activo, true);
+            return await _collection.Find(filter).ToListAsync();
         }
 
-        public async Task<int> AddAsync(Usuario entity)
+        public async Task<string> AddAsync(Usuario entity)
         {
-            await _dbSet.AddAsync(entity);
-            await _context.SaveChangesAsync();
-            return 1; // Usuarios no tienen ID int
+            await _collection.InsertOneAsync(entity);
+            return entity.Id;
         }
 
         public async Task UpdateAsync(Usuario entity)
         {
-            _dbSet.Update(entity);
-            await _context.SaveChangesAsync();
+            var filter = Builders<Usuario>.Filter.Eq("_id", MongoDB.Bson.ObjectId.Parse(entity.Id));
+            await _collection.ReplaceOneAsync(filter, entity);
         }
 
         public async Task DeleteAsync(string id)
         {
-            var entity = await GetByIdAsync(id);
-            if (entity != null)
-            {
-                _dbSet.Remove(entity);
-                await _context.SaveChangesAsync();
-            }
+            var filter = Builders<Usuario>.Filter.Eq("_id", MongoDB.Bson.ObjectId.Parse(id));
+            await _collection.DeleteOneAsync(filter);
         }
 
         public async Task<bool> ExistsAsync(string id)
         {
-            var entity = await GetByIdAsync(id);
-            return entity != null;
+            var filter = Builders<Usuario>.Filter.Eq("_id", MongoDB.Bson.ObjectId.Parse(id));
+            var count = await _collection.CountDocumentsAsync(filter);
+            return count > 0;
         }
 
-        public async Task<Usuario> GetByCorreoAsync(string correo)
+        public async Task<Usuario?> GetByCorreoAsync(string correo)
         {
-            return await _dbSet
-                .Include(u => u.Rol)
-                .FirstOrDefaultAsync(u => u.Correo == correo && u.Activo);
+            var filter = Builders<Usuario>.Filter.And(
+                Builders<Usuario>.Filter.Eq(u => u.Correo, correo),
+                Builders<Usuario>.Filter.Eq(u => u.Activo, true)
+            );
+            return await _collection.Find(filter).FirstOrDefaultAsync();
         }
 
-        public async Task<Usuario> GetByCedulaAsync(string cedula)
+        public async Task<Usuario?> GetByCedulaAsync(string cedula)
         {
-            return await _dbSet
-                .Include(u => u.Rol)
-                .FirstOrDefaultAsync(u => u.Cedula == cedula && u.Activo);
+            var filter = Builders<Usuario>.Filter.And(
+                Builders<Usuario>.Filter.Eq(u => u.Cedula, cedula),
+                Builders<Usuario>.Filter.Eq(u => u.Activo, true)
+            );
+            return await _collection.Find(filter).FirstOrDefaultAsync();
         }
 
-        public async Task<IEnumerable<Usuario>> GetByRolAsync(int rolId)
+        public async Task<IEnumerable<Usuario>> GetByRolAsync(string rolId)
         {
-            return await _dbSet
-                .Where(u => u.RolId == rolId && u.Activo)
-                .Include(u => u.Rol)
-                .ToListAsync();
+            var filter = Builders<Usuario>.Filter.And(
+                Builders<Usuario>.Filter.Eq(u => u.RolId, rolId),
+                Builders<Usuario>.Filter.Eq(u => u.Activo, true)
+            );
+            return await _collection.Find(filter).ToListAsync();
         }
 
         public async Task<bool> ExisteCorreoAsync(string correo)
         {
-            return await _dbSet.AnyAsync(u => u.Correo == correo);
+            var filter = Builders<Usuario>.Filter.Eq(u => u.Correo, correo);
+            var count = await _collection.CountDocumentsAsync(filter);
+            return count > 0;
         }
 
         public async Task<bool> ExisteCedulaAsync(string cedula)
         {
-            return await _dbSet.AnyAsync(u => u.Cedula == cedula);
+            var filter = Builders<Usuario>.Filter.Eq(u => u.Cedula, cedula);
+            var count = await _collection.CountDocumentsAsync(filter);
+            return count > 0;
         }
     }
 }

@@ -3,24 +3,44 @@
   "WorkspaceRootPath": "C:\\Users\\LEGIO\\Documents\\QUINTO\\TECNOLO. Y DESA. WEB\\Backend_Factu\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{9C79FA28-01A5-7D33-9270-CC644F0409F0}|PuntoVenta.Infrastructure\\PuntoVenta.Infrastructure.csproj|c:\\users\\legio\\documents\\quinto\\tecnolo. y desa. web\\backend_factu\\puntoventa.infrastructure\\repositories\\facturarepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{9C79FA28-01A5-7D33-9270-CC644F0409F0}|PuntoVenta.Infrastructure\\PuntoVenta.Infrastructure.csproj|solutionrelative:puntoventa.infrastructure\\repositories\\facturarepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{6742B2B5-8A4F-27C6-37FC-E0BC08156318}|PuntoVenta.Api\\PuntoVenta.Api.csproj|c:\\users\\legio\\documents\\quinto\\tecnolo. y desa. web\\backend_factu\\puntoventa.api\\controllers\\rolescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{6742B2B5-8A4F-27C6-37FC-E0BC08156318}|PuntoVenta.Api\\PuntoVenta.Api.csproj|solutionrelative:puntoventa.api\\controllers\\rolescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{9C79FA28-01A5-7D33-9270-CC644F0409F0}|PuntoVenta.Infrastructure\\PuntoVenta.Infrastructure.csproj|c:\\users\\legio\\documents\\quinto\\tecnolo. y desa. web\\backend_factu\\puntoventa.infrastructure\\repositories\\clienterepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{9C79FA28-01A5-7D33-9270-CC644F0409F0}|PuntoVenta.Infrastructure\\PuntoVenta.Infrastructure.csproj|solutionrelative:puntoventa.infrastructure\\repositories\\clienterepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{9DE9EC03-811D-8CDB-5076-CC82865FFEA6}|PuntoVenta.Application\\PuntoVenta.Application.csproj|c:\\users\\legio\\documents\\quinto\\tecnolo. y desa. web\\backend_factu\\puntoventa.application\\features\\usuarios\\commands\\createusuariocommandhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9DE9EC03-811D-8CDB-5076-CC82865FFEA6}|PuntoVenta.Application\\PuntoVenta.Application.csproj|solutionrelative:puntoventa.application\\features\\usuarios\\commands\\createusuariocommandhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{9C79FA28-01A5-7D33-9270-CC644F0409F0}|PuntoVenta.Infrastructure\\PuntoVenta.Infrastructure.csproj|c:\\users\\legio\\documents\\quinto\\tecnolo. y desa. web\\backend_factu\\puntoventa.infrastructure\\repositories\\productrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{9C79FA28-01A5-7D33-9270-CC644F0409F0}|PuntoVenta.Infrastructure\\PuntoVenta.Infrastructure.csproj|solutionrelative:puntoventa.infrastructure\\repositories\\productrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{9DE9EC03-811D-8CDB-5076-CC82865FFEA6}|PuntoVenta.Application\\PuntoVenta.Application.csproj|c:\\users\\legio\\documents\\quinto\\tecnolo. y desa. web\\backend_factu\\puntoventa.application\\features\\usuarios\\commands\\createusuariocommand.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9DE9EC03-811D-8CDB-5076-CC82865FFEA6}|PuntoVenta.Application\\PuntoVenta.Application.csproj|solutionrelative:puntoventa.application\\features\\usuarios\\commands\\createusuariocommand.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{9C79FA28-01A5-7D33-9270-CC644F0409F0}|PuntoVenta.Infrastructure\\PuntoVenta.Infrastructure.csproj|c:\\users\\legio\\documents\\quinto\\tecnolo. y desa. web\\backend_factu\\puntoventa.infrastructure\\persistencia\\mongodbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{9C79FA28-01A5-7D33-9270-CC644F0409F0}|PuntoVenta.Infrastructure\\PuntoVenta.Infrastructure.csproj|solutionrelative:puntoventa.infrastructure\\persistencia\\mongodbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{9DE9EC03-811D-8CDB-5076-CC82865FFEA6}|PuntoVenta.Application\\PuntoVenta.Application.csproj|c:\\users\\legio\\documents\\quinto\\tecnolo. y desa. web\\backend_factu\\puntoventa.application\\features\\usuarios\\queries\\loginqueryhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9DE9EC03-811D-8CDB-5076-CC82865FFEA6}|PuntoVenta.Application\\PuntoVenta.Application.csproj|solutionrelative:puntoventa.application\\features\\usuarios\\queries\\loginqueryhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{9C79FA28-01A5-7D33-9270-CC644F0409F0}|PuntoVenta.Infrastructure\\PuntoVenta.Infrastructure.csproj|c:\\users\\legio\\documents\\quinto\\tecnolo. y desa. web\\backend_factu\\puntoventa.infrastructure\\repositories\\genericrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{9C79FA28-01A5-7D33-9270-CC644F0409F0}|PuntoVenta.Infrastructure\\PuntoVenta.Infrastructure.csproj|solutionrelative:puntoventa.infrastructure\\repositories\\genericrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{9C79FA28-01A5-7D33-9270-CC644F0409F0}|PuntoVenta.Infrastructure\\PuntoVenta.Infrastructure.csproj|c:\\users\\legio\\documents\\quinto\\tecnolo. y desa. web\\backend_factu\\puntoventa.infrastructure\\servicecollectionextensions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9C79FA28-01A5-7D33-9270-CC644F0409F0}|PuntoVenta.Infrastructure\\PuntoVenta.Infrastructure.csproj|solutionrelative:puntoventa.infrastructure\\servicecollectionextensions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9DE9EC03-811D-8CDB-5076-CC82865FFEA6}|PuntoVenta.Application\\PuntoVenta.Application.csproj|c:\\users\\legio\\documents\\quinto\\tecnolo. y desa. web\\backend_factu\\puntoventa.application\\features\\ventas\\commands\\deleteventacommandhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9DE9EC03-811D-8CDB-5076-CC82865FFEA6}|PuntoVenta.Application\\PuntoVenta.Application.csproj|solutionrelative:puntoventa.application\\features\\ventas\\commands\\deleteventacommandhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9DE9EC03-811D-8CDB-5076-CC82865FFEA6}|PuntoVenta.Application\\PuntoVenta.Application.csproj|c:\\users\\legio\\documents\\quinto\\tecnolo. y desa. web\\backend_factu\\puntoventa.application\\features\\ventas\\commands\\updateventacommandhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9DE9EC03-811D-8CDB-5076-CC82865FFEA6}|PuntoVenta.Application\\PuntoVenta.Application.csproj|solutionrelative:puntoventa.application\\features\\ventas\\commands\\updateventacommandhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9DE9EC03-811D-8CDB-5076-CC82865FFEA6}|PuntoVenta.Application\\PuntoVenta.Application.csproj|c:\\users\\legio\\documents\\quinto\\tecnolo. y desa. web\\backend_factu\\puntoventa.application\\features\\ventas\\queries\\getventasqueryhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9DE9EC03-811D-8CDB-5076-CC82865FFEA6}|PuntoVenta.Application\\PuntoVenta.Application.csproj|solutionrelative:puntoventa.application\\features\\ventas\\queries\\getventasqueryhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9DE9EC03-811D-8CDB-5076-CC82865FFEA6}|PuntoVenta.Application\\PuntoVenta.Application.csproj|c:\\users\\legio\\documents\\quinto\\tecnolo. y desa. web\\backend_factu\\puntoventa.application\\features\\ventas\\queries\\getventabyidqueryhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9DE9EC03-811D-8CDB-5076-CC82865FFEA6}|PuntoVenta.Application\\PuntoVenta.Application.csproj|solutionrelative:puntoventa.application\\features\\ventas\\queries\\getventabyidqueryhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9DE9EC03-811D-8CDB-5076-CC82865FFEA6}|PuntoVenta.Application\\PuntoVenta.Application.csproj|c:\\users\\legio\\documents\\quinto\\tecnolo. y desa. web\\backend_factu\\puntoventa.application\\features\\ventas\\commands\\createventacommandhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9DE9EC03-811D-8CDB-5076-CC82865FFEA6}|PuntoVenta.Application\\PuntoVenta.Application.csproj|solutionrelative:puntoventa.application\\features\\ventas\\commands\\createventacommandhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -29,72 +49,137 @@
       "VerticalTabListWidth": 256,
       "DocumentGroups": [
         {
-          "DockedHeight": 255,
+          "DockedHeight": 200,
           "SelectedChildIndex": 0,
           "Children": [
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "FacturaRepository.cs",
-              "DocumentMoniker": "C:\\Users\\LEGIO\\Documents\\QUINTO\\TECNOLO. Y DESA. WEB\\Backend_Factu\\PuntoVenta.Infrastructure\\Repositories\\FacturaRepository.cs",
-              "RelativeDocumentMoniker": "PuntoVenta.Infrastructure\\Repositories\\FacturaRepository.cs",
-              "ToolTip": "C:\\Users\\LEGIO\\Documents\\QUINTO\\TECNOLO. Y DESA. WEB\\Backend_Factu\\PuntoVenta.Infrastructure\\Repositories\\FacturaRepository.cs",
-              "RelativeToolTip": "PuntoVenta.Infrastructure\\Repositories\\FacturaRepository.cs",
-              "ViewState": "AgIAABkAAAAAAAAAAAAAAFUAAAABAAAAAAAAAA==",
+              "Title": "RolesController.cs",
+              "DocumentMoniker": "C:\\Users\\LEGIO\\Documents\\QUINTO\\TECNOLO. Y DESA. WEB\\Backend_Factu\\PuntoVenta.Api\\Controllers\\RolesController.cs",
+              "RelativeDocumentMoniker": "PuntoVenta.Api\\Controllers\\RolesController.cs",
+              "ToolTip": "C:\\Users\\LEGIO\\Documents\\QUINTO\\TECNOLO. Y DESA. WEB\\Backend_Factu\\PuntoVenta.Api\\Controllers\\RolesController.cs",
+              "RelativeToolTip": "PuntoVenta.Api\\Controllers\\RolesController.cs",
+              "ViewState": "AgIAACsAAAAAAAAAAAAjwDUAAAANAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-21T13:55:07.13Z",
+              "WhenOpened": "2025-11-21T14:23:46.054Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "ClienteRepository.cs",
-              "DocumentMoniker": "C:\\Users\\LEGIO\\Documents\\QUINTO\\TECNOLO. Y DESA. WEB\\Backend_Factu\\PuntoVenta.Infrastructure\\Repositories\\ClienteRepository.cs",
-              "RelativeDocumentMoniker": "PuntoVenta.Infrastructure\\Repositories\\ClienteRepository.cs",
-              "ToolTip": "C:\\Users\\LEGIO\\Documents\\QUINTO\\TECNOLO. Y DESA. WEB\\Backend_Factu\\PuntoVenta.Infrastructure\\Repositories\\ClienteRepository.cs",
-              "RelativeToolTip": "PuntoVenta.Infrastructure\\Repositories\\ClienteRepository.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAA==",
+              "DocumentIndex": 5,
+              "Title": "DeleteVentaCommandHandler.cs",
+              "DocumentMoniker": "C:\\Users\\LEGIO\\Documents\\QUINTO\\TECNOLO. Y DESA. WEB\\Backend_Factu\\PuntoVenta.Application\\Features\\Ventas\\Commands\\DeleteVentaCommandHandler.cs",
+              "RelativeDocumentMoniker": "PuntoVenta.Application\\Features\\Ventas\\Commands\\DeleteVentaCommandHandler.cs",
+              "ToolTip": "C:\\Users\\LEGIO\\Documents\\QUINTO\\TECNOLO. Y DESA. WEB\\Backend_Factu\\PuntoVenta.Application\\Features\\Ventas\\Commands\\DeleteVentaCommandHandler.cs",
+              "RelativeToolTip": "PuntoVenta.Application\\Features\\Ventas\\Commands\\DeleteVentaCommandHandler.cs",
+              "ViewState": "AgIAADcAAAAAAAAAAABRwAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-21T13:54:42.994Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "ProductRepository.cs",
-              "DocumentMoniker": "C:\\Users\\LEGIO\\Documents\\QUINTO\\TECNOLO. Y DESA. WEB\\Backend_Factu\\PuntoVenta.Infrastructure\\Repositories\\ProductRepository.cs",
-              "RelativeDocumentMoniker": "PuntoVenta.Infrastructure\\Repositories\\ProductRepository.cs",
-              "ToolTip": "C:\\Users\\LEGIO\\Documents\\QUINTO\\TECNOLO. Y DESA. WEB\\Backend_Factu\\PuntoVenta.Infrastructure\\Repositories\\ProductRepository.cs",
-              "RelativeToolTip": "PuntoVenta.Infrastructure\\Repositories\\ProductRepository.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-21T13:54:21.703Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "MongoDbContext.cs",
-              "DocumentMoniker": "C:\\Users\\LEGIO\\Documents\\QUINTO\\TECNOLO. Y DESA. WEB\\Backend_Factu\\PuntoVenta.Infrastructure\\Persistencia\\MongoDbContext.cs",
-              "RelativeDocumentMoniker": "PuntoVenta.Infrastructure\\Persistencia\\MongoDbContext.cs",
-              "ToolTip": "C:\\Users\\LEGIO\\Documents\\QUINTO\\TECNOLO. Y DESA. WEB\\Backend_Factu\\PuntoVenta.Infrastructure\\Persistencia\\MongoDbContext.cs",
-              "RelativeToolTip": "PuntoVenta.Infrastructure\\Persistencia\\MongoDbContext.cs",
-              "ViewState": "AgIAACkAAAAAAAAAAAAEwAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-21T13:53:58.984Z",
+              "WhenOpened": "2025-11-21T14:21:46.552Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 4,
-              "Title": "GenericRepository.cs",
-              "DocumentMoniker": "C:\\Users\\LEGIO\\Documents\\QUINTO\\TECNOLO. Y DESA. WEB\\Backend_Factu\\PuntoVenta.Infrastructure\\Repositories\\GenericRepository.cs",
-              "RelativeDocumentMoniker": "PuntoVenta.Infrastructure\\Repositories\\GenericRepository.cs",
-              "ToolTip": "C:\\Users\\LEGIO\\Documents\\QUINTO\\TECNOLO. Y DESA. WEB\\Backend_Factu\\PuntoVenta.Infrastructure\\Repositories\\GenericRepository.cs",
-              "RelativeToolTip": "PuntoVenta.Infrastructure\\Repositories\\GenericRepository.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAdAAAAAAAAAA==",
+              "Title": "ServiceCollectionExtensions.cs",
+              "DocumentMoniker": "C:\\Users\\LEGIO\\Documents\\QUINTO\\TECNOLO. Y DESA. WEB\\Backend_Factu\\PuntoVenta.Infrastructure\\ServiceCollectionExtensions.cs",
+              "RelativeDocumentMoniker": "PuntoVenta.Infrastructure\\ServiceCollectionExtensions.cs",
+              "ToolTip": "C:\\Users\\LEGIO\\Documents\\QUINTO\\TECNOLO. Y DESA. WEB\\Backend_Factu\\PuntoVenta.Infrastructure\\ServiceCollectionExtensions.cs",
+              "RelativeToolTip": "PuntoVenta.Infrastructure\\ServiceCollectionExtensions.cs",
+              "ViewState": "AgIAACAAAAAAAAAAAIBJwAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-21T13:53:37.333Z",
+              "WhenOpened": "2025-11-21T14:21:09.971Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "LoginQueryHandler.cs",
+              "DocumentMoniker": "C:\\Users\\LEGIO\\Documents\\QUINTO\\TECNOLO. Y DESA. WEB\\Backend_Factu\\PuntoVenta.Application\\Features\\Usuarios\\Queries\\LoginQueryHandler.cs",
+              "RelativeDocumentMoniker": "PuntoVenta.Application\\Features\\Usuarios\\Queries\\LoginQueryHandler.cs",
+              "ToolTip": "C:\\Users\\LEGIO\\Documents\\QUINTO\\TECNOLO. Y DESA. WEB\\Backend_Factu\\PuntoVenta.Application\\Features\\Usuarios\\Queries\\LoginQueryHandler.cs",
+              "RelativeToolTip": "PuntoVenta.Application\\Features\\Usuarios\\Queries\\LoginQueryHandler.cs",
+              "ViewState": "AgIAAIkAAAAAAAAAAEBVwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-21T14:20:53.165Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "CreateUsuarioCommand.cs",
+              "DocumentMoniker": "C:\\Users\\LEGIO\\Documents\\QUINTO\\TECNOLO. Y DESA. WEB\\Backend_Factu\\PuntoVenta.Application\\Features\\Usuarios\\Commands\\CreateUsuarioCommand.cs",
+              "RelativeDocumentMoniker": "PuntoVenta.Application\\Features\\Usuarios\\Commands\\CreateUsuarioCommand.cs",
+              "ToolTip": "C:\\Users\\LEGIO\\Documents\\QUINTO\\TECNOLO. Y DESA. WEB\\Backend_Factu\\PuntoVenta.Application\\Features\\Usuarios\\Commands\\CreateUsuarioCommand.cs",
+              "RelativeToolTip": "PuntoVenta.Application\\Features\\Usuarios\\Commands\\CreateUsuarioCommand.cs",
+              "ViewState": "AgIAAAoAAAAAAAAAAMBcwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-21T14:20:17.812Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "CreateUsuarioCommandHandler.cs",
+              "DocumentMoniker": "C:\\Users\\LEGIO\\Documents\\QUINTO\\TECNOLO. Y DESA. WEB\\Backend_Factu\\PuntoVenta.Application\\Features\\Usuarios\\Commands\\CreateUsuarioCommandHandler.cs",
+              "RelativeDocumentMoniker": "PuntoVenta.Application\\Features\\Usuarios\\Commands\\CreateUsuarioCommandHandler.cs",
+              "ToolTip": "C:\\Users\\LEGIO\\Documents\\QUINTO\\TECNOLO. Y DESA. WEB\\Backend_Factu\\PuntoVenta.Application\\Features\\Usuarios\\Commands\\CreateUsuarioCommandHandler.cs",
+              "RelativeToolTip": "PuntoVenta.Application\\Features\\Usuarios\\Commands\\CreateUsuarioCommandHandler.cs",
+              "ViewState": "AgIAABwAAAAAAAAAAAAnwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-21T14:19:54.347Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "CreateVentaCommandHandler.cs",
+              "DocumentMoniker": "C:\\Users\\LEGIO\\Documents\\QUINTO\\TECNOLO. Y DESA. WEB\\Backend_Factu\\PuntoVenta.Application\\Features\\Ventas\\Commands\\CreateVentaCommandHandler.cs",
+              "RelativeDocumentMoniker": "PuntoVenta.Application\\Features\\Ventas\\Commands\\CreateVentaCommandHandler.cs",
+              "ToolTip": "C:\\Users\\LEGIO\\Documents\\QUINTO\\TECNOLO. Y DESA. WEB\\Backend_Factu\\PuntoVenta.Application\\Features\\Ventas\\Commands\\CreateVentaCommandHandler.cs",
+              "RelativeToolTip": "PuntoVenta.Application\\Features\\Ventas\\Commands\\CreateVentaCommandHandler.cs",
+              "ViewState": "AgIAAIIAAAAAAAAAAIBZwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-21T14:23:24.126Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "GetVentaByIdQueryHandler.cs",
+              "DocumentMoniker": "C:\\Users\\LEGIO\\Documents\\QUINTO\\TECNOLO. Y DESA. WEB\\Backend_Factu\\PuntoVenta.Application\\Features\\Ventas\\Queries\\GetVentaByIdQueryHandler.cs",
+              "RelativeDocumentMoniker": "PuntoVenta.Application\\Features\\Ventas\\Queries\\GetVentaByIdQueryHandler.cs",
+              "ToolTip": "C:\\Users\\LEGIO\\Documents\\QUINTO\\TECNOLO. Y DESA. WEB\\Backend_Factu\\PuntoVenta.Application\\Features\\Ventas\\Queries\\GetVentaByIdQueryHandler.cs",
+              "RelativeToolTip": "PuntoVenta.Application\\Features\\Ventas\\Queries\\GetVentaByIdQueryHandler.cs",
+              "ViewState": "AgIAAEAAAAAAAAAAAABRwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-21T14:22:48.073Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "GetVentasQueryHandler.cs",
+              "DocumentMoniker": "C:\\Users\\LEGIO\\Documents\\QUINTO\\TECNOLO. Y DESA. WEB\\Backend_Factu\\PuntoVenta.Application\\Features\\Ventas\\Queries\\GetVentasQueryHandler.cs",
+              "RelativeDocumentMoniker": "PuntoVenta.Application\\Features\\Ventas\\Queries\\GetVentasQueryHandler.cs",
+              "ToolTip": "C:\\Users\\LEGIO\\Documents\\QUINTO\\TECNOLO. Y DESA. WEB\\Backend_Factu\\PuntoVenta.Application\\Features\\Ventas\\Queries\\GetVentasQueryHandler.cs",
+              "RelativeToolTip": "PuntoVenta.Application\\Features\\Ventas\\Queries\\GetVentasQueryHandler.cs",
+              "ViewState": "AgIAAEcAAAAAAAAAAEBVwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-21T14:22:30.348Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "UpdateVentaCommandHandler.cs",
+              "DocumentMoniker": "C:\\Users\\LEGIO\\Documents\\QUINTO\\TECNOLO. Y DESA. WEB\\Backend_Factu\\PuntoVenta.Application\\Features\\Ventas\\Commands\\UpdateVentaCommandHandler.cs",
+              "RelativeDocumentMoniker": "PuntoVenta.Application\\Features\\Ventas\\Commands\\UpdateVentaCommandHandler.cs",
+              "ToolTip": "C:\\Users\\LEGIO\\Documents\\QUINTO\\TECNOLO. Y DESA. WEB\\Backend_Factu\\PuntoVenta.Application\\Features\\Ventas\\Commands\\UpdateVentaCommandHandler.cs",
+              "RelativeToolTip": "PuntoVenta.Application\\Features\\Ventas\\Commands\\UpdateVentaCommandHandler.cs",
+              "ViewState": "AgIAADEAAAAAAAAAAABRwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-21T14:22:13.174Z",
               "EditorCaption": ""
             }
           ]

@@ -36,7 +36,7 @@ namespace PuntoVenta.Api.Controllers
                 var result = clientes
                     .Select(c => new ClienteResponseDto
                     {
-                        Id = c.Id,
+                        Id = c.Id, // string (MongoDB ObjectId)
                         Nombre = c.Nombre,
                         Documento = c.Documento,
                         Email = c.Email,
@@ -59,7 +59,7 @@ namespace PuntoVenta.Api.Controllers
         /// Obtiene un cliente específico por ID
         /// </summary>
         [HttpGet("{id}")]
-        public async Task<ActionResult<ClienteResponseDto>> GetClienteById(int id)
+        public async Task<ActionResult<ClienteResponseDto>> GetClienteById(string id)
         {
             try
             {
@@ -100,11 +100,11 @@ namespace PuntoVenta.Api.Controllers
             {
                 var cliente = new PuntoVenta.Domain.Entities.Cliente
                 {
-                    Nombre = createClienteDto.Nombre,
-                    Documento = createClienteDto.Documento,
-                    Email = createClienteDto.Email,
-                    Telefono = createClienteDto.Telefono,
-                    Direccion = createClienteDto.Direccion,
+                    Nombre = createClienteDto.Nombre ?? string.Empty,
+                    Documento = createClienteDto.Documento ?? string.Empty,
+                    Email = createClienteDto.Email ?? string.Empty,
+                    Telefono = createClienteDto.Telefono ?? string.Empty,
+                    Direccion = createClienteDto.Direccion ?? string.Empty,
                     Activo = true,
                     FechaCreacion = DateTime.UtcNow
                 };
@@ -137,7 +137,7 @@ namespace PuntoVenta.Api.Controllers
         /// </summary>
         [HttpPut("{id}")]
         [Authorize(Roles = "Administrador")]
-        public async Task<ActionResult<ClienteResponseDto>> UpdateCliente(int id, [FromBody] UpdateClienteDto updateClienteDto)
+        public async Task<ActionResult<ClienteResponseDto>> UpdateCliente(string id, [FromBody] UpdateClienteDto updateClienteDto)
         {
             try
             {
@@ -148,7 +148,6 @@ namespace PuntoVenta.Api.Controllers
                 }
 
                 cliente.Nombre = updateClienteDto.Nombre ?? cliente.Nombre;
-                // Documento is not part of UpdateClienteDto by design; omit changing it here
                 cliente.Email = updateClienteDto.Email ?? cliente.Email;
                 cliente.Telefono = updateClienteDto.Telefono ?? cliente.Telefono;
                 cliente.Direccion = updateClienteDto.Direccion ?? cliente.Direccion;
@@ -217,7 +216,7 @@ namespace PuntoVenta.Api.Controllers
         /// </summary>
         [HttpPut("{id}/desactivar")]
         [Authorize(Roles = "Administrador")]
-        public async Task<ActionResult<bool>> DesactivarCliente(int id)
+        public async Task<ActionResult<bool>> DesactivarCliente(string id)
         {
             try
             {

@@ -1,0 +1,49 @@
+﻿using MediatR;
+using PuntoVenta.Application.Interfaces;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
+
+namespace PuntoVenta.Application.Features.Ventas.Commands
+{
+    public class UpdateVentaCommandHandler : IRequestHandler<UpdateVentaCommand, bool>
+    {
+        private readonly IUnitOfWork _unitOfWork;
+
+        public UpdateVentaCommandHandler(IUnitOfWork unitOfWork)
+        {
+            _unitOfWork = unitOfWork;
+        }
+
+        public async Task<bool> Handle(UpdateVentaCommand request, CancellationToken cancellationToken)
+        {
+            try
+            {
+                var venta = await _unitOfWork.Ventas.GetByIdAsync(request.VentaId);
+
+                if (venta == null)
+                {
+                    throw new Exception($"Venta con ID {request.VentaId} no encontrada");
+                }
+
+                // Solo permitir cambios si la venta está en estado Completada
+                if (venta.Estado != "Completada")
+                {
+                    throw new Exception($"No se puede modificar una venta en estado {venta.Estado}");
+                }
+
+                venta.Estado = request.Estado;
+                venta.Observaciones = request.Observaciones;
+
+                await _unitOfWork.Ventas.UpdateAsync(venta);
+                await _unitOfWork.SaveChangesAsync();
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error al actualizar venta: {ex.Message}");
+            }
+        }
+    }
+}

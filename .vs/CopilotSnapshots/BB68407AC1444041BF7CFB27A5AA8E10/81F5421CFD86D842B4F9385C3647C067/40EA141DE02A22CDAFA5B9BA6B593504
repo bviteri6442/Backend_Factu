@@ -1,0 +1,227 @@
+﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using PuntoVenta.Application.DTOs;
+using PuntoVenta.Application.Interfaces;
+
+namespace PuntoVenta.Api.Controllers
+{
+    [Authorize]
+    [Route("api/[controller]")]
+    [ApiController]
+    public class UsuariosController : ControllerBase
+    {
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IMediator _mediator;
+
+        public UsuariosController(IUnitOfWork unitOfWork, IMediator mediator)
+        {
+            _unitOfWork = unitOfWork;
+            _mediator = mediator;
+        }
+
+        /// <summary>
+        /// Obtener todos los usuarios (solo administrador)
+        /// </summary>
+        [Authorize(Roles = "Administrador")]
+        [HttpGet]
+        public async Task<IActionResult> GetUsuarios()
+        {
+            try
+            {
+                var usuarios = await _unitOfWork.Usuarios.GetAllAsync();
+                var usuariosDto = usuarios.Select(u => new UsuarioResponseDto
+                {
+                    Id = u.Id,
+                    Cedula = u.Cedula,
+                    Correo = u.Correo,
+                    NombreCompleto = u.NombreCompleto,
+                    Activo = u.Activo,
+                    FechaBloqueo = u.FechaBloqueo,
+                    FechaCreacion = u.FechaCreacion,
+                    FechaUltimoLogin = u.FechaUltimoLogin,
+                    RolId = u.RolId,
+                    RolNombre = u.RolNombre // MongoDB denormalized data
+                }).ToList();
+
+                return Ok(usuariosDto);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { mensaje = ex.Message });
+            }
+        }
+
+        /// <summary>
+        /// Obtener usuario por ID (solo administrador)
+        /// </summary>
+        [Authorize(Roles = "Administrador")]
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetUsuario(string id)
+        {
+            try
+            {
+                var usuario = await _unitOfWork.Usuarios.GetByIdAsync(id);
+                if (usuario == null)
+                {
+                    return NotFound(new { mensaje = "Usuario no encontrado" });
+                }
+
+                var usuarioDto = new UsuarioResponseDto
+                {
+                    Id = usuario.Id,
+                    Cedula = usuario.Cedula,
+                    Correo = usuario.Correo,
+                    NombreCompleto = usuario.NombreCompleto,
+                    Activo = usuario.Activo,
+                    FechaBloqueo = usuario.FechaBloqueo,
+                    FechaCreacion = usuario.FechaCreacion,
+                    FechaUltimoLogin = usuario.FechaUltimoLogin,
+                    RolId = usuario.RolId,
+                    RolNombre = usuario.RolNombre
+                };
+
+                return Ok(usuarioDto);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { mensaje = ex.Message });
+            }
+        }
+
+        /// <summary>
+        /// Actualizar usuario (solo administrador)
+        /// </summary>
+        [Authorize(Roles = "Administrador")]
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateUsuario(string id, [FromBody] UpdateUsuarioDto updateUsuarioDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                var usuario = await _unitOfWork.Usuarios.GetByIdAsync(id);
+                if (usuario == null)
+                {
+                    return NotFound(new { mensaje = "Usuario no encontrado" });
+                }
+
+                if (!string.IsNullOrEmpty(updateUsuarioDto.NombreCompleto))
+                    usuario.NombreCompleto = updateUsuarioDto.NombreCompleto;
+
+                if (!string.IsNullOrEmpty(updateUsuarioDto.Correo))
+                    usuario.Correo = updateUsuarioDto.Correo;
+
+                if (!string.IsNullOrEmpty(updateUsuarioDto.RolId))
+                {
+                    var rol = await _unitOfWork.Roles.GetByIdAsync(updateUsuarioDto.RolId);
+                    if (rol == null)
+                        return BadRequest(new { mensaje = "Rol no válido" });
+                    
+                    usuario.RolId = updateUsuarioDto.RolId;
+                    usuario.RolNombre = rol.Nombre; // Update denormalized field
+                }
+
+                if (updateUsuarioDto.Activo.HasValue)
+                    usuario.Activo = updateUsuarioDto.Activo.Value;
+
+                await _unitOfWork.Usuarios.UpdateAsync(usuario);
+                await _unitOfWork.SaveChangesAsync();
+
+                return Ok(new { mensaje = "Usuario actualizado exitosamente" });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { mensaje = ex.Message });
+            }
+        }
+
+        /// <summary>
+        /// Desactivar usuario (soft delete)
+        /// </summary>
+        [Authorize(Roles = "Administrador")]
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteUsuario(string id)
+        {
+            try
+            {
+                var usuario = await _unitOfWork.Usuarios.GetByIdAsync(id);
+                if (usuario == null)
+                {
+                    return NotFound(new { mensaje = "Usuario no encontrado" });
+                }
+
+                usuario.Activo = false;
+                await _unitOfWork.Usuarios.UpdateAsync(usuario);
+                await _unitOfWork.SaveChangesAsync();
+
+                return Ok(new { mensaje = "Usuario desactivado exitosamente" });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { mensaje = ex.Message });
+            }
+        }
+
+        /// <summary>
+        /// Desbloquear usuario bloqueado por intentos fallidos
+        /// </summary>
+        [Authorize(Roles = "Administrador")]
+        [HttpPost("{id}/desbloquear")]
+        public async Task<IActionResult> DesbloquearUsuario(string id)
+        {
+            try
+            {
+                var usuario = await _unitOfWork.Usuarios.GetByIdAsync(id);
+                if (usuario == null)
+                {
+                    return NotFound(new { mensaje = "Usuario no encontrado" });
+                }
+
+                usuario.FechaBloqueo = null;
+                usuario.RazonBloqueo = string.Empty;
+                await _unitOfWork.Usuarios.UpdateAsync(usuario);
+
+                // Reiniciar intentos de login
+                if (!string.IsNullOrEmpty(usuario.Correo))
+                {
+                    await _unitOfWork.IntentosLogin.ReiniciarIntentosAsync(usuario.Correo);
+                }
+
+                await _unitOfWork.SaveChangesAsync();
+
+                return Ok(new { mensaje = "Usuario desbloqueado exitosamente" });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { mensaje = ex.Message });
+            }
+        }
+
+        /// <summary>
+        /// Buscar usuarios por término
+        /// </summary>
+        [HttpGet("buscar/{termino}")]
+        public async Task<IActionResult> BuscarUsuarios(string termino)
+        {
+            try
+            {
+                var usuarios = await _unitOfWork.Usuarios.GetAllAsync();
+                var resultado = usuarios.Where(u =>
+                    u.NombreCompleto.Contains(termino, StringComparison.OrdinalIgnoreCase) ||
+                    u.Correo.Contains(termino, StringComparison.OrdinalIgnoreCase) ||
+                    u.Cedula.Contains(termino, StringComparison.OrdinalIgnoreCase)
+                ).ToList();
+
+                return Ok(resultado);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { mensaje = ex.Message });
+            }
+        }
+    }
+}

@@ -1,0 +1,141 @@
+﻿using MediatR;
+using Microsoft.IdentityModel.Tokens;
+using PuntoVenta.Application.Interfaces;
+using System;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
+using BCrypt.Net;
+
+namespace PuntoVenta.Application.Features.Usuarios.Queries
+{
+    public class LoginQueryHandler : IRequestHandler<LoginQuery, AuthResponse>
+    {
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IConfiguration _configuration;
+
+        public LoginQueryHandler(IUnitOfWork unitOfWork, IConfiguration configuration)
+        {
+            _unitOfWork = unitOfWork;
+            _configuration = configuration;
+        }
+
+        public async Task<AuthResponse> Handle(LoginQuery request, CancellationToken cancellationToken)
+        {
+            var response = new AuthResponse();
+
+            // Validar que no estén vacíos
+            if (string.IsNullOrWhiteSpace(request.Correo) || string.IsNullOrWhiteSpace(request.Contrasena))
+            {
+                response.Exitoso = false;
+                response.Mensaje = "El correo y contraseña son requeridos";
+                return response;
+            }
+
+            try
+            {
+                // Verificar si el usuario está bloqueado por intentos fallidos
+                var intentosLogin = await _unitOfWork.IntentosLogin.GetByCorreoAsync(request.Correo);
+                if (intentosLogin?.Bloqueado == true)
+                {
+                    response.Exitoso = false;
+                    response.Mensaje = "La cuenta está bloqueada por demasiados intentos fallidos. Contacte al administrador.";
+                    return response;
+                }
+
+                // Obtener usuario por correo
+                var usuario = await _unitOfWork.Usuarios.GetByCorreoAsync(request.Correo);
+                if (usuario == null)
+                {
+                    // Registrar intento fallido
+                    await _unitOfWork.IntentosLogin.IncrementarIntentosAsync(request.Correo, "", "");
+                    await _unitOfWork.SaveChangesAsync();
+
+                    response.Exitoso = false;
+                    response.Mensaje = "Correo o contraseña incorrectos";
+                    return response;
+                }
+
+                // Verificar si el usuario está activo
+                if (!usuario.Activo)
+                {
+                    response.Exitoso = false;
+                    response.Mensaje = "La cuenta está inactiva. Contacte al administrador.";
+                    return response;
+                }
+
+                // Verificar contraseña (BCrypt)
+                bool esContrasenValida = false;
+                if (!string.IsNullOrEmpty(usuario.ContrasenaHash)) // Changed from Contrasena to ContrasenaHash
+                {
+                    // Usar BCrypt para verificar
+                    esContrasenValida = BCrypt.Net.BCrypt.Verify(request.Contrasena, usuario.ContrasenaHash);
+                }
+                
+                if (!esContrasenValida)
+                {
+                    // Registrar intento fallido
+                    await _unitOfWork.IntentosLogin.IncrementarIntentosAsync(request.Correo, "", "");
+                    await _unitOfWork.SaveChangesAsync();
+
+                    response.Exitoso = false;
+                    response.Mensaje = "Correo o contraseña incorrectos";
+                    return response;
+                }
+
+                // Login exitoso: Reiniciar intentos fallidos
+                await _unitOfWork.IntentosLogin.ReiniciarIntentosAsync(request.Correo);
+
+                // Actualizar última fecha de login
+                usuario.FechaUltimoLogin = DateTime.UtcNow;
+                await _unitOfWork.Usuarios.UpdateAsync(usuario);
+                await _unitOfWork.SaveChangesAsync();
+
+                // Generar JWT
+                var token = GenerarToken(usuario);
+
+                response.Exitoso = true;
+                response.Token = token;
+                response.UsuarioId = usuario.Id;
+                response.NombreUsuario = usuario.NombreCompleto;
+                response.Rol = usuario.RolNombre; // Changed from usuario.Rol?.Nombre to usuario.RolNombre (denormalized)
+                response.Mensaje = "Login exitoso";
+            }
+            catch (Exception ex)
+            {
+                response.Exitoso = false;
+                response.Mensaje = $"Error en el login: {ex.Message}";
+            }
+
+            return response;
+        }
+
+        private string GenerarToken(Domain.Entities.Usuario usuario)
+        {
+            var jwtSettings = _configuration.GetSection("JwtSettings");
+            var key = Encoding.ASCII.GetBytes(jwtSettings["SecretKey"] ?? "");
+
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(new[]
+                {
+                    new Claim(ClaimTypes.NameIdentifier, usuario.Id),
+                    new Claim(ClaimTypes.Email, usuario.Correo ?? ""),
+                    new Claim(ClaimTypes.Name, usuario.NombreCompleto ?? ""),
+                    new Claim("Cedula", usuario.Cedula ?? ""),
+                    new Claim(ClaimTypes.Role, usuario.RolNombre ?? "Usuario") // Changed from usuario.Rol?.Nombre
+                }),
+                Expires = DateTime.UtcNow.AddHours(24),
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+            };
+
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            return tokenHandler.WriteToken(token);
+        }
+    }
+}
+

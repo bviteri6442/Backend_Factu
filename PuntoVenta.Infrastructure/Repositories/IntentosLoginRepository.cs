@@ -1,25 +1,26 @@
+using MongoDB.Driver;
 using PuntoVenta.Application.Interfaces;
 using PuntoVenta.Domain.Entities;
 using PuntoVenta.Infrastructure.Persistencia;
-using Microsoft.EntityFrameworkCore;
 using System;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace PuntoVenta.Infrastructure.Repositories
 {
     /// <summary>
-    /// Repositorio para gestionar intentos de login
+    /// MongoDB repository for IntentosLogin entity
     /// </summary>
     public class IntentosLoginRepository : GenericRepository<IntentosLogin>, IIntentosLoginRepository
     {
-        public IntentosLoginRepository(ApplicationDbContext context) : base(context)
+        public IntentosLoginRepository(MongoDbContext context) 
+            : base(context, "intentosLogin")
         {
         }
 
-        public async Task<IntentosLogin> GetByCorreoAsync(string correo)
+        public async Task<IntentosLogin?> GetByCorreoAsync(string correo)
         {
-            return await _dbSet.FirstOrDefaultAsync(il => il.Correo == correo);
+            var filter = Builders<IntentosLogin>.Filter.Eq(il => il.Correo, correo);
+            return await _collection.Find(filter).FirstOrDefaultAsync();
         }
 
         public async Task IncrementarIntentosAsync(string correo, string ip, string userAgent)
@@ -36,7 +37,7 @@ namespace PuntoVenta.Infrastructure.Repositories
                     DireccionIP = ip,
                     UserAgent = userAgent
                 };
-                await AddAsync(intento);
+                await _collection.InsertOneAsync(intento);
             }
             else
             {
@@ -45,14 +46,15 @@ namespace PuntoVenta.Infrastructure.Repositories
                 intento.DireccionIP = ip;
                 intento.UserAgent = userAgent;
 
-                // Bloquear después de 3 intentos fallidos
+                // Block after 3 failed attempts
                 if (intento.NumeroIntentosFallidos >= 3)
                 {
                     intento.Bloqueado = true;
                     intento.FechaBloqueo = DateTime.UtcNow;
                 }
 
-                await UpdateAsync(intento);
+                var filter = Builders<IntentosLogin>.Filter.Eq("_id", MongoDB.Bson.ObjectId.Parse(intento.Id));
+                await _collection.ReplaceOneAsync(filter, intento);
             }
         }
 
@@ -64,7 +66,9 @@ namespace PuntoVenta.Infrastructure.Repositories
                 intento.NumeroIntentosFallidos = 0;
                 intento.Bloqueado = false;
                 intento.FechaBloqueo = null;
-                await UpdateAsync(intento);
+                
+                var filter = Builders<IntentosLogin>.Filter.Eq("_id", MongoDB.Bson.ObjectId.Parse(intento.Id));
+                await _collection.ReplaceOneAsync(filter, intento);
             }
         }
 
@@ -81,13 +85,15 @@ namespace PuntoVenta.Infrastructure.Repositories
                     FechaBloqueo = DateTime.UtcNow,
                     FechaUltimoIntento = DateTime.UtcNow
                 };
-                await AddAsync(intento);
+                await _collection.InsertOneAsync(intento);
             }
             else
             {
                 intento.Bloqueado = true;
                 intento.FechaBloqueo = DateTime.UtcNow;
-                await UpdateAsync(intento);
+                
+                var filter = Builders<IntentosLogin>.Filter.Eq("_id", MongoDB.Bson.ObjectId.Parse(intento.Id));
+                await _collection.ReplaceOneAsync(filter, intento);
             }
         }
     }
