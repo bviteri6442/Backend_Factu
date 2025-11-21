@@ -8,7 +8,6 @@ namespace PuntoVenta.Application.Interfaces
     /// </summary>
     public interface IRolRepository : IGenericRepository<Rol>
     {
-        Task GetByIdAsync(int id);
         Task<Rol?> GetByNombreAsync(string nombre);
     }
 }
