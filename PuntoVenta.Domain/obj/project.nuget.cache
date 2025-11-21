@@ -1,8 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "OCLKQVh8Ono=",
+  "dgSpecHash": "UvfBI0xlAbs=",
   "success": true,
-  "projectFilePath": "C:\\Users\\LEGIO\\Documents\\QUINTO\\TECNOLO. Y DESA. WEB\\WEB_ProyectoFinal\\PuntoVenta.Domain\\PuntoVenta.Domain.csproj",
-  "expectedPackageFiles": [],
+  "projectFilePath": "C:\\Users\\LEGIO\\Documents\\QUINTO\\TECNOLO. Y DESA. WEB\\Backend_Factu\\PuntoVenta.Domain\\PuntoVenta.Domain.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\LEGIO\\.nuget\\packages\\mongodb.bson\\2.28.0\\mongodb.bson.2.28.0.nupkg.sha512",
+    "C:\\Users\\LEGIO\\.nuget\\packages\\system.memory\\4.5.5\\system.memory.4.5.5.nupkg.sha512",
+    "C:\\Users\\LEGIO\\.nuget\\packages\\system.runtime.compilerservices.unsafe\\5.0.0\\system.runtime.compilerservices.unsafe.5.0.0.nupkg.sha512"
+  ],
   "logs": []
 }

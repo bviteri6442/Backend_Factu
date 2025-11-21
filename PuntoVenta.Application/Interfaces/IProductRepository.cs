@@ -18,17 +18,6 @@ namespace PuntoVenta.Application.Interfaces
     }
 
     /// <summary>
-    /// Interfaz específica para Productos con búsquedas personalizadas
-    /// </summary>
-    public interface IProductRepository : IGenericRepository<Product>
-    {
-        Task<Product> GetByCodigoBarraAsync(string codigoBarra);
-        Task<IEnumerable<Product>> GetProductosConStockAsync();
-        Task<IEnumerable<Product>> SearchAsync(string searchTerm);
-        Task UpdateStockAsync(int productId, int cantidad);
-    }
-
-    /// <summary>
     /// Interfaz para gestionar Usuarios
     /// </summary>
     public interface IUsuarioRepository
@@ -94,5 +83,16 @@ namespace PuntoVenta.Application.Interfaces
         Task IncrementarIntentosAsync(string correo, string ip, string userAgent);
         Task ReiniciarIntentosAsync(string correo);
         Task BloquearUsuarioAsync(string correo);
+    }
+
+    /// <summary>
+    /// Repository interface for Product entity with custom queries
+    /// </summary>
+    public interface IProductRepository : IGenericRepository<Product>
+    {
+        Task<Product?> GetByCodigoBarraAsync(string codigoBarra);
+        Task<IEnumerable<Product>> GetProductosConStockAsync();
+        Task<IEnumerable<Product>> SearchAsync(string searchTerm);
+        Task<bool> UpdateStockAsync(string productId, int cantidad);
     }
 }

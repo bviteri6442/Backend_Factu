@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\LEGIO\\Documents\\QUINTO\\TECNOLO. Y DESA. WEB\\WEB_ProyectoFinal\\PuntoVenta.Api\\PuntoVenta.Api.csproj": {}
+    "C:\\Users\\LEGIO\\Documents\\QUINTO\\TECNOLO. Y DESA. WEB\\Backend_Factu\\PuntoVenta.Api\\PuntoVenta.Api.csproj": {}
   },
   "projects": {
-    "C:\\Users\\LEGIO\\Documents\\QUINTO\\TECNOLO. Y DESA. WEB\\WEB_ProyectoFinal\\PuntoVenta.Api\\PuntoVenta.Api.csproj": {
+    "C:\\Users\\LEGIO\\Documents\\QUINTO\\TECNOLO. Y DESA. WEB\\Backend_Factu\\PuntoVenta.Api\\PuntoVenta.Api.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\LEGIO\\Documents\\QUINTO\\TECNOLO. Y DESA. WEB\\WEB_ProyectoFinal\\PuntoVenta.Api\\PuntoVenta.Api.csproj",
+        "projectUniqueName": "C:\\Users\\LEGIO\\Documents\\QUINTO\\TECNOLO. Y DESA. WEB\\Backend_Factu\\PuntoVenta.Api\\PuntoVenta.Api.csproj",
         "projectName": "PuntoVenta.Api",
-        "projectPath": "C:\\Users\\LEGIO\\Documents\\QUINTO\\TECNOLO. Y DESA. WEB\\WEB_ProyectoFinal\\PuntoVenta.Api\\PuntoVenta.Api.csproj",
+        "projectPath": "C:\\Users\\LEGIO\\Documents\\QUINTO\\TECNOLO. Y DESA. WEB\\Backend_Factu\\PuntoVenta.Api\\PuntoVenta.Api.csproj",
         "packagesPath": "C:\\Users\\LEGIO\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\LEGIO\\Documents\\QUINTO\\TECNOLO. Y DESA. WEB\\WEB_ProyectoFinal\\PuntoVenta.Api\\obj\\",
+        "outputPath": "C:\\Users\\LEGIO\\Documents\\QUINTO\\TECNOLO. Y DESA. WEB\\Backend_Factu\\PuntoVenta.Api\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -32,11 +32,11 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "C:\\Users\\LEGIO\\Documents\\QUINTO\\TECNOLO. Y DESA. WEB\\WEB_ProyectoFinal\\PuntoVenta.Application\\PuntoVenta.Application.csproj": {
-                "projectPath": "C:\\Users\\LEGIO\\Documents\\QUINTO\\TECNOLO. Y DESA. WEB\\WEB_ProyectoFinal\\PuntoVenta.Application\\PuntoVenta.Application.csproj"
+              "C:\\Users\\LEGIO\\Documents\\QUINTO\\TECNOLO. Y DESA. WEB\\Backend_Factu\\PuntoVenta.Application\\PuntoVenta.Application.csproj": {
+                "projectPath": "C:\\Users\\LEGIO\\Documents\\QUINTO\\TECNOLO. Y DESA. WEB\\Backend_Factu\\PuntoVenta.Application\\PuntoVenta.Application.csproj"
               },
-              "C:\\Users\\LEGIO\\Documents\\QUINTO\\TECNOLO. Y DESA. WEB\\WEB_ProyectoFinal\\PuntoVenta.Infrastructure\\PuntoVenta.Infrastructure.csproj": {
-                "projectPath": "C:\\Users\\LEGIO\\Documents\\QUINTO\\TECNOLO. Y DESA. WEB\\WEB_ProyectoFinal\\PuntoVenta.Infrastructure\\PuntoVenta.Infrastructure.csproj"
+              "C:\\Users\\LEGIO\\Documents\\QUINTO\\TECNOLO. Y DESA. WEB\\Backend_Factu\\PuntoVenta.Infrastructure\\PuntoVenta.Infrastructure.csproj": {
+                "projectPath": "C:\\Users\\LEGIO\\Documents\\QUINTO\\TECNOLO. Y DESA. WEB\\Backend_Factu\\PuntoVenta.Infrastructure\\PuntoVenta.Infrastructure.csproj"
               }
             }
           }
@@ -105,14 +105,14 @@
         }
       }
     },
-    "C:\\Users\\LEGIO\\Documents\\QUINTO\\TECNOLO. Y DESA. WEB\\WEB_ProyectoFinal\\PuntoVenta.Application\\PuntoVenta.Application.csproj": {
+    "C:\\Users\\LEGIO\\Documents\\QUINTO\\TECNOLO. Y DESA. WEB\\Backend_Factu\\PuntoVenta.Application\\PuntoVenta.Application.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\LEGIO\\Documents\\QUINTO\\TECNOLO. Y DESA. WEB\\WEB_ProyectoFinal\\PuntoVenta.Application\\PuntoVenta.Application.csproj",
+        "projectUniqueName": "C:\\Users\\LEGIO\\Documents\\QUINTO\\TECNOLO. Y DESA. WEB\\Backend_Factu\\PuntoVenta.Application\\PuntoVenta.Application.csproj",
         "projectName": "PuntoVenta.Application",
-        "projectPath": "C:\\Users\\LEGIO\\Documents\\QUINTO\\TECNOLO. Y DESA. WEB\\WEB_ProyectoFinal\\PuntoVenta.Application\\PuntoVenta.Application.csproj",
+        "projectPath": "C:\\Users\\LEGIO\\Documents\\QUINTO\\TECNOLO. Y DESA. WEB\\Backend_Factu\\PuntoVenta.Application\\PuntoVenta.Application.csproj",
         "packagesPath": "C:\\Users\\LEGIO\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\LEGIO\\Documents\\QUINTO\\TECNOLO. Y DESA. WEB\\WEB_ProyectoFinal\\PuntoVenta.Application\\obj\\",
+        "outputPath": "C:\\Users\\LEGIO\\Documents\\QUINTO\\TECNOLO. Y DESA. WEB\\Backend_Factu\\PuntoVenta.Application\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -133,8 +133,8 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "C:\\Users\\LEGIO\\Documents\\QUINTO\\TECNOLO. Y DESA. WEB\\WEB_ProyectoFinal\\PuntoVenta.Domain\\PuntoVenta.Domain.csproj": {
-                "projectPath": "C:\\Users\\LEGIO\\Documents\\QUINTO\\TECNOLO. Y DESA. WEB\\WEB_ProyectoFinal\\PuntoVenta.Domain\\PuntoVenta.Domain.csproj"
+              "C:\\Users\\LEGIO\\Documents\\QUINTO\\TECNOLO. Y DESA. WEB\\Backend_Factu\\PuntoVenta.Domain\\PuntoVenta.Domain.csproj": {
+                "projectPath": "C:\\Users\\LEGIO\\Documents\\QUINTO\\TECNOLO. Y DESA. WEB\\Backend_Factu\\PuntoVenta.Domain\\PuntoVenta.Domain.csproj"
               }
             }
           }
@@ -212,14 +212,14 @@
         }
       }
     },
-    "C:\\Users\\LEGIO\\Documents\\QUINTO\\TECNOLO. Y DESA. WEB\\WEB_ProyectoFinal\\PuntoVenta.Domain\\PuntoVenta.Domain.csproj": {
+    "C:\\Users\\LEGIO\\Documents\\QUINTO\\TECNOLO. Y DESA. WEB\\Backend_Factu\\PuntoVenta.Domain\\PuntoVenta.Domain.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\LEGIO\\Documents\\QUINTO\\TECNOLO. Y DESA. WEB\\WEB_ProyectoFinal\\PuntoVenta.Domain\\PuntoVenta.Domain.csproj",
+        "projectUniqueName": "C:\\Users\\LEGIO\\Documents\\QUINTO\\TECNOLO. Y DESA. WEB\\Backend_Factu\\PuntoVenta.Domain\\PuntoVenta.Domain.csproj",
         "projectName": "PuntoVenta.Domain",
-        "projectPath": "C:\\Users\\LEGIO\\Documents\\QUINTO\\TECNOLO. Y DESA. WEB\\WEB_ProyectoFinal\\PuntoVenta.Domain\\PuntoVenta.Domain.csproj",
+        "projectPath": "C:\\Users\\LEGIO\\Documents\\QUINTO\\TECNOLO. Y DESA. WEB\\Backend_Factu\\PuntoVenta.Domain\\PuntoVenta.Domain.csproj",
         "packagesPath": "C:\\Users\\LEGIO\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\LEGIO\\Documents\\QUINTO\\TECNOLO. Y DESA. WEB\\WEB_ProyectoFinal\\PuntoVenta.Domain\\obj\\",
+        "outputPath": "C:\\Users\\LEGIO\\Documents\\QUINTO\\TECNOLO. Y DESA. WEB\\Backend_Factu\\PuntoVenta.Domain\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -257,6 +257,12 @@
       "frameworks": {
         "net8.0": {
           "targetAlias": "net8.0",
+          "dependencies": {
+            "MongoDB.Bson": {
+              "target": "Package",
+              "version": "[2.28.0, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",
@@ -277,14 +283,14 @@
         }
       }
     },
-    "C:\\Users\\LEGIO\\Documents\\QUINTO\\TECNOLO. Y DESA. WEB\\WEB_ProyectoFinal\\PuntoVenta.Infrastructure\\PuntoVenta.Infrastructure.csproj": {
+    "C:\\Users\\LEGIO\\Documents\\QUINTO\\TECNOLO. Y DESA. WEB\\Backend_Factu\\PuntoVenta.Infrastructure\\PuntoVenta.Infrastructure.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\LEGIO\\Documents\\QUINTO\\TECNOLO. Y DESA. WEB\\WEB_ProyectoFinal\\PuntoVenta.Infrastructure\\PuntoVenta.Infrastructure.csproj",
+        "projectUniqueName": "C:\\Users\\LEGIO\\Documents\\QUINTO\\TECNOLO. Y DESA. WEB\\Backend_Factu\\PuntoVenta.Infrastructure\\PuntoVenta.Infrastructure.csproj",
         "projectName": "PuntoVenta.Infrastructure",
-        "projectPath": "C:\\Users\\LEGIO\\Documents\\QUINTO\\TECNOLO. Y DESA. WEB\\WEB_ProyectoFinal\\PuntoVenta.Infrastructure\\PuntoVenta.Infrastructure.csproj",
+        "projectPath": "C:\\Users\\LEGIO\\Documents\\QUINTO\\TECNOLO. Y DESA. WEB\\Backend_Factu\\PuntoVenta.Infrastructure\\PuntoVenta.Infrastructure.csproj",
         "packagesPath": "C:\\Users\\LEGIO\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\LEGIO\\Documents\\QUINTO\\TECNOLO. Y DESA. WEB\\WEB_ProyectoFinal\\PuntoVenta.Infrastructure\\obj\\",
+        "outputPath": "C:\\Users\\LEGIO\\Documents\\QUINTO\\TECNOLO. Y DESA. WEB\\Backend_Factu\\PuntoVenta.Infrastructure\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -305,8 +311,8 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "C:\\Users\\LEGIO\\Documents\\QUINTO\\TECNOLO. Y DESA. WEB\\WEB_ProyectoFinal\\PuntoVenta.Application\\PuntoVenta.Application.csproj": {
-                "projectPath": "C:\\Users\\LEGIO\\Documents\\QUINTO\\TECNOLO. Y DESA. WEB\\WEB_ProyectoFinal\\PuntoVenta.Application\\PuntoVenta.Application.csproj"
+              "C:\\Users\\LEGIO\\Documents\\QUINTO\\TECNOLO. Y DESA. WEB\\Backend_Factu\\PuntoVenta.Application\\PuntoVenta.Application.csproj": {
+                "projectPath": "C:\\Users\\LEGIO\\Documents\\QUINTO\\TECNOLO. Y DESA. WEB\\Backend_Factu\\PuntoVenta.Application\\PuntoVenta.Application.csproj"
               }
             }
           }
@@ -327,17 +333,17 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "dependencies": {
-            "Microsoft.AspNetCore.Identity.EntityFrameworkCore": {
+            "Microsoft.AspNetCore.Identity": {
               "target": "Package",
-              "version": "[8.0.0, )"
+              "version": "[2.2.0, )"
             },
-            "Microsoft.EntityFrameworkCore.SqlServer": {
+            "MongoDB.Bson": {
               "target": "Package",
-              "version": "[8.0.0, )"
+              "version": "[2.28.0, )"
             },
-            "Microsoft.EntityFrameworkCore.Tools": {
+            "MongoDB.Driver": {
               "target": "Package",
-              "version": "[8.0.0, )"
+              "version": "[2.28.0, )"
             }
           },
           "imports": [

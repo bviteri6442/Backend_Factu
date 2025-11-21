@@ -1,57 +1,53 @@
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
+
 namespace PuntoVenta.Domain.Entities
 {
+    /// <summary>
+    /// Product entity for MongoDB
+    /// </summary>
     public class Product
     {
-        public int Id { get; set; }
+        [BsonId]
+        [BsonRepresentation(BsonType.ObjectId)]
+        public string Id { get; set; } = ObjectId.GenerateNewId().ToString();
         
-        /// <summary>
-        /// Nombre del producto
-        /// </summary>
-    public string Nombre { get; set; } = string.Empty;
+        [BsonElement("nombre")]
+        [BsonRequired]
+        public string Nombre { get; set; } = string.Empty;
         
-        /// <summary>
-        /// Código de barras único del producto
-        /// </summary>
-    public string CodigoBarra { get; set; } = string.Empty;
+        [BsonElement("codigoBarra")]
+        [BsonRequired]
+        public string CodigoBarra { get; set; } = string.Empty;
         
-        /// <summary>
-        /// Descripción del producto
-        /// </summary>
-    public string Descripcion { get; set; } = string.Empty;
+        [BsonElement("descripcion")]
+        public string Descripcion { get; set; } = string.Empty;
         
-        /// <summary>
-        /// Precio de costo
-        /// </summary>
+        [BsonElement("precioCosto")]
+        [BsonRepresentation(BsonType.Decimal128)]
         public decimal PrecioCosto { get; set; }
         
-        /// <summary>
-        /// Precio de venta
-        /// </summary>
+        [BsonElement("precioVenta")]
+        [BsonRepresentation(BsonType.Decimal128)]
         public decimal PrecioVenta { get; set; }
         
-        /// <summary>
-        /// Stock actual del producto
-        /// </summary>
+        [BsonElement("stockActual")]
         public int StockActual { get; set; }
         
-        /// <summary>
-        /// Stock mínimo antes de alertar
-        /// </summary>
+        [BsonElement("stockMinimo")]
         public int StockMinimo { get; set; } = 10;
         
-        /// <summary>
-        /// Indicador si el producto está activo
-        /// </summary>
+        [BsonElement("activo")]
         public bool Activo { get; set; } = true;
         
-        /// <summary>
-        /// Fecha de creación
-        /// </summary>
+        [BsonElement("fechaCreacion")]
+        [BsonDateTimeOptions(Kind = DateTimeKind.Utc)]
         public DateTime FechaCreacion { get; set; } = DateTime.UtcNow;
         
-        /// <summary>
-        /// Fecha de última actualización
-        /// </summary>
+        [BsonElement("fechaActualizacion")]
+        [BsonDateTimeOptions(Kind = DateTimeKind.Utc)]
         public DateTime FechaActualizacion { get; set; } = DateTime.UtcNow;
+
+        // Índices únicos se configurarán en MongoDB
     }
 }

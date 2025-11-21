@@ -1,72 +1,66 @@
+using MongoDB.Driver;
 using PuntoVenta.Application.Interfaces;
 using PuntoVenta.Domain.Entities;
 using PuntoVenta.Infrastructure.Persistencia;
-using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace PuntoVenta.Infrastructure.Repositories
 {
+    /// <summary>
+    /// MongoDB repository for Product entity
+    /// </summary>
     public class ProductRepository : GenericRepository<Product>, IProductRepository
     {
-        public ProductRepository(ApplicationDbContext context) : base(context)
+        public ProductRepository(MongoDbContext context) 
+            : base(context, "products")
         {
         }
 
-        /// <summary>
-        /// Obtiene un producto por su código de barras
-        /// </summary>
-        public async Task<Product> GetByCodigoBarraAsync(string codigoBarra)
+        public async Task<Product?> GetByCodigoBarraAsync(string codigoBarra)
         {
-            return await _dbSet.FirstOrDefaultAsync(p => p.CodigoBarra == codigoBarra && p.Activo);
+            var filter = Builders<Product>.Filter.Eq(p => p.CodigoBarra, codigoBarra);
+            return await _collection.Find(filter).FirstOrDefaultAsync();
         }
 
-        /// <summary>
-        /// Obtiene todos los productos que tienen stock disponible
-        /// </summary>
         public async Task<IEnumerable<Product>> GetProductosConStockAsync()
         {
-            return await _dbSet.Where(p => p.Activo && p.StockActual > 0).ToListAsync();
+            var filter = Builders<Product>.Filter.And(
+                Builders<Product>.Filter.Eq(p => p.Activo, true),
+                Builders<Product>.Filter.Gt(p => p.StockActual, 0)
+            );
+            return await _collection.Find(filter).ToListAsync();
         }
 
-        /// <summary>
-        /// Búsqueda inteligente de productos por nombre, descripción o código de barras
-        /// </summary>
         public async Task<IEnumerable<Product>> SearchAsync(string searchTerm)
         {
             if (string.IsNullOrWhiteSpace(searchTerm))
-                return await GetProductosConStockAsync();
-
-            searchTerm = searchTerm.ToLower();
-            return await _dbSet
-                .Where(p => p.Activo && p.StockActual > 0 &&
-                    (p.Nombre.ToLower().Contains(searchTerm) ||
-                     p.Descripcion.ToLower().Contains(searchTerm) ||
-                     p.CodigoBarra.ToLower().Contains(searchTerm)))
-                .ToListAsync();
-        }
-
-        /// <summary>
-        /// Actualiza el stock de un producto
-        /// </summary>
-        public async Task UpdateStockAsync(int productId, int cantidad)
-        {
-            var producto = await GetByIdAsync(productId);
-            if (producto != null)
             {
-                producto.StockActual -= cantidad;
-                producto.FechaActualizacion = DateTime.UtcNow;
-                await UpdateAsync(producto);
+                return await GetProductosConStockAsync();
             }
+
+            var filter = Builders<Product>.Filter.And(
+                Builders<Product>.Filter.Eq(p => p.Activo, true),
+                Builders<Product>.Filter.Or(
+                    Builders<Product>.Filter.Regex(p => p.Nombre, new MongoDB.Bson.BsonRegularExpression(searchTerm, "i")),
+                    Builders<Product>.Filter.Regex(p => p.CodigoBarra, new MongoDB.Bson.BsonRegularExpression(searchTerm, "i")),
+                    Builders<Product>.Filter.Regex(p => p.Descripcion, new MongoDB.Bson.BsonRegularExpression(searchTerm, "i"))
+                )
+            );
+
+            return await _collection.Find(filter).ToListAsync();
         }
 
-        /// <summary>
-        /// Obtiene todos los productos (incluyendo inactivos y sin stock) - para administración
-        /// </summary>
-        public override async Task<IEnumerable<Product>> GetAllAsync()
+        public async Task<bool> UpdateStockAsync(string productId, int cantidad)
         {
-            return await _dbSet.ToListAsync();
+            var filter = Builders<Product>.Filter.Eq("_id", MongoDB.Bson.ObjectId.Parse(productId));
+            var update = Builders<Product>.Update
+                .Inc(p => p.StockActual, cantidad)
+                .Set(p => p.FechaActualizacion, System.DateTime.UtcNow);
+
+            var result = await _collection.UpdateOneAsync(filter, update);
+            return result.ModifiedCount > 0;
         }
     }
 }

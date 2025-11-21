@@ -1,10 +1,26 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\LEGIO\\Documents\\QUINTO\\TECNOLO. Y DESA. WEB\\WEB_ProyectoFinal\\",
+  "WorkspaceRootPath": "C:\\Users\\LEGIO\\Documents\\QUINTO\\TECNOLO. Y DESA. WEB\\Backend_Factu\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{6742B2B5-8A4F-27C6-37FC-E0BC08156318}|PuntoVenta.Api\\PuntoVenta.Api.csproj|c:\\users\\legio\\documents\\quinto\\tecnolo. y desa. web\\web_proyectofinal\\puntoventa.api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{6742B2B5-8A4F-27C6-37FC-E0BC08156318}|PuntoVenta.Api\\PuntoVenta.Api.csproj|solutionrelative:puntoventa.api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{9C79FA28-01A5-7D33-9270-CC644F0409F0}|PuntoVenta.Infrastructure\\PuntoVenta.Infrastructure.csproj|c:\\users\\legio\\documents\\quinto\\tecnolo. y desa. web\\backend_factu\\puntoventa.infrastructure\\repositories\\facturarepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9C79FA28-01A5-7D33-9270-CC644F0409F0}|PuntoVenta.Infrastructure\\PuntoVenta.Infrastructure.csproj|solutionrelative:puntoventa.infrastructure\\repositories\\facturarepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9C79FA28-01A5-7D33-9270-CC644F0409F0}|PuntoVenta.Infrastructure\\PuntoVenta.Infrastructure.csproj|c:\\users\\legio\\documents\\quinto\\tecnolo. y desa. web\\backend_factu\\puntoventa.infrastructure\\repositories\\clienterepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9C79FA28-01A5-7D33-9270-CC644F0409F0}|PuntoVenta.Infrastructure\\PuntoVenta.Infrastructure.csproj|solutionrelative:puntoventa.infrastructure\\repositories\\clienterepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9C79FA28-01A5-7D33-9270-CC644F0409F0}|PuntoVenta.Infrastructure\\PuntoVenta.Infrastructure.csproj|c:\\users\\legio\\documents\\quinto\\tecnolo. y desa. web\\backend_factu\\puntoventa.infrastructure\\repositories\\productrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9C79FA28-01A5-7D33-9270-CC644F0409F0}|PuntoVenta.Infrastructure\\PuntoVenta.Infrastructure.csproj|solutionrelative:puntoventa.infrastructure\\repositories\\productrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9C79FA28-01A5-7D33-9270-CC644F0409F0}|PuntoVenta.Infrastructure\\PuntoVenta.Infrastructure.csproj|c:\\users\\legio\\documents\\quinto\\tecnolo. y desa. web\\backend_factu\\puntoventa.infrastructure\\persistencia\\mongodbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9C79FA28-01A5-7D33-9270-CC644F0409F0}|PuntoVenta.Infrastructure\\PuntoVenta.Infrastructure.csproj|solutionrelative:puntoventa.infrastructure\\persistencia\\mongodbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9C79FA28-01A5-7D33-9270-CC644F0409F0}|PuntoVenta.Infrastructure\\PuntoVenta.Infrastructure.csproj|c:\\users\\legio\\documents\\quinto\\tecnolo. y desa. web\\backend_factu\\puntoventa.infrastructure\\repositories\\genericrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9C79FA28-01A5-7D33-9270-CC644F0409F0}|PuntoVenta.Infrastructure\\PuntoVenta.Infrastructure.csproj|solutionrelative:puntoventa.infrastructure\\repositories\\genericrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -19,14 +35,66 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "Program.cs",
-              "DocumentMoniker": "C:\\Users\\LEGIO\\Documents\\QUINTO\\TECNOLO. Y DESA. WEB\\WEB_ProyectoFinal\\PuntoVenta.Api\\Program.cs",
-              "RelativeDocumentMoniker": "PuntoVenta.Api\\Program.cs",
-              "ToolTip": "C:\\Users\\LEGIO\\Documents\\QUINTO\\TECNOLO. Y DESA. WEB\\WEB_ProyectoFinal\\PuntoVenta.Api\\Program.cs",
-              "RelativeToolTip": "PuntoVenta.Api\\Program.cs",
-              "ViewState": "AgIAAEMAAAAAAAAAAAAowAAAAAAAAAAAAAAAAA==",
+              "Title": "FacturaRepository.cs",
+              "DocumentMoniker": "C:\\Users\\LEGIO\\Documents\\QUINTO\\TECNOLO. Y DESA. WEB\\Backend_Factu\\PuntoVenta.Infrastructure\\Repositories\\FacturaRepository.cs",
+              "RelativeDocumentMoniker": "PuntoVenta.Infrastructure\\Repositories\\FacturaRepository.cs",
+              "ToolTip": "C:\\Users\\LEGIO\\Documents\\QUINTO\\TECNOLO. Y DESA. WEB\\Backend_Factu\\PuntoVenta.Infrastructure\\Repositories\\FacturaRepository.cs",
+              "RelativeToolTip": "PuntoVenta.Infrastructure\\Repositories\\FacturaRepository.cs",
+              "ViewState": "AgIAABkAAAAAAAAAAAAAAFUAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-15T21:14:07.308Z",
+              "WhenOpened": "2025-11-21T13:55:07.13Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "ClienteRepository.cs",
+              "DocumentMoniker": "C:\\Users\\LEGIO\\Documents\\QUINTO\\TECNOLO. Y DESA. WEB\\Backend_Factu\\PuntoVenta.Infrastructure\\Repositories\\ClienteRepository.cs",
+              "RelativeDocumentMoniker": "PuntoVenta.Infrastructure\\Repositories\\ClienteRepository.cs",
+              "ToolTip": "C:\\Users\\LEGIO\\Documents\\QUINTO\\TECNOLO. Y DESA. WEB\\Backend_Factu\\PuntoVenta.Infrastructure\\Repositories\\ClienteRepository.cs",
+              "RelativeToolTip": "PuntoVenta.Infrastructure\\Repositories\\ClienteRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-21T13:54:42.994Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "ProductRepository.cs",
+              "DocumentMoniker": "C:\\Users\\LEGIO\\Documents\\QUINTO\\TECNOLO. Y DESA. WEB\\Backend_Factu\\PuntoVenta.Infrastructure\\Repositories\\ProductRepository.cs",
+              "RelativeDocumentMoniker": "PuntoVenta.Infrastructure\\Repositories\\ProductRepository.cs",
+              "ToolTip": "C:\\Users\\LEGIO\\Documents\\QUINTO\\TECNOLO. Y DESA. WEB\\Backend_Factu\\PuntoVenta.Infrastructure\\Repositories\\ProductRepository.cs",
+              "RelativeToolTip": "PuntoVenta.Infrastructure\\Repositories\\ProductRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-21T13:54:21.703Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "MongoDbContext.cs",
+              "DocumentMoniker": "C:\\Users\\LEGIO\\Documents\\QUINTO\\TECNOLO. Y DESA. WEB\\Backend_Factu\\PuntoVenta.Infrastructure\\Persistencia\\MongoDbContext.cs",
+              "RelativeDocumentMoniker": "PuntoVenta.Infrastructure\\Persistencia\\MongoDbContext.cs",
+              "ToolTip": "C:\\Users\\LEGIO\\Documents\\QUINTO\\TECNOLO. Y DESA. WEB\\Backend_Factu\\PuntoVenta.Infrastructure\\Persistencia\\MongoDbContext.cs",
+              "RelativeToolTip": "PuntoVenta.Infrastructure\\Persistencia\\MongoDbContext.cs",
+              "ViewState": "AgIAACkAAAAAAAAAAAAEwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-21T13:53:58.984Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "GenericRepository.cs",
+              "DocumentMoniker": "C:\\Users\\LEGIO\\Documents\\QUINTO\\TECNOLO. Y DESA. WEB\\Backend_Factu\\PuntoVenta.Infrastructure\\Repositories\\GenericRepository.cs",
+              "RelativeDocumentMoniker": "PuntoVenta.Infrastructure\\Repositories\\GenericRepository.cs",
+              "ToolTip": "C:\\Users\\LEGIO\\Documents\\QUINTO\\TECNOLO. Y DESA. WEB\\Backend_Factu\\PuntoVenta.Infrastructure\\Repositories\\GenericRepository.cs",
+              "RelativeToolTip": "PuntoVenta.Infrastructure\\Repositories\\GenericRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAdAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-21T13:53:37.333Z",
               "EditorCaption": ""
             }
           ]

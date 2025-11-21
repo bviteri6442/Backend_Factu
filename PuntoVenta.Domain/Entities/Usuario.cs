@@ -1,61 +1,56 @@
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
+
 namespace PuntoVenta.Domain.Entities
 {
     /// <summary>
-    /// Entidad de Usuario extendida de IdentityUser para el sistema de puntos de venta
+    /// User entity for MongoDB with authentication
     /// </summary>
     public class Usuario
     {
-    public string Id { get; set; } = string.Empty;
+        [BsonId]
+        [BsonRepresentation(BsonType.ObjectId)]
+        public string Id { get; set; } = ObjectId.GenerateNewId().ToString();
         
-        /// <summary>
-        /// Número de cédula del usuario (único)
-        /// </summary>
-    public string Cedula { get; set; } = string.Empty;
+        [BsonElement("cedula")]
+        [BsonRequired]
+        public string Cedula { get; set; } = string.Empty;
         
-        /// <summary>
-        /// Correo electrónico (usado para login)
-        /// </summary>
-    public string Correo { get; set; } = string.Empty;
+        [BsonElement("correo")]
+        [BsonRequired]
+        public string Correo { get; set; } = string.Empty;
         
-        /// <summary>
-        /// Nombre completo del usuario
-        /// </summary>
-    public string NombreCompleto { get; set; } = string.Empty;
+        [BsonElement("nombreCompleto")]
+        [BsonRequired]
+        public string NombreCompleto { get; set; } = string.Empty;
         
-        /// <summary>
-        /// Contraseña hasheada
-        /// </summary>
-    public string Contrasena { get; set; } = string.Empty;
+        [BsonElement("contrasenaHash")]
+        [BsonRequired]
+        public string ContrasenaHash { get; set; } = string.Empty; // BCrypt hash
         
-        /// <summary>
-        /// Indicador si el usuario está activo
-        /// </summary>
+        [BsonElement("activo")]
         public bool Activo { get; set; } = true;
         
-        /// <summary>
-        /// Fecha de bloqueo (NULL si no está bloqueado)
-        /// </summary>
+        [BsonElement("fechaBloqueo")]
+        [BsonDateTimeOptions(Kind = DateTimeKind.Utc)]
         public DateTime? FechaBloqueo { get; set; }
         
-        /// <summary>
-        /// Razón del bloqueo
-        /// </summary>
-    public string RazonBloqueo { get; set; } = string.Empty;
+        [BsonElement("razonBloqueo")]
+        public string RazonBloqueo { get; set; } = string.Empty;
         
-        /// <summary>
-        /// Fecha de creación
-        /// </summary>
+        [BsonElement("fechaCreacion")]
+        [BsonDateTimeOptions(Kind = DateTimeKind.Utc)]
         public DateTime FechaCreacion { get; set; } = DateTime.UtcNow;
         
-        /// <summary>
-        /// Fecha del último login
-        /// </summary>
+        [BsonElement("fechaUltimoLogin")]
+        [BsonDateTimeOptions(Kind = DateTimeKind.Utc)]
         public DateTime? FechaUltimoLogin { get; set; }
         
-        /// <summary>
-        /// Relación con Rol
-        /// </summary>
-    public int RolId { get; set; }
-    public Rol? Rol { get; set; }
+        [BsonElement("rolId")]
+        [BsonRepresentation(BsonType.ObjectId)]
+        public string RolId { get; set; } = string.Empty;
+        
+        [BsonElement("rolNombre")]
+        public string RolNombre { get; set; } = string.Empty; // Desnormalizado para consultas rápidas
     }
 }

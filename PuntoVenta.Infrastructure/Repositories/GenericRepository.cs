@@ -1,70 +1,76 @@
-using Microsoft.EntityFrameworkCore;
+using MongoDB.Driver;
+using MongoDB.Bson;
 using PuntoVenta.Application.Interfaces;
 using PuntoVenta.Infrastructure.Persistencia;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace PuntoVenta.Infrastructure.Repositories
 {
     /// <summary>
-    /// Repositorio genérico base que implementa operaciones CRUD comunes
+    /// Generic MongoDB repository implementation
     /// </summary>
     public class GenericRepository<T> : IGenericRepository<T> where T : class
     {
-        protected readonly ApplicationDbContext _context;
-        protected readonly DbSet<T> _dbSet;
+        protected readonly IMongoCollection<T> _collection;
+        protected readonly MongoDbContext _context;
 
-        public GenericRepository(ApplicationDbContext context)
+        public GenericRepository(MongoDbContext context, string collectionName)
         {
             _context = context;
-            _dbSet = context.Set<T>();
+            _collection = context.GetCollection<T>(collectionName);
         }
 
-        public virtual async Task<T> GetByIdAsync(int id)
+        public virtual async Task<T?> GetByIdAsync(string id)
         {
-            return await _dbSet.FindAsync(id);
+            var filter = Builders<T>.Filter.Eq("_id", ObjectId.Parse(id));
+            return await _collection.Find(filter).FirstOrDefaultAsync();
         }
 
         public virtual async Task<IEnumerable<T>> GetAllAsync()
         {
-            return await _dbSet.ToListAsync();
+            return await _collection.Find(_ => true).ToListAsync();
         }
 
-        public virtual async Task<int> AddAsync(T entity)
+        public virtual async Task<string> AddAsync(T entity)
         {
-            await _dbSet.AddAsync(entity);
-            await _context.SaveChangesAsync();
+            await _collection.InsertOneAsync(entity);
             
-            // Obtener el ID de la entidad agregada
-            var property = entity.GetType().GetProperty("Id");
-            if (property != null)
+            // Extract the generated ObjectId
+            var idProperty = entity.GetType().GetProperty("Id");
+            if (idProperty != null)
             {
-                return (int)property.GetValue(entity);
+                var idValue = idProperty.GetValue(entity);
+                return idValue?.ToString() ?? string.Empty;
             }
-            return 0;
+            return string.Empty;
         }
 
         public virtual async Task UpdateAsync(T entity)
         {
-            _dbSet.Update(entity);
-            await _context.SaveChangesAsync();
-        }
-
-        public virtual async Task DeleteAsync(int id)
-        {
-            var entity = await GetByIdAsync(id);
-            if (entity != null)
+            var idProperty = entity.GetType().GetProperty("Id");
+            if (idProperty != null)
             {
-                _dbSet.Remove(entity);
-                await _context.SaveChangesAsync();
+                var idValue = idProperty.GetValue(entity)?.ToString();
+                if (!string.IsNullOrEmpty(idValue))
+                {
+                    var filter = Builders<T>.Filter.Eq("_id", ObjectId.Parse(idValue));
+                    await _collection.ReplaceOneAsync(filter, entity);
+                }
             }
         }
 
-        public virtual async Task<bool> ExistsAsync(int id)
+        public virtual async Task DeleteAsync(string id)
         {
-            var entity = await GetByIdAsync(id);
-            return entity != null;
+            var filter = Builders<T>.Filter.Eq("_id", ObjectId.Parse(id));
+            await _collection.DeleteOneAsync(filter);
+        }
+
+        public virtual async Task<bool> ExistsAsync(string id)
+        {
+            var filter = Builders<T>.Filter.Eq("_id", ObjectId.Parse(id));
+            var count = await _collection.CountDocumentsAsync(filter);
+            return count > 0;
         }
     }
 }

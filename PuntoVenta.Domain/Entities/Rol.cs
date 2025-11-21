@@ -1,35 +1,32 @@
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
+
 namespace PuntoVenta.Domain.Entities
 {
     /// <summary>
-    /// Entidad de Rol para control de acceso basado en roles (RBAC)
+    /// Role entity for RBAC (Role-Based Access Control)
     /// </summary>
     public class Rol
     {
-        public int Id { get; set; }
+        [BsonId]
+        [BsonRepresentation(BsonType.ObjectId)]
+        public string Id { get; set; } = ObjectId.GenerateNewId().ToString();
         
-        /// <summary>
-        /// Nombre del rol (ej: "Administrador", "Usuario", "Vendedor")
-        /// </summary>
-    public string Nombre { get; set; } = string.Empty;
+        [BsonElement("nombre")]
+        [BsonRequired]
+        public string Nombre { get; set; } = string.Empty; // "Administrador", "Usuario"
         
-        /// <summary>
-        /// Descripción del rol
-        /// </summary>
-    public string Descripcion { get; set; } = string.Empty;
+        [BsonElement("descripcion")]
+        public string Descripcion { get; set; } = string.Empty;
         
-        /// <summary>
-        /// Indicador si el rol está activo
-        /// </summary>
+        [BsonElement("activo")]
         public bool Activo { get; set; } = true;
         
-        /// <summary>
-        /// Fecha de creación
-        /// </summary>
+        [BsonElement("fechaCreacion")]
+        [BsonDateTimeOptions(Kind = DateTimeKind.Utc)]
         public DateTime FechaCreacion { get; set; } = DateTime.UtcNow;
         
-        /// <summary>
-        /// Relación uno a muchos con Usuarios
-        /// </summary>
-        public ICollection<Usuario> Usuarios { get; set; } = new List<Usuario>();
+        [BsonElement("permisos")]
+        public List<string> Permisos { get; set; } = new(); // ["crear_factura", "ver_reportes", etc.]
     }
 }
