@@ -1,50 +1,46 @@
-using MongoDB.Driver;
+using Microsoft.EntityFrameworkCore;
 using PuntoVenta.Application.Interfaces;
 using PuntoVenta.Domain.Entities;
 using PuntoVenta.Infrastructure.Persistencia;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace PuntoVenta.Infrastructure.Repositories
 {
     /// <summary>
-    /// MongoDB repository for Cliente entity
+    /// EF Core repository for Cliente entity
     /// </summary>
     public class ClienteRepository : GenericRepository<Cliente>, IClienteRepository
     {
-        public ClienteRepository(MongoDbContext context) 
-            : base(context, "clientes")
+        public ClienteRepository(ApplicationDbContext context) 
+            : base(context)
         {
         }
 
         public async Task<Cliente?> GetByDocumentoAsync(string documento)
         {
-            var filter = Builders<Cliente>.Filter.And(
-                Builders<Cliente>.Filter.Eq(c => c.Documento, documento),
-                Builders<Cliente>.Filter.Eq(c => c.Activo, true)
-            );
-            return await _collection.Find(filter).FirstOrDefaultAsync();
+            return await _context.Clientes
+                .FirstOrDefaultAsync(c => c.Documento == documento && c.Activo);
         }
 
         public async Task<IEnumerable<Cliente>> SearchAsync(string searchTerm)
         {
             if (string.IsNullOrWhiteSpace(searchTerm))
             {
-                var filterActive = Builders<Cliente>.Filter.Eq(c => c.Activo, true);
-                return await _collection.Find(filterActive).ToListAsync();
+                return await _context.Clientes
+                    .Where(c => c.Activo)
+                    .ToListAsync();
             }
 
-            var filter = Builders<Cliente>.Filter.And(
-                Builders<Cliente>.Filter.Eq(c => c.Activo, true),
-                Builders<Cliente>.Filter.Or(
-                    Builders<Cliente>.Filter.Regex(c => c.Nombre, new MongoDB.Bson.BsonRegularExpression(searchTerm, "i")),
-                    Builders<Cliente>.Filter.Regex(c => c.Documento, new MongoDB.Bson.BsonRegularExpression(searchTerm, "i")),
-                    Builders<Cliente>.Filter.Regex(c => c.Email, new MongoDB.Bson.BsonRegularExpression(searchTerm, "i")),
-                    Builders<Cliente>.Filter.Regex(c => c.Telefono, new MongoDB.Bson.BsonRegularExpression(searchTerm, "i"))
-                )
-            );
-
-            return await _collection.Find(filter).ToListAsync();
+            return await _context.Clientes
+                .Where(c => c.Activo && (
+                    EF.Functions.ILike(c.Nombre, $"%{searchTerm}%") ||
+                    EF.Functions.ILike(c.Documento, $"%{searchTerm}%") ||
+                    EF.Functions.ILike(c.Email ?? "", $"%{searchTerm}%") ||
+                    EF.Functions.ILike(c.Telefono ?? "", $"%{searchTerm}%")
+                ))
+                .ToListAsync();
         }
     }
 }

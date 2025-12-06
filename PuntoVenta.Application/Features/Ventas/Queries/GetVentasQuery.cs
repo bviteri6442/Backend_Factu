@@ -9,7 +9,7 @@ namespace PuntoVenta.Application.Features.Ventas.Queries
     {
         public DateTime? FechaInicio { get; set; }
         public DateTime? FechaFin { get; set; }
-        public string? UsuarioId { get; set; }
+        public int? UsuarioId { get; set; }
         public int? ClienteId { get; set; }
         public string? Estado { get; set; }
     }

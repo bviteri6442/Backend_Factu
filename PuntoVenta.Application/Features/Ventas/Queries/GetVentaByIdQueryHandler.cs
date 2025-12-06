@@ -22,8 +22,7 @@ namespace PuntoVenta.Application.Features.Ventas.Queries
         {
             try
             {
-                // Changed: Use Facturas instead of Ventas (MongoDB migration)
-                var factura = await _unitOfWork.Facturas.GetFacturaConDetallesAsync(request.VentaId.ToString());
+                var factura = await _unitOfWork.Facturas.GetFacturaConDetallesAsync(request.VentaId);
 
                 if (factura == null)
                 {
@@ -32,12 +31,12 @@ namespace PuntoVenta.Application.Features.Ventas.Queries
 
                 var resultado = new VentaDetailResponseDto
                 {
-                    VentaId = request.VentaId,
+                    VentaId = factura.Id,
                     NumeroFactura = factura.NumeroFactura,
                     FechaVenta = factura.FechaVenta,
                     UsuarioId = factura.UsuarioId,
                     UsuarioNombre = factura.UsuarioNombre,
-                    ClienteId = !string.IsNullOrEmpty(factura.ClienteId) && int.TryParse(factura.ClienteId, out int cId) ? cId : (int?)null,
+                    ClienteId = factura.ClienteId,
                     ClienteNombre = factura.ClienteNombre,
                     Subtotal = factura.Subtotal,
                     PorcentajeIVA = factura.PorcentajeIVA,
@@ -47,7 +46,7 @@ namespace PuntoVenta.Application.Features.Ventas.Queries
                     Observaciones = factura.Observaciones,
                     Detalles = factura.Detalles?.Select(d => new DetalleVentaResponseDto
                     {
-                        ProductoId = int.TryParse(d.ProductoId, out int pId) ? pId : 0,
+                        ProductoId = d.ProductoId,
                         ProductoNombre = d.ProductoNombre,
                         Cantidad = d.Cantidad,
                         PrecioUnitario = d.PrecioUnitario,

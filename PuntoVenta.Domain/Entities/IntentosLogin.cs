@@ -1,6 +1,3 @@
-using MongoDB.Bson;
-using MongoDB.Bson.Serialization.Attributes;
-
 namespace PuntoVenta.Domain.Entities
 {
     /// <summary>
@@ -8,32 +5,12 @@ namespace PuntoVenta.Domain.Entities
     /// </summary>
     public class IntentosLogin
     {
-        [BsonId]
-        [BsonRepresentation(BsonType.ObjectId)]
-        public string Id { get; set; } = ObjectId.GenerateNewId().ToString();
-        
-        [BsonElement("correo")]
-        [BsonRequired]
-        public string Correo { get; set; } = string.Empty;
-        
-        [BsonElement("numeroIntentosFallidos")]
-        public int NumeroIntentosFallidos { get; set; } = 0;
-        
-        [BsonElement("fechaUltimoIntento")]
-        [BsonDateTimeOptions(Kind = DateTimeKind.Utc)]
-        public DateTime FechaUltimoIntento { get; set; } = DateTime.UtcNow;
-        
-        [BsonElement("direccionIP")]
-        public string DireccionIP { get; set; } = string.Empty;
-        
-        [BsonElement("userAgent")]
-        public string UserAgent { get; set; } = string.Empty;
-        
-        [BsonElement("bloqueado")]
-        public bool Bloqueado { get; set; } = false;
-        
-        [BsonElement("fechaBloqueo")]
-        [BsonDateTimeOptions(Kind = DateTimeKind.Utc)]
-        public DateTime? FechaBloqueo { get; set; }
+        public int Id { get; set; }
+        public string NombreUsuario { get; set; } = string.Empty;
+        public bool Exitoso { get; set; }
+        public string? IpAddress { get; set; }
+        public string? UserAgent { get; set; }
+        public DateTime FechaIntento { get; set; } = DateTime.UtcNow;
+        public string? MensajeError { get; set; }
     }
 }

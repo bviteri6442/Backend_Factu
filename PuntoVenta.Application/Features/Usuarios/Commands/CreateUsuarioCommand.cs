@@ -5,10 +5,10 @@ namespace PuntoVenta.Application.Features.Usuarios.Commands
 {
     public class CreateUsuarioCommand : IRequest<int>
     {
-        public string? Cedula { get; set; }
-        public string? Correo { get; set; }
-        public string? NombreCompleto { get; set; }
+        public string? NombreUsuario { get; set; }
+        public string? Email { get; set; }
+        public string? Nombre { get; set; }
         public string? Contrasena { get; set; }
-        public string RolId { get; set; } = string.Empty; // Changed from int to string for MongoDB ObjectId
+        public int RolId { get; set; }
     }
 }

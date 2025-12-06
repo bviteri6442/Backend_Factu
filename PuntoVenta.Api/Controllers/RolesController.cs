@@ -48,7 +48,7 @@ namespace PuntoVenta.Api.Controllers
         /// Obtener rol por ID
         /// </summary>
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetRol(string id) // Changed from int to string
+        public async Task<IActionResult> GetRol(int id)
         {
             try
             {
@@ -96,10 +96,10 @@ namespace PuntoVenta.Api.Controllers
                     FechaCreacion = DateTime.UtcNow
                 };
 
-                var id = await _unitOfWork.Roles.AddAsync(rol);
+                await _unitOfWork.Roles.AddAsync(rol);
                 await _unitOfWork.SaveChangesAsync();
 
-                return CreatedAtAction(nameof(GetRol), new { id = id }, new { mensaje = $"Rol {createRolDto.Nombre} creado exitosamente" });
+                return CreatedAtAction(nameof(GetRol), new { id = rol.Id }, new { mensaje = $"Rol {createRolDto.Nombre} creado exitosamente" });
             }
             catch (Exception ex)
             {
@@ -111,7 +111,7 @@ namespace PuntoVenta.Api.Controllers
         /// Actualizar rol
         /// </summary>
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateRol(string id, [FromBody] UpdateRolDto updateRolDto) // Changed from int to string
+        public async Task<IActionResult> UpdateRol(int id, [FromBody] UpdateRolDto updateRolDto)
         {
             if (!ModelState.IsValid)
             {
@@ -150,7 +150,7 @@ namespace PuntoVenta.Api.Controllers
         /// Desactivar rol
         /// </summary>
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteRol(string id) // Changed from int to string
+        public async Task<IActionResult> DeleteRol(int id)
         {
             try
             {

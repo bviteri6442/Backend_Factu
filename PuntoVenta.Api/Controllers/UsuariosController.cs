@@ -2,7 +2,10 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PuntoVenta.Application.DTOs;
+using PuntoVenta.Application.Features.Usuarios.Commands;
 using PuntoVenta.Application.Interfaces;
+using PuntoVenta.Domain.Entities;
+using System.Security.Claims;
 
 namespace PuntoVenta.Api.Controllers
 {
@@ -33,15 +36,15 @@ namespace PuntoVenta.Api.Controllers
                 var usuariosDto = usuarios.Select(u => new UsuarioResponseDto
                 {
                     Id = u.Id,
-                    Cedula = u.Cedula,
-                    Correo = u.Correo,
-                    NombreCompleto = u.NombreCompleto,
+                    NombreUsuario = u.NombreUsuario,
+                    Email = u.Email,
+                    Nombre = u.Nombre,
                     Activo = u.Activo,
                     FechaBloqueo = u.FechaBloqueo,
                     FechaCreacion = u.FechaCreacion,
                     FechaUltimoLogin = u.FechaUltimoLogin,
                     RolId = u.RolId,
-                    RolNombre = u.RolNombre // MongoDB denormalized data
+                    RolNombre = u.RolNombre
                 }).ToList();
 
                 return Ok(usuariosDto);
@@ -57,7 +60,7 @@ namespace PuntoVenta.Api.Controllers
         /// </summary>
         [Authorize(Roles = "Administrador")]
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetUsuario(string id)
+        public async Task<IActionResult> GetUsuario(int id)
         {
             try
             {
@@ -70,9 +73,9 @@ namespace PuntoVenta.Api.Controllers
                 var usuarioDto = new UsuarioResponseDto
                 {
                     Id = usuario.Id,
-                    Cedula = usuario.Cedula,
-                    Correo = usuario.Correo,
-                    NombreCompleto = usuario.NombreCompleto,
+                    NombreUsuario = usuario.NombreUsuario,
+                    Email = usuario.Email,
+                    Nombre = usuario.Nombre,
                     Activo = usuario.Activo,
                     FechaBloqueo = usuario.FechaBloqueo,
                     FechaCreacion = usuario.FechaCreacion,
@@ -90,11 +93,56 @@ namespace PuntoVenta.Api.Controllers
         }
 
         /// <summary>
+        /// Crear nuevo usuario (solo administrador)
+        /// </summary>
+        [Authorize(Roles = "Administrador")]
+        [HttpPost]
+        public async Task<IActionResult> CreateUsuario([FromBody] CreateUsuarioRequestDto createDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                // Verificar que el rol existe
+                var rol = await _unitOfWork.Roles.GetByIdAsync(createDto.RolId);
+                if (rol == null)
+                {
+                    return BadRequest(new { mensaje = "El rol especificado no existe" });
+                }
+
+                var command = new CreateUsuarioCommand
+                {
+                    NombreUsuario = createDto.NombreUsuario ?? createDto.Cedula ?? "",
+                    Email = createDto.Email ?? createDto.Correo ?? "",
+                    Nombre = createDto.Nombre ?? createDto.NombreCompleto ?? "",
+                    Contrasena = createDto.Contrasena ?? "",
+                    RolId = createDto.RolId
+                };
+
+                var resultado = await _mediator.Send(command);
+
+                return CreatedAtAction(nameof(GetUsuario), new { id = resultado }, new
+                {
+                    exitoso = true,
+                    mensaje = "Usuario creado exitosamente",
+                    usuarioId = resultado
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { mensaje = ex.Message });
+            }
+        }
+
+        /// <summary>
         /// Actualizar usuario (solo administrador)
         /// </summary>
         [Authorize(Roles = "Administrador")]
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateUsuario(string id, [FromBody] UpdateUsuarioDto updateUsuarioDto)
+        public async Task<IActionResult> UpdateUsuario(int id, [FromBody] UpdateUsuarioDto updateUsuarioDto)
         {
             if (!ModelState.IsValid)
             {
@@ -109,20 +157,20 @@ namespace PuntoVenta.Api.Controllers
                     return NotFound(new { mensaje = "Usuario no encontrado" });
                 }
 
-                if (!string.IsNullOrEmpty(updateUsuarioDto.NombreCompleto))
-                    usuario.NombreCompleto = updateUsuarioDto.NombreCompleto;
+                if (!string.IsNullOrEmpty(updateUsuarioDto.Nombre))
+                    usuario.Nombre = updateUsuarioDto.Nombre;
 
-                if (!string.IsNullOrEmpty(updateUsuarioDto.Correo))
-                    usuario.Correo = updateUsuarioDto.Correo;
+                if (!string.IsNullOrEmpty(updateUsuarioDto.Email))
+                    usuario.Email = updateUsuarioDto.Email;
 
-                if (!string.IsNullOrEmpty(updateUsuarioDto.RolId))
+                if (updateUsuarioDto.RolId.HasValue)
                 {
-                    var rol = await _unitOfWork.Roles.GetByIdAsync(updateUsuarioDto.RolId);
+                    var rol = await _unitOfWork.Roles.GetByIdAsync(updateUsuarioDto.RolId.Value);
                     if (rol == null)
                         return BadRequest(new { mensaje = "Rol no válido" });
                     
-                    usuario.RolId = updateUsuarioDto.RolId;
-                    usuario.RolNombre = rol.Nombre; // Update denormalized field
+                    usuario.RolId = updateUsuarioDto.RolId.Value;
+                    usuario.RolNombre = rol.Nombre;
                 }
 
                 if (updateUsuarioDto.Activo.HasValue)
@@ -140,11 +188,11 @@ namespace PuntoVenta.Api.Controllers
         }
 
         /// <summary>
-        /// Desactivar usuario (soft delete)
+        /// Desactivar usuario (soft delete) y registrar la eliminación
         /// </summary>
         [Authorize(Roles = "Administrador")]
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteUsuario(string id)
+        public async Task<IActionResult> DeleteUsuario(int id, [FromQuery] string? motivo = null)
         {
             try
             {
@@ -154,6 +202,29 @@ namespace PuntoVenta.Api.Controllers
                     return NotFound(new { mensaje = "Usuario no encontrado" });
                 }
 
+                // Obtener información del administrador que realiza la eliminación
+                var adminId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                var adminNombre = User.FindFirst(ClaimTypes.Name)?.Value ?? "Administrador";
+
+                // Registrar la eliminación
+                var eliminacion = new EliminacionUsuario
+                {
+                    UsuarioEliminadoId = usuario.Id,
+                    CedulaUsuarioEliminado = usuario.NombreUsuario,
+                    NombreUsuarioEliminado = usuario.Nombre,
+                    EmailUsuarioEliminado = usuario.Email,
+                    RolUsuarioEliminado = usuario.RolNombre,
+                    AdministradorId = int.TryParse(adminId, out int aid) ? aid : 0,
+                    NombreAdministrador = adminNombre,
+                    FechaEliminacion = DateTime.UtcNow,
+                    MotivoEliminacion = motivo,
+                    TipoEliminacion = "Desactivación",
+                    IpAddress = HttpContext.Connection.RemoteIpAddress?.ToString()
+                };
+
+                await _unitOfWork.EliminacionesUsuarios.AddAsync(eliminacion);
+
+                // Desactivar el usuario
                 usuario.Activo = false;
                 await _unitOfWork.Usuarios.UpdateAsync(usuario);
                 await _unitOfWork.SaveChangesAsync();
@@ -171,7 +242,7 @@ namespace PuntoVenta.Api.Controllers
         /// </summary>
         [Authorize(Roles = "Administrador")]
         [HttpPost("{id}/desbloquear")]
-        public async Task<IActionResult> DesbloquearUsuario(string id)
+        public async Task<IActionResult> DesbloquearUsuario(int id)
         {
             try
             {
@@ -186,9 +257,9 @@ namespace PuntoVenta.Api.Controllers
                 await _unitOfWork.Usuarios.UpdateAsync(usuario);
 
                 // Reiniciar intentos de login
-                if (!string.IsNullOrEmpty(usuario.Correo))
+                if (!string.IsNullOrEmpty(usuario.Email))
                 {
-                    await _unitOfWork.IntentosLogin.ReiniciarIntentosAsync(usuario.Correo);
+                    await _unitOfWork.IntentosLogin.ReiniciarIntentosAsync(usuario.Email);
                 }
 
                 await _unitOfWork.SaveChangesAsync();
@@ -211,9 +282,9 @@ namespace PuntoVenta.Api.Controllers
             {
                 var usuarios = await _unitOfWork.Usuarios.GetAllAsync();
                 var resultado = usuarios.Where(u =>
-                    u.NombreCompleto.Contains(termino, StringComparison.OrdinalIgnoreCase) ||
-                    u.Correo.Contains(termino, StringComparison.OrdinalIgnoreCase) ||
-                    u.Cedula.Contains(termino, StringComparison.OrdinalIgnoreCase)
+                    (!string.IsNullOrEmpty(u.Nombre) && u.Nombre.Contains(termino, StringComparison.OrdinalIgnoreCase)) ||
+                    (!string.IsNullOrEmpty(u.Email) && u.Email.Contains(termino, StringComparison.OrdinalIgnoreCase)) ||
+                    (!string.IsNullOrEmpty(u.NombreUsuario) && u.NombreUsuario.Contains(termino, StringComparison.OrdinalIgnoreCase))
                 ).ToList();
 
                 return Ok(resultado);

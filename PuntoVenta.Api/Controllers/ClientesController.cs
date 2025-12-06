@@ -59,7 +59,7 @@ namespace PuntoVenta.Api.Controllers
         /// Obtiene un cliente específico por ID
         /// </summary>
         [HttpGet("{id}")]
-        public async Task<ActionResult<ClienteResponseDto>> GetClienteById(string id)
+        public async Task<ActionResult<ClienteResponseDto>> GetClienteById(int id)
         {
             try
             {
@@ -109,12 +109,12 @@ namespace PuntoVenta.Api.Controllers
                     FechaCreacion = DateTime.UtcNow
                 };
 
-                var clienteId = await _unitOfWork.Clientes.AddAsync(cliente);
+                await _unitOfWork.Clientes.AddAsync(cliente);
                 await _unitOfWork.SaveChangesAsync();
 
                 var result = new ClienteResponseDto
                 {
-                    Id = clienteId,
+                    Id = cliente.Id,
                     Nombre = cliente.Nombre,
                     Documento = cliente.Documento,
                     Email = cliente.Email,
@@ -124,7 +124,7 @@ namespace PuntoVenta.Api.Controllers
                     FechaCreacion = cliente.FechaCreacion
                 };
 
-                return CreatedAtAction(nameof(GetClienteById), new { id = clienteId }, result);
+                return CreatedAtAction(nameof(GetClienteById), new { id = cliente.Id }, result);
             }
             catch (Exception ex)
             {
@@ -137,7 +137,7 @@ namespace PuntoVenta.Api.Controllers
         /// </summary>
         [HttpPut("{id}")]
         [Authorize(Roles = "Administrador")]
-        public async Task<ActionResult<ClienteResponseDto>> UpdateCliente(string id, [FromBody] UpdateClienteDto updateClienteDto)
+        public async Task<ActionResult<ClienteResponseDto>> UpdateCliente(int id, [FromBody] UpdateClienteDto updateClienteDto)
         {
             try
             {
@@ -216,7 +216,7 @@ namespace PuntoVenta.Api.Controllers
         /// </summary>
         [HttpPut("{id}/desactivar")]
         [Authorize(Roles = "Administrador")]
-        public async Task<ActionResult<bool>> DesactivarCliente(string id)
+        public async Task<ActionResult<bool>> DesactivarCliente(int id)
         {
             try
             {

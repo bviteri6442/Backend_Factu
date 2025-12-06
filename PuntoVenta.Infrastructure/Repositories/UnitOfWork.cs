@@ -1,4 +1,4 @@
-using MongoDB.Driver;
+using Microsoft.EntityFrameworkCore.Storage;
 using PuntoVenta.Application.Interfaces;
 using PuntoVenta.Infrastructure.Persistencia;
 using System;
@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 namespace PuntoVenta.Infrastructure.Repositories
 {
     /// <summary>
-    /// MongoDB Unit of Work implementation with transaction support
+    /// EF Core Unit of Work implementation with transaction support
     /// </summary>
     public class UnitOfWork : IUnitOfWork
     {
-        private readonly MongoDbContext _context;
-        private IClientSessionHandle? _session;
+        private readonly ApplicationDbContext _context;
+        private IDbContextTransaction? _transaction;
 
         private IProductRepository? _productRepository;
         private IUsuarioRepository? _usuarioRepository;
@@ -21,8 +21,9 @@ namespace PuntoVenta.Infrastructure.Repositories
         private IFacturaRepository? _facturaRepository;
         private IErrorLogRepository? _errorLogRepository;
         private IIntentosLoginRepository? _intentosLoginRepository;
+        private IEliminacionUsuarioRepository? _eliminacionUsuarioRepository;
 
-        public UnitOfWork(MongoDbContext context)
+        public UnitOfWork(ApplicationDbContext context)
         {
             _context = context;
         }
@@ -83,39 +84,48 @@ namespace PuntoVenta.Infrastructure.Repositories
             }
         }
 
-        // MongoDB doesn't require SaveChangesAsync (auto-commit per operation)
+        public IEliminacionUsuarioRepository EliminacionesUsuarios
+        {
+            get
+            {
+                return _eliminacionUsuarioRepository ??= new EliminacionUsuarioRepository(_context);
+            }
+        }
+
         public async Task<int> SaveChangesAsync()
         {
-            // MongoDB writes are atomic by default
-            return await Task.FromResult(0);
+            return await _context.SaveChangesAsync();
         }
 
         public async Task BeginTransactionAsync()
         {
-            _session = _context.StartSession();
-            _session.StartTransaction();
-            await Task.CompletedTask;
+            _transaction = await _context.Database.BeginTransactionAsync();
         }
 
         public async Task CommitTransactionAsync()
         {
-            if (_session != null)
+            if (_transaction != null)
             {
-                await _session.CommitTransactionAsync();
+                await _transaction.CommitAsync();
+                await _transaction.DisposeAsync();
+                _transaction = null;
             }
         }
 
         public async Task RollbackTransactionAsync()
         {
-            if (_session != null)
+            if (_transaction != null)
             {
-                await _session.AbortTransactionAsync();
+                await _transaction.RollbackAsync();
+                await _transaction.DisposeAsync();
+                _transaction = null;
             }
         }
 
         public void Dispose()
         {
-            _session?.Dispose();
+            _transaction?.Dispose();
+            _context?.Dispose();
         }
     }
 }

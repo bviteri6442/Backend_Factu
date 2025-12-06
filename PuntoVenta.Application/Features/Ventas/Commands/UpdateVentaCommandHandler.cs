@@ -19,8 +19,7 @@ namespace PuntoVenta.Application.Features.Ventas.Commands
         {
             try
             {
-                // Changed: Use Facturas instead of Ventas (MongoDB migration)
-                var factura = await _unitOfWork.Facturas.GetByIdAsync(request.VentaId.ToString());
+                var factura = await _unitOfWork.Facturas.GetByIdAsync(request.VentaId);
 
                 if (factura == null)
                 {

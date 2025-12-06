@@ -9,15 +9,15 @@ namespace PuntoVenta.Application.Interfaces
     /// </summary>
     public interface IUsuarioRepository
     {
-        Task<Usuario?> GetByIdAsync(string id);
+        Task<Usuario?> GetByIdAsync(int id);
         Task<IEnumerable<Usuario>> GetAllAsync();
-        Task<string> AddAsync(Usuario entity);
+        Task<int> AddAsync(Usuario entity);
         Task UpdateAsync(Usuario entity);
-        Task DeleteAsync(string id);
-        Task<bool> ExistsAsync(string id);
+        Task DeleteAsync(int id);
+        Task<bool> ExistsAsync(int id);
         Task<Usuario?> GetByCorreoAsync(string correo);
         Task<Usuario?> GetByCedulaAsync(string cedula);
-        Task<IEnumerable<Usuario>> GetByRolAsync(string rolId);
+        Task<IEnumerable<Usuario>> GetByRolAsync(int rolId);
         Task<bool> ExisteCorreoAsync(string correo);
         Task<bool> ExisteCedulaAsync(string cedula);
     }

@@ -42,17 +42,17 @@ namespace PuntoVenta.Api.Controllers
 
                 if (fechaInicio.HasValue)
                 {
-                    filtrados = filtrados.Where(e => e.FechaError >= fechaInicio.Value);
+                    filtrados = filtrados.Where(e => e.Fecha >= fechaInicio.Value);
                 }
 
                 if (fechaFin.HasValue)
                 {
-                    filtrados = filtrados.Where(e => e.FechaError <= fechaFin.Value);
+                    filtrados = filtrados.Where(e => e.Fecha <= fechaFin.Value);
                 }
 
                 if (!string.IsNullOrEmpty(nivelSeveridad))
                 {
-                    filtrados = filtrados.Where(e => e.NivelSeveridad == nivelSeveridad);
+                    filtrados = filtrados.Where(e => e.Nivel == nivelSeveridad);
                 }
 
                 if (revisado.HasValue)
@@ -61,18 +61,18 @@ namespace PuntoVenta.Api.Controllers
                 }
 
                 var resultado = filtrados
-                    .OrderByDescending(e => e.FechaError)
+                    .OrderByDescending(e => e.Fecha)
                     .Select(e => new
                     {
-                        Id = e.Id,
+                        e.Id,
                         e.TipoError,
                         e.Mensaje,
-                        e.Pantalla,
-                        e.NivelSeveridad,
-                        e.FechaError,
+                        Origen = e.Origen,
+                        e.Nivel,
+                        e.Fecha,
                         e.Revisado,
-                        UsuarioId = e.UsuarioId,
-                        UsuarioNombre = (string?)null
+                        e.UsuarioId,
+                        e.Notas
                     })
                     .ToList();
 
@@ -88,7 +88,7 @@ namespace PuntoVenta.Api.Controllers
         /// Obtiene un error específico por ID
         /// </summary>
         [HttpGet("{id}")]
-        public async Task<ActionResult<dynamic>> GetErrorLogById(string id) // Changed from int to string
+        public async Task<ActionResult<dynamic>> GetErrorLogById(int id)
         {
             try
             {
@@ -104,15 +104,13 @@ namespace PuntoVenta.Api.Controllers
                     errorLog.TipoError,
                     errorLog.Mensaje,
                     errorLog.StackTrace,
-                    errorLog.Fuente,
+                    Origen = errorLog.Origen,
                     errorLog.NumeroLinea,
-                    errorLog.Pantalla,
-                    errorLog.Evento,
-                    errorLog.NivelSeveridad,
-                    errorLog.FechaError,
+                    errorLog.Nivel,
+                    errorLog.Fecha,
                     errorLog.Revisado,
                     UsuarioId = errorLog.UsuarioId,
-                    UsuarioNombre = (string?)null
+                    errorLog.Notas
                 };
 
                 return Ok(resultado);
@@ -127,7 +125,7 @@ namespace PuntoVenta.Api.Controllers
         /// Marca un error como revisado
         /// </summary>
         [HttpPut("{id}/revisar")]
-        public async Task<ActionResult<bool>> MarcarComoRevisado(string id) // Changed from int to string
+        public async Task<ActionResult<bool>> MarcarComoRevisado(int id)
         {
             try
             {
@@ -164,7 +162,7 @@ namespace PuntoVenta.Api.Controllers
                     {
                         TipoError = g.Key,
                         Cantidad = g.Count(),
-                        UltimoCometido = g.Max(e => e.FechaError)
+                        UltimoCometido = g.Max(e => e.Fecha)
                     })
                     .OrderByDescending(e => e.Cantidad)
                     .ToList();
@@ -187,7 +185,7 @@ namespace PuntoVenta.Api.Controllers
             {
                 var errorLogs = await _unitOfWork.ErrorLogs.GetAllAsync();
                 var resumen = errorLogs
-                    .GroupBy(e => e.NivelSeveridad)
+                    .GroupBy(e => e.Nivel)
                     .Select(g => new
                     {
                         NivelSeveridad = g.Key,
@@ -215,11 +213,11 @@ namespace PuntoVenta.Api.Controllers
             {
                 var errorLogs = await _unitOfWork.ErrorLogs.GetAllAsync();
                 var fechaLimite = DateTime.UtcNow.AddDays(-90);
-                var erroresEliminar = errorLogs.Where(e => e.FechaError < fechaLimite).ToList();
+                var erroresEliminar = errorLogs.Where(e => e.Fecha < fechaLimite).ToList();
 
                 foreach (var error in erroresEliminar)
                 {
-                    await _unitOfWork.ErrorLogs.DeleteAsync(error.Id); // error.Id is now string
+                    await _unitOfWork.ErrorLogs.DeleteAsync(error.Id);
                 }
 
                 await _unitOfWork.SaveChangesAsync();

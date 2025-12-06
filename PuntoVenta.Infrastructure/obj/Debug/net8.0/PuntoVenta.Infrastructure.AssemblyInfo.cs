@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("PuntoVenta.Infrastructure")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+eb1fc0d4e0bb3e932e54fabfb466d312f1f695ad")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ba5b66056151fe00dc55104238edd032fdd240ad")]
 [assembly: System.Reflection.AssemblyProductAttribute("PuntoVenta.Infrastructure")]
 [assembly: System.Reflection.AssemblyTitleAttribute("PuntoVenta.Infrastructure")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

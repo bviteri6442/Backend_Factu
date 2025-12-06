@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "zh7EYuIzuKs=",
+  "dgSpecHash": "do222dRKLLk=",
   "success": true,
-  "projectFilePath": "C:\\Users\\LEGIO\\Documents\\QUINTO\\TECNOLO. Y DESA. WEB\\Backend_Factu\\PuntoVenta.Application\\PuntoVenta.Application.csproj",
+  "projectFilePath": "C:\\Users\\LEGIO\\Documents\\QUINTO\\TECNOLO. Y DESA. WEB\\PFINAL\\Backend_Factu\\PuntoVenta.Application\\PuntoVenta.Application.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\LEGIO\\.nuget\\packages\\automapper\\12.0.1\\automapper.12.0.1.nupkg.sha512",
     "C:\\Users\\LEGIO\\.nuget\\packages\\automapper.extensions.microsoft.dependencyinjection\\12.0.1\\automapper.extensions.microsoft.dependencyinjection.12.0.1.nupkg.sha512",

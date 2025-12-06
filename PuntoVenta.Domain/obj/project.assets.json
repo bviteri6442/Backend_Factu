@@ -131,11 +131,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\LEGIO\\Documents\\QUINTO\\TECNOLO. Y DESA. WEB\\Backend_Factu\\PuntoVenta.Domain\\PuntoVenta.Domain.csproj",
+      "projectUniqueName": "C:\\Users\\LEGIO\\Documents\\QUINTO\\TECNOLO. Y DESA. WEB\\PFINAL\\Backend_Factu\\PuntoVenta.Domain\\PuntoVenta.Domain.csproj",
       "projectName": "PuntoVenta.Domain",
-      "projectPath": "C:\\Users\\LEGIO\\Documents\\QUINTO\\TECNOLO. Y DESA. WEB\\Backend_Factu\\PuntoVenta.Domain\\PuntoVenta.Domain.csproj",
+      "projectPath": "C:\\Users\\LEGIO\\Documents\\QUINTO\\TECNOLO. Y DESA. WEB\\PFINAL\\Backend_Factu\\PuntoVenta.Domain\\PuntoVenta.Domain.csproj",
       "packagesPath": "C:\\Users\\LEGIO\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\LEGIO\\Documents\\QUINTO\\TECNOLO. Y DESA. WEB\\Backend_Factu\\PuntoVenta.Domain\\obj\\",
+      "outputPath": "C:\\Users\\LEGIO\\Documents\\QUINTO\\TECNOLO. Y DESA. WEB\\PFINAL\\Backend_Factu\\PuntoVenta.Domain\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

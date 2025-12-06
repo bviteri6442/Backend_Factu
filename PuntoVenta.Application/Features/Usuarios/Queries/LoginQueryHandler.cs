@@ -28,34 +28,25 @@ namespace PuntoVenta.Application.Features.Usuarios.Queries
             var response = new AuthResponse();
 
             // Validar que no estén vacíos
-            if (string.IsNullOrWhiteSpace(request.Correo) || string.IsNullOrWhiteSpace(request.Contrasena))
+            if (string.IsNullOrWhiteSpace(request.Email) || string.IsNullOrWhiteSpace(request.Contrasena))
             {
                 response.Exitoso = false;
-                response.Mensaje = "El correo y contraseña son requeridos";
+                response.Mensaje = "El email y contraseña son requeridos";
                 return response;
             }
 
             try
             {
-                // Verificar si el usuario está bloqueado por intentos fallidos
-                var intentosLogin = await _unitOfWork.IntentosLogin.GetByCorreoAsync(request.Correo);
-                if (intentosLogin?.Bloqueado == true)
-                {
-                    response.Exitoso = false;
-                    response.Mensaje = "La cuenta está bloqueada por demasiados intentos fallidos. Contacte al administrador.";
-                    return response;
-                }
-
-                // Obtener usuario por correo
-                var usuario = await _unitOfWork.Usuarios.GetByCorreoAsync(request.Correo);
+                // Obtener usuario por email
+                var usuario = await _unitOfWork.Usuarios.GetByCorreoAsync(request.Email);
                 if (usuario == null)
                 {
                     // Registrar intento fallido
-                    await _unitOfWork.IntentosLogin.IncrementarIntentosAsync(request.Correo, "", "");
+                    await _unitOfWork.IntentosLogin.IncrementarIntentosAsync(request.Email, "", "");
                     await _unitOfWork.SaveChangesAsync();
 
                     response.Exitoso = false;
-                    response.Mensaje = "Correo o contraseña incorrectos";
+                    response.Mensaje = "Email o contraseña incorrectos";
                     return response;
                 }
 
@@ -69,25 +60,25 @@ namespace PuntoVenta.Application.Features.Usuarios.Queries
 
                 // Verificar contraseña (BCrypt)
                 bool esContrasenValida = false;
-                if (!string.IsNullOrEmpty(usuario.ContrasenaHash)) // Changed from Contrasena to ContrasenaHash
+                if (!string.IsNullOrEmpty(usuario.PasswordHash))
                 {
-                    // Usar BCrypt para verificar
-                    esContrasenValida = BCrypt.Net.BCrypt.Verify(request.Contrasena, usuario.ContrasenaHash);
+                    // Usar BCrypt.EnhancedVerify porque se creó con EnhancedHashPassword
+                    esContrasenValida = BCrypt.Net.BCrypt.EnhancedVerify(request.Contrasena, usuario.PasswordHash, HashType.SHA384);
                 }
                 
                 if (!esContrasenValida)
                 {
                     // Registrar intento fallido
-                    await _unitOfWork.IntentosLogin.IncrementarIntentosAsync(request.Correo, "", "");
+                    await _unitOfWork.IntentosLogin.IncrementarIntentosAsync(request.Email, "", "");
                     await _unitOfWork.SaveChangesAsync();
 
                     response.Exitoso = false;
-                    response.Mensaje = "Correo o contraseña incorrectos";
+                    response.Mensaje = "Email o contraseña incorrectos";
                     return response;
                 }
 
                 // Login exitoso: Reiniciar intentos fallidos
-                await _unitOfWork.IntentosLogin.ReiniciarIntentosAsync(request.Correo);
+                await _unitOfWork.IntentosLogin.ReiniciarIntentosAsync(request.Email);
 
                 // Actualizar última fecha de login
                 usuario.FechaUltimoLogin = DateTime.UtcNow;
@@ -100,8 +91,8 @@ namespace PuntoVenta.Application.Features.Usuarios.Queries
                 response.Exitoso = true;
                 response.Token = token;
                 response.UsuarioId = usuario.Id;
-                response.NombreUsuario = usuario.NombreCompleto;
-                response.Rol = usuario.RolNombre; // Changed from usuario.Rol?.Nombre to usuario.RolNombre (denormalized)
+                response.NombreUsuario = usuario.Nombre;
+                response.Rol = usuario.RolNombre;
                 response.Mensaje = "Login exitoso";
             }
             catch (Exception ex)
@@ -123,11 +114,11 @@ namespace PuntoVenta.Application.Features.Usuarios.Queries
             {
                 Subject = new ClaimsIdentity(new[]
                 {
-                    new Claim(ClaimTypes.NameIdentifier, usuario.Id),
-                    new Claim(ClaimTypes.Email, usuario.Correo ?? ""),
-                    new Claim(ClaimTypes.Name, usuario.NombreCompleto ?? ""),
-                    new Claim("Cedula", usuario.Cedula ?? ""),
-                    new Claim(ClaimTypes.Role, usuario.RolNombre ?? "Usuario") // Changed from usuario.Rol?.Nombre
+                    new Claim(ClaimTypes.NameIdentifier, usuario.Id.ToString()),
+                    new Claim(ClaimTypes.Email, usuario.Email ?? ""),
+                    new Claim(ClaimTypes.Name, usuario.Nombre ?? ""),
+                    new Claim("NombreUsuario", usuario.NombreUsuario ?? ""),
+                    new Claim(ClaimTypes.Role, usuario.RolNombre ?? "Usuario")
                 }),
                 Expires = DateTime.UtcNow.AddHours(24),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)

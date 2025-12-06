@@ -19,8 +19,7 @@ namespace PuntoVenta.Application.Features.Ventas.Commands
         {
             try
             {
-                // Cambiado: Usar Facturas en lugar de Ventas (migración de MongoDB)
-                var factura = await _unitOfWork.Facturas.GetFacturaConDetallesAsync(request.VentaId.ToString());
+                var factura = await _unitOfWork.Facturas.GetFacturaConDetallesAsync(request.VentaId);
 
                 if (factura == null)
                 {
@@ -39,7 +38,7 @@ namespace PuntoVenta.Application.Features.Ventas.Commands
                     var producto = await _unitOfWork.Productos.GetByIdAsync(detalle.ProductoId);
                     if (producto != null)
                     {
-                        producto.StockActual += detalle.Cantidad;
+                        producto.Stock += detalle.Cantidad;
                         await _unitOfWork.Productos.UpdateAsync(producto);
                     }
                 }

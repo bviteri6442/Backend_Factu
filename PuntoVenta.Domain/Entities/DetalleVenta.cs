@@ -5,30 +5,14 @@ namespace PuntoVenta.Domain.Entities
     /// </summary>
     public class DetalleVenta
     {
-        public int VentaId { get; set; }
-    public Venta? Venta { get; set; }
-
+        public int Id { get; set; }
+        public int FacturaId { get; set; }
         public int ProductoId { get; set; }
-    public Product? Producto { get; set; }
-
-        /// <summary>
-        /// Cantidad de productos vendidos
-        /// </summary>
+        public string ProductoNombre { get; set; } = string.Empty;
+        public string? CodigoBarra { get; set; }
         public int Cantidad { get; set; }
-        
-        /// <summary>
-        /// Precio unitario en el momento de la venta
-        /// </summary>
         public decimal PrecioUnitario { get; set; }
-        
-        /// <summary>
-        /// Descuento aplicado al detalle (en porcentaje o valor)
-        /// </summary>
-        public decimal Descuento { get; set; } = 0;
-        
-        /// <summary>
-        /// Total del detalle (Cantidad * PrecioUnitario - Descuento)
-        /// </summary>
+        public decimal Descuento { get; set; } = 0m;
         public decimal Total { get; set; }
     }
 }

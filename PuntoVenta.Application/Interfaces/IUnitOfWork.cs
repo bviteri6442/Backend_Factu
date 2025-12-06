@@ -16,6 +16,7 @@ namespace PuntoVenta.Application.Interfaces
         IFacturaRepository Facturas { get; } // Cambiado de IVentaRepository a IFacturaRepository
         IErrorLogRepository ErrorLogs { get; }
         IIntentosLoginRepository IntentosLogin { get; }
+        IEliminacionUsuarioRepository EliminacionesUsuarios { get; }
 
         Task<int> SaveChangesAsync();
         Task BeginTransactionAsync();

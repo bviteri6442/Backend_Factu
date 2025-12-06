@@ -22,8 +22,15 @@ namespace PuntoVenta.Application.Features.Ventas.Queries
         {
             try
             {
-                // Changed: Use Facturas instead of Ventas (MongoDB migration)
                 var facturas = await _unitOfWork.Facturas.GetAllAsync();
+
+                Console.WriteLine($"[DEBUG] Facturas obtenidas: {facturas?.Count() ?? 0}");
+                
+                if (facturas == null || !facturas.Any())
+                {
+                    Console.WriteLine("[DEBUG] No se encontraron facturas en la base de datos");
+                    return new List<VentaResponseDto>();
+                }
 
                 // Apply filters
                 var query = facturas.AsEnumerable();
@@ -38,9 +45,9 @@ namespace PuntoVenta.Application.Features.Ventas.Queries
                     query = query.Where(v => v.FechaVenta <= request.FechaFin.Value);
                 }
 
-                if (!string.IsNullOrEmpty(request.UsuarioId))
+                if (request.UsuarioId.HasValue)
                 {
-                    query = query.Where(v => v.UsuarioId == request.UsuarioId);
+                    query = query.Where(v => v.UsuarioId == request.UsuarioId.Value);
                 }
 
                 if (!string.IsNullOrEmpty(request.Estado))
@@ -51,19 +58,22 @@ namespace PuntoVenta.Application.Features.Ventas.Queries
                 // Map to DTO
                 var resultado = query.Select(f => new VentaResponseDto
                 {
-                    VentaId = int.TryParse(f.Id, out int id) ? id : 0, // Temporary conversion
+                    VentaId = f.Id,
                     NumeroFactura = f.NumeroFactura,
                     FechaVenta = f.FechaVenta,
                     UsuarioId = f.UsuarioId,
                     UsuarioNombre = f.UsuarioNombre,
-                    ClienteId = !string.IsNullOrEmpty(f.ClienteId) && int.TryParse(f.ClienteId, out int cId) ? cId : (int?)null,
+                    ClienteId = f.ClienteId,
                     ClienteNombre = f.ClienteNombre,
                     Subtotal = f.Subtotal,
+                    PorcentajeIVA = f.PorcentajeIVA,
                     TotalImpuesto = f.TotalImpuesto,
                     TotalVenta = f.TotalVenta,
-                    Estado = f.Estado
+                    Estado = f.Estado,
+                    Observaciones = f.Observaciones
                 }).ToList();
 
+                Console.WriteLine($"[DEBUG] Facturas mapeadas a DTO: {resultado.Count}");
                 return resultado;
             }
             catch (Exception ex)

@@ -40,7 +40,6 @@ namespace PuntoVenta.Application.DTOs
     /// </summary>
     public class CreateVentaDto
     {
-        [Range(0, int.MaxValue, ErrorMessage = "El cliente es inválido")]
         public int? ClienteId { get; set; }
 
         [Required(ErrorMessage = "Los detalles de la venta son requeridos")]
@@ -59,7 +58,7 @@ namespace PuntoVenta.Application.DTOs
         public int VentaId { get; set; }
         public string? NumeroFactura { get; set; }
         public DateTime FechaVenta { get; set; }
-        public string? UsuarioId { get; set; }
+        public int UsuarioId { get; set; }
         public string? UsuarioNombre { get; set; }
         public int? ClienteId { get; set; }
         public string? ClienteNombre { get; set; }
@@ -79,7 +78,7 @@ namespace PuntoVenta.Application.DTOs
         public int VentaId { get; set; }
         public string? NumeroFactura { get; set; }
         public DateTime FechaVenta { get; set; }
-        public string? UsuarioId { get; set; }
+        public int UsuarioId { get; set; }
         public string? UsuarioNombre { get; set; }
         public int? ClienteId { get; set; }
         public string? ClienteNombre { get; set; }

@@ -12,8 +12,8 @@ var builder = WebApplication.CreateBuilder(args);
 // 1. Agregar Servicios de Infraestructura (DB, Identity, Repositorios)
 builder.Services.AddInfrastructureServices(builder.Configuration);
 
-// 2. Registrar MediatR
-builder.Services.AddMediatR(typeof(Program).Assembly);
+// 2. Registrar MediatR - Escanear el ensamblado de Application donde están los handlers
+builder.Services.AddMediatR(typeof(PuntoVenta.Application.Features.Usuarios.Commands.CreateUsuarioCommand).Assembly);
 
 // Lectura de la clave secreta desde appsettings.json
 var jwtSettings = builder.Configuration.GetSection("JwtSettings");
@@ -51,7 +51,7 @@ builder.Services.AddCors(options =>
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 
-// Registrar el documento Swagger "v1"
+// Registrar el documento Swagger "v1" con autenticación JWT
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo
@@ -59,6 +59,32 @@ builder.Services.AddSwaggerGen(c =>
         Title = "PuntoVenta API",
         Version = "v1",
         Description = "API de ejemplo para PuntoVenta"
+    });
+
+    // Configurar autenticación JWT en Swagger
+    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Name = "Authorization",
+        Type = SecuritySchemeType.Http,
+        Scheme = "Bearer",
+        BearerFormat = "JWT",
+        In = ParameterLocation.Header,
+        Description = "Ingresa el token JWT en el formato: Bearer {tu token}"
+    });
+
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            Array.Empty<string>()
+        }
     });
 });
 

@@ -7,9 +7,9 @@ namespace PuntoVenta.Application.DTOs
     /// </summary>
     public class LoginDto
     {
-        [Required(ErrorMessage = "El correo es requerido")]
-        [EmailAddress(ErrorMessage = "El formato del correo no es válido")]
-        public string? Correo { get; set; }
+        [Required(ErrorMessage = "El email es requerido")]
+        [EmailAddress(ErrorMessage = "El formato del email no es válido")]
+        public string? Email { get; set; }
 
         [Required(ErrorMessage = "La contraseña es requerida")]
         [StringLength(10, MinimumLength = 4, ErrorMessage = "La contraseña debe tener entre 4 y 10 caracteres")]
@@ -21,17 +21,17 @@ namespace PuntoVenta.Application.DTOs
     /// </summary>
     public class CreateUsuarioDto
     {
-        [Required(ErrorMessage = "La cédula es requerida")]
-        [RegularExpression(@"^\d{6,10}$", ErrorMessage = "La cédula debe contener entre 6 y 10 dígitos")]
-        public string? Cedula { get; set; }
+        [Required(ErrorMessage = "El nombre de usuario es requerido")]
+        [StringLength(50, MinimumLength = 3, ErrorMessage = "El nombre de usuario debe tener entre 3 y 50 caracteres")]
+        public string? NombreUsuario { get; set; }
 
-        [Required(ErrorMessage = "El correo es requerido")]
-        [EmailAddress(ErrorMessage = "El formato del correo no es válido")]
-        public string? Correo { get; set; }
+        [Required(ErrorMessage = "El email es requerido")]
+        [EmailAddress(ErrorMessage = "El formato del email no es válido")]
+        public string? Email { get; set; }
 
-        [Required(ErrorMessage = "El nombre completo es requerido")]
+        [Required(ErrorMessage = "El nombre es requerido")]
         [StringLength(150, MinimumLength = 3, ErrorMessage = "El nombre debe tener entre 3 y 150 caracteres")]
-        public string? NombreCompleto { get; set; }
+        public string? Nombre { get; set; }
 
         [Required(ErrorMessage = "La contraseña es requerida")]
         [StringLength(10, MinimumLength = 4, ErrorMessage = "La contraseña debe tener entre 4 y 10 caracteres")]
@@ -40,7 +40,7 @@ namespace PuntoVenta.Application.DTOs
         public string? Contrasena { get; set; }
 
         [Required(ErrorMessage = "El rol es requerido")]
-        public string RolId { get; set; } = string.Empty; // Changed from int to string for MongoDB ObjectId
+        public int RolId { get; set; }
     }
 
     /// <summary>
@@ -48,15 +48,15 @@ namespace PuntoVenta.Application.DTOs
     /// </summary>
     public class UpdateUsuarioDto
     {
-        public string? Id { get; set; } // Changed from int to string for MongoDB ObjectId
+        public int Id { get; set; }
 
         [StringLength(150, MinimumLength = 3, ErrorMessage = "El nombre debe tener entre 3 y 150 caracteres")]
-        public string? NombreCompleto { get; set; }
+        public string? Nombre { get; set; }
 
-        [EmailAddress(ErrorMessage = "El formato del correo no es válido")]
-        public string? Correo { get; set; }
+        [EmailAddress(ErrorMessage = "El formato del email no es válido")]
+        public string? Email { get; set; }
 
-        public string? RolId { get; set; } // Changed from int? to string? for MongoDB ObjectId
+        public int? RolId { get; set; }
 
         public bool? Activo { get; set; }
     }
@@ -66,15 +66,39 @@ namespace PuntoVenta.Application.DTOs
     /// </summary>
     public class UsuarioResponseDto
     {
-        public string? Id { get; set; }
-        public string? Cedula { get; set; }
-        public string? Correo { get; set; }
-        public string? NombreCompleto { get; set; }
+        public int Id { get; set; }
+        public string? NombreUsuario { get; set; }
+        public string? Email { get; set; }
+        public string? Nombre { get; set; }
         public bool Activo { get; set; }
         public DateTime? FechaBloqueo { get; set; }
         public DateTime FechaCreacion { get; set; }
         public DateTime? FechaUltimoLogin { get; set; }
-        public string? RolNombre { get; set; } // MongoDB denormalizes rol data
-        public string? RolId { get; set; }
+        public string? RolNombre { get; set; }
+        public int RolId { get; set; }
+    }
+
+    /// <summary>
+    /// DTO flexible para crear usuario desde el frontend
+    /// Acepta tanto los nombres del frontend (cedula, nombreCompleto, correo) 
+    /// como los del backend (nombreUsuario, nombre, email)
+    /// </summary>
+    public class CreateUsuarioRequestDto
+    {
+        // Campos del backend
+        public string? NombreUsuario { get; set; }
+        public string? Email { get; set; }
+        public string? Nombre { get; set; }
+
+        // Campos del frontend (aliases)
+        public string? Cedula { get; set; }
+        public string? NombreCompleto { get; set; }
+        public string? Correo { get; set; }
+
+        [Required(ErrorMessage = "La contraseña es requerida")]
+        public string? Contrasena { get; set; }
+
+        [Required(ErrorMessage = "El rol es requerido")]
+        public int RolId { get; set; }
     }
 }

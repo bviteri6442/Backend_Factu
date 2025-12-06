@@ -24,15 +24,15 @@ namespace PuntoVenta.Application.Features.Products.Queries.GetProducts
 			return productos.Select(p => new ProductoResponseDto
 			{
 				Id = p.Id,
-				CodigoBarra = p.CodigoBarra,
+				Codigo = p.Codigo,
 				Nombre = p.Nombre,
-				PrecioCosto = p.PrecioCosto,
-				PrecioVenta = p.PrecioVenta,
-				StockActual = p.StockActual,
+				PrecioCompra = p.PrecioCompra,
+				Precio = p.Precio,
+				Stock = p.Stock,
 				StockMinimo = p.StockMinimo,
 				Descripcion = p.Descripcion,
 				FechaCreacion = p.FechaCreacion,
-				FechaActualizacion = p.FechaActualizacion,
+				FechaActualizacion = p.FechaActualizacion ?? p.FechaCreacion,
 				Activo = p.Activo
 			}).ToList();
 		}

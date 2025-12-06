@@ -8,11 +8,16 @@
 
   <ItemGroup>
     <!-- PAQUETES DE MONGODB -->
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.0">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
     <PackageReference Include="MongoDB.Driver" Version="2.28.0" />
     <PackageReference Include="MongoDB.Bson" Version="2.28.0" />
     
     <!-- MANTENER SOLO IDENTITY PARA AUTENTICACIÓN (sin EF Core Stores) -->
     <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.0" />
     
     <!-- REMOVER COMPLETAMENTE ESTOS PAQUETES -->
     <!-- <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.0" /> -->

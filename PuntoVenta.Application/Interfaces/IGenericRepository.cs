@@ -4,16 +4,16 @@ using System.Threading.Tasks;
 namespace PuntoVenta.Application.Interfaces
 {
     /// <summary>
-    /// Generic repository interface for MongoDB entities
+    /// Generic repository interface for PostgreSQL entities with EF Core
     /// </summary>
     /// <typeparam name="T">Entity type</typeparam>
     public interface IGenericRepository<T> where T : class
     {
-        Task<T?> GetByIdAsync(string id);
+        Task<T?> GetByIdAsync(int id);
         Task<IEnumerable<T>> GetAllAsync();
-        Task<string> AddAsync(T entity);
+        Task<int> AddAsync(T entity);
         Task UpdateAsync(T entity);
-        Task DeleteAsync(string id);
-        Task<bool> ExistsAsync(string id);
+        Task DeleteAsync(int id);
+        Task<bool> ExistsAsync(int id);
     }
 }

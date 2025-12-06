@@ -20,7 +20,7 @@ namespace PuntoVenta.Application.DTOs
     /// </summary>
     public class UpdateRolDto
     {
-        public string? Id { get; set; } // Changed from int to string for MongoDB ObjectId
+        public int Id { get; set; }
 
         [StringLength(100, MinimumLength = 3, ErrorMessage = "El nombre debe tener entre 3 y 100 caracteres")]
         public string? Nombre { get; set; }
@@ -36,7 +36,7 @@ namespace PuntoVenta.Application.DTOs
     /// </summary>
     public class RolResponseDto
     {
-        public string Id { get; set; } = string.Empty; // Changed from int to string for MongoDB ObjectId
+        public int Id { get; set; }
         public string? Nombre { get; set; }
         public string? Descripcion { get; set; }
         public bool Activo { get; set; }

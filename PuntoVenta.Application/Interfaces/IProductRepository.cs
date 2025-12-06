@@ -12,6 +12,6 @@ namespace PuntoVenta.Application.Interfaces
         Task<Product?> GetByCodigoBarraAsync(string codigoBarra);
         Task<IEnumerable<Product>> GetProductosConStockAsync();
         Task<IEnumerable<Product>> SearchAsync(string searchTerm);
-        Task<bool> UpdateStockAsync(string productId, int cantidad);
+        Task<bool> UpdateStockAsync(int productId, int cantidad);
     }
 }

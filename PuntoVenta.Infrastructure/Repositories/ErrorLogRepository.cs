@@ -1,47 +1,45 @@
-using MongoDB.Driver;
+using Microsoft.EntityFrameworkCore;
 using PuntoVenta.Application.Interfaces;
 using PuntoVenta.Domain.Entities;
 using PuntoVenta.Infrastructure.Persistencia;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace PuntoVenta.Infrastructure.Repositories
 {
     /// <summary>
-    /// MongoDB repository for ErrorLog entity
+    /// EF Core repository for ErrorLog entity
     /// </summary>
     public class ErrorLogRepository : GenericRepository<ErrorLog>, IErrorLogRepository
     {
-        public ErrorLogRepository(MongoDbContext context) 
-            : base(context, "errorLogs")
+        public ErrorLogRepository(ApplicationDbContext context) 
+            : base(context)
         {
         }
 
         public async Task<IEnumerable<ErrorLog>> GetErroresNoRevisadosAsync()
         {
-            var filter = Builders<ErrorLog>.Filter.Eq(e => e.Revisado, false);
-            return await _collection.Find(filter)
-                .SortByDescending(e => e.FechaError)
+            return await _context.ErrorLogs
+                .Where(e => !e.Revisado)
+                .OrderByDescending(e => e.Fecha)
                 .ToListAsync();
         }
 
         public async Task<IEnumerable<ErrorLog>> GetErroresPorFechaAsync(DateTime desde, DateTime hasta)
         {
-            var filter = Builders<ErrorLog>.Filter.And(
-                Builders<ErrorLog>.Filter.Gte(e => e.FechaError, desde),
-                Builders<ErrorLog>.Filter.Lte(e => e.FechaError, hasta)
-            );
-            return await _collection.Find(filter)
-                .SortByDescending(e => e.FechaError)
+            return await _context.ErrorLogs
+                .Where(e => e.Fecha >= desde && e.Fecha <= hasta)
+                .OrderByDescending(e => e.Fecha)
                 .ToListAsync();
         }
 
         public async Task<IEnumerable<ErrorLog>> GetErroresPorUsuarioAsync(string usuarioId)
         {
-            var filter = Builders<ErrorLog>.Filter.Eq(e => e.UsuarioId, usuarioId);
-            return await _collection.Find(filter)
-                .SortByDescending(e => e.FechaError)
+            return await _context.ErrorLogs
+                .Where(e => e.UsuarioId == usuarioId)
+                .OrderByDescending(e => e.Fecha)
                 .ToListAsync();
         }
     }

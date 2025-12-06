@@ -1,5 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
+using Microsoft.EntityFrameworkCore;
 using PuntoVenta.Infrastructure.Persistencia;
 using PuntoVenta.Application.Interfaces;
 using PuntoVenta.Infrastructure.Repositories;
@@ -12,15 +13,16 @@ namespace PuntoVenta.Infrastructure
             this IServiceCollection services,
             IConfiguration configuration)
         {
-            // Register MongoDB Context
-            services.AddSingleton<MongoDbContext>();
+            // Register PostgreSQL DbContext
+            services.AddDbContext<ApplicationDbContext>(options =>
+                options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
 
             // Register Repositories
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<IUsuarioRepository, UsuarioRepository>();
             services.AddScoped<IRolRepository, RolRepository>();
             services.AddScoped<IClienteRepository, ClienteRepository>();
-            services.AddScoped<IFacturaRepository, FacturaRepository>(); // Changed from IVentaRepository
+            services.AddScoped<IFacturaRepository, FacturaRepository>();
             services.AddScoped<IErrorLogRepository, ErrorLogRepository>();
             services.AddScoped<IIntentosLoginRepository, IntentosLoginRepository>();
             

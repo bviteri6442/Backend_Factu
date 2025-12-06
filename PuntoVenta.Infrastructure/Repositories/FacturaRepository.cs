@@ -1,5 +1,4 @@
-using MongoDB.Driver;
-using MongoDB.Bson;
+using Microsoft.EntityFrameworkCore;
 using PuntoVenta.Application.Interfaces;
 using PuntoVenta.Domain.Entities;
 using PuntoVenta.Infrastructure.Persistencia;
@@ -11,55 +10,53 @@ using System.Threading.Tasks;
 namespace PuntoVenta.Infrastructure.Repositories
 {
     /// <summary>
-    /// MongoDB repository for Factura (Invoice) entity
+    /// EF Core repository for Factura (Invoice) entity
     /// </summary>
     public class FacturaRepository : GenericRepository<Factura>, IFacturaRepository
     {
-        public FacturaRepository(MongoDbContext context) 
-            : base(context, "facturas")
+        public FacturaRepository(ApplicationDbContext context) 
+            : base(context)
         {
         }
 
-        public async Task<Factura?> GetFacturaConDetallesAsync(string id)
+        public async Task<Factura?> GetFacturaConDetallesAsync(int id)
         {
-            // MongoDB automatically includes embedded documents (Detalles)
-            return await GetByIdAsync(id);
+            return await _context.Facturas
+                .Include(f => f.Detalles)
+                .FirstOrDefaultAsync(f => f.Id == id);
         }
 
         public async Task<IEnumerable<Factura>> GetFacturasPorFechaAsync(DateTime desde, DateTime hasta)
         {
-            var filter = Builders<Factura>.Filter.And(
-                Builders<Factura>.Filter.Gte(f => f.FechaVenta, desde),
-                Builders<Factura>.Filter.Lte(f => f.FechaVenta, hasta)
-            );
-
-            return await _collection.Find(filter)
-                .SortByDescending(f => f.FechaVenta)
+            return await _context.Facturas
+                .Include(f => f.Detalles)
+                .Where(f => f.FechaVenta >= desde && f.FechaVenta <= hasta)
+                .OrderByDescending(f => f.FechaVenta)
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<Factura>> GetFacturasPorUsuarioAsync(string usuarioId)
+        public async Task<IEnumerable<Factura>> GetFacturasPorUsuarioAsync(int usuarioId)
         {
-            var filter = Builders<Factura>.Filter.Eq(f => f.UsuarioId, usuarioId);
-            return await _collection.Find(filter)
-                .SortByDescending(f => f.FechaVenta)
+            return await _context.Facturas
+                .Include(f => f.Detalles)
+                .Where(f => f.UsuarioId == usuarioId)
+                .OrderByDescending(f => f.FechaVenta)
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<Factura>> GetFacturasPorClienteAsync(string clienteId)
+        public async Task<IEnumerable<Factura>> GetFacturasPorClienteAsync(int clienteId)
         {
-            var filter = Builders<Factura>.Filter.Eq(f => f.ClienteId, clienteId);
-            return await _collection.Find(filter)
-                .SortByDescending(f => f.FechaVenta)
+            return await _context.Facturas
+                .Include(f => f.Detalles)
+                .Where(f => f.ClienteId == clienteId)
+                .OrderByDescending(f => f.FechaVenta)
                 .ToListAsync();
         }
 
         public async Task<string> GenerarNumeroFacturaAsync()
         {
-            // Get the latest invoice number
-            var lastFactura = await _collection.Find(_ => true)
-                .SortByDescending(f => f.NumeroFactura)
-                .Limit(1)
+            var lastFactura = await _context.Facturas
+                .OrderByDescending(f => f.NumeroFactura)
                 .FirstOrDefaultAsync();
 
             if (lastFactura == null)
@@ -79,8 +76,9 @@ namespace PuntoVenta.Infrastructure.Repositories
 
         public async Task<Factura?> GetByNumeroFacturaAsync(string numeroFactura)
         {
-            var filter = Builders<Factura>.Filter.Eq(f => f.NumeroFactura, numeroFactura);
-            return await _collection.Find(filter).FirstOrDefaultAsync();
+            return await _context.Facturas
+                .Include(f => f.Detalles)
+                .FirstOrDefaultAsync(f => f.NumeroFactura == numeroFactura);
         }
     }
 }

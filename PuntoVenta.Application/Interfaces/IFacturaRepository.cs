@@ -10,10 +10,10 @@ namespace PuntoVenta.Application.Interfaces
     /// </summary>
     public interface IFacturaRepository : IGenericRepository<Factura>
     {
-        Task<Factura?> GetFacturaConDetallesAsync(string id);
+        Task<Factura?> GetFacturaConDetallesAsync(int id);
         Task<IEnumerable<Factura>> GetFacturasPorFechaAsync(DateTime desde, DateTime hasta);
-        Task<IEnumerable<Factura>> GetFacturasPorUsuarioAsync(string usuarioId);
-        Task<IEnumerable<Factura>> GetFacturasPorClienteAsync(string clienteId);
+        Task<IEnumerable<Factura>> GetFacturasPorUsuarioAsync(int usuarioId);
+        Task<IEnumerable<Factura>> GetFacturasPorClienteAsync(int clienteId);
         Task<string> GenerarNumeroFacturaAsync();
         Task<Factura?> GetByNumeroFacturaAsync(string numeroFactura);
     }

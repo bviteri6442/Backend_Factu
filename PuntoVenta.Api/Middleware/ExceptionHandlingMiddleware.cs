@@ -1,7 +1,9 @@
 using Microsoft.AspNetCore.Http;
 using PuntoVenta.Application.Interfaces;
+using PuntoVenta.Domain.Entities;
 using System;
 using System.Net;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace PuntoVenta.Api.Middleware
@@ -30,7 +32,7 @@ namespace PuntoVenta.Api.Middleware
             }
         }
 
-        private static Task HandleExceptionAsync(HttpContext context, Exception exception, IUnitOfWork unitOfWork)
+        private static async Task HandleExceptionAsync(HttpContext context, Exception exception, IUnitOfWork unitOfWork)
         {
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
@@ -40,23 +42,22 @@ namespace PuntoVenta.Api.Middleware
             try
             {
                 // Registrar el error en la base de datos
-                var errorLog = new PuntoVenta.Domain.Entities.ErrorLog
+                var errorLog = new ErrorLog
                 {
                     TipoError = exception.GetType().Name,
                     Mensaje = exception.Message,
                     StackTrace = exception.StackTrace,
-                    Fuente = exception.Source,
+                    Origen = exception.Source,
                     NumeroLinea = null,
-                    Pantalla = context.Request.Path,
-                    Evento = context.Request.Method,
-                    NivelSeveridad = "Error",
-                    FechaError = DateTime.UtcNow,
+                    UsuarioId = context.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value,
+                    Nivel = "Error",
+                    Fecha = DateTime.UtcNow,
                     Revisado = false,
-                    UsuarioId = context.User?.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value
+                    Notas = $"Ruta: {context.Request.Path}; Método: {context.Request.Method}"
                 };
 
-                unitOfWork.ErrorLogs.AddAsync(errorLog).GetAwaiter().GetResult();
-                unitOfWork.SaveChangesAsync().GetAwaiter().GetResult();
+                await unitOfWork.ErrorLogs.AddAsync(errorLog);
+                await unitOfWork.SaveChangesAsync();
             }
             catch
             {
@@ -71,7 +72,7 @@ namespace PuntoVenta.Api.Middleware
                 timestamp = DateTime.UtcNow
             };
 
-            return context.Response.WriteAsJsonAsync(response);
+            await context.Response.WriteAsJsonAsync(response);
         }
     }
 }

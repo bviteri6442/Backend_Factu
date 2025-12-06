@@ -4,10 +4,17 @@ using Microsoft.AspNetCore.Mvc;
 using PuntoVenta.Application.DTOs;
 using PuntoVenta.Application.Features.Ventas.Commands;
 using PuntoVenta.Application.Features.Ventas.Queries;
+using PuntoVenta.Application.Interfaces;
+using PuntoVenta.Domain.Entities;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using System.Linq;
+using QuestPDF.Fluent;
+using QuestPDF.Helpers;
+using QuestPDF.Infrastructure;
 
 namespace PuntoVenta.Api.Controllers
 {
@@ -20,10 +27,12 @@ namespace PuntoVenta.Api.Controllers
     public class VentasController : ControllerBase
     {
         private readonly IMediator _mediator;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public VentasController(IMediator mediator)
+        public VentasController(IMediator mediator, IUnitOfWork unitOfWork)
         {
             _mediator = mediator;
+            _unitOfWork = unitOfWork;
         }
 
         /// <summary>
@@ -31,30 +40,84 @@ namespace PuntoVenta.Api.Controllers
         /// </summary>
         [HttpGet]
         public async Task<ActionResult<List<VentaResponseDto>>> GetVentas(
-            [FromQuery] DateTime? fechaInicio,
-            [FromQuery] DateTime? fechaFin,
-            [FromQuery] string usuarioId,
-            [FromQuery] int? clienteId,
-            [FromQuery] string estado)
+            [FromQuery] DateTime? fechaInicio = null,
+            [FromQuery] DateTime? fechaFin = null,
+            [FromQuery] int? usuarioId = null,
+            [FromQuery] int? clienteId = null,
+            [FromQuery] string? estado = null)
         {
             try
             {
-                var query = new GetVentasQuery
-                {
-                    FechaInicio = fechaInicio,
-                    FechaFin = fechaFin,
-                    UsuarioId = usuarioId,
-                    ClienteId = clienteId,
-                    Estado = estado
-                };
+                // Obtener todas las facturas directamente desde el repositorio
+                var facturas = await _unitOfWork.Facturas.GetAllAsync();
+                
+                // Aplicar filtros
+                var query = facturas.AsEnumerable();
 
-                var result = await _mediator.Send(query);
+                if (fechaInicio.HasValue)
+                {
+                    query = query.Where(v => v.FechaVenta >= fechaInicio.Value);
+                }
+
+                if (fechaFin.HasValue)
+                {
+                    query = query.Where(v => v.FechaVenta <= fechaFin.Value);
+                }
+
+                if (usuarioId.HasValue)
+                {
+                    query = query.Where(v => v.UsuarioId == usuarioId.Value);
+                }
+
+                if (clienteId.HasValue)
+                {
+                    query = query.Where(v => v.ClienteId == clienteId.Value);
+                }
+
+                if (!string.IsNullOrEmpty(estado))
+                {
+                    query = query.Where(v => v.Estado == estado);
+                }
+
+                // Mapear a DTO - Usar hash code del ObjectId como int temporal para compatibilidad
+                var result = query.Select(f => new VentaResponseDto
+                {
+                    VentaId = f.Id,
+                    NumeroFactura = f.NumeroFactura,
+                    FechaVenta = f.FechaVenta,
+                    UsuarioId = f.UsuarioId,
+                    UsuarioNombre = f.UsuarioNombre,
+                    ClienteId = f.ClienteId,
+                    ClienteNombre = f.ClienteNombre,
+                    Subtotal = f.Subtotal,
+                    PorcentajeIVA = f.PorcentajeIVA,
+                    TotalImpuesto = f.TotalImpuesto,
+                    TotalVenta = f.TotalVenta,
+                    Estado = f.Estado,
+                    Observaciones = f.Observaciones
+                }).ToList();
+
                 return Ok(result);
             }
             catch (Exception ex)
             {
                 return BadRequest(new { message = ex.Message });
             }
+        }
+
+        /// <summary>
+        /// Endpoint temporal de diagnóstico para inspeccionar directamente las facturas almacenadas
+        /// </summary>
+        [HttpGet("debug/raw")]
+        [AllowAnonymous]
+        public async Task<ActionResult> GetFacturasRaw()
+        {
+            var facturas = await _unitOfWork.Facturas.GetAllAsync();
+            return Ok(new
+            {
+                Count = facturas?.Count() ?? 0,
+                Datos = facturas
+            });
         }
 
         /// <summary>
@@ -65,9 +128,13 @@ namespace PuntoVenta.Api.Controllers
         {
             try
             {
-                var query = new GetVentaByIdQuery { VentaId = id };
-                var result = await _mediator.Send(query);
-                return Ok(result);
+                var factura = await _unitOfWork.Facturas.GetFacturaConDetallesAsync(id);
+                if (factura == null)
+                {
+                    return NotFound(new { message = $"Factura con ID {id} no encontrada" });
+                }
+
+                return Ok(MapFacturaToDetailDto(factura));
             }
             catch (Exception ex)
             {
@@ -84,8 +151,8 @@ namespace PuntoVenta.Api.Controllers
             try
             {
                 // Obtener ID del usuario desde el token JWT
-                var usuarioId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-                if (string.IsNullOrEmpty(usuarioId))
+                var usuarioIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                if (!int.TryParse(usuarioIdClaim, out var usuarioId))
                 {
                     return Unauthorized(new { message = "Usuario no autenticado" });
                 }
@@ -143,6 +210,287 @@ namespace PuntoVenta.Api.Controllers
             {
                 return BadRequest(new { message = ex.Message });
             }
+        }
+
+        /// <summary>
+        /// Genera PDF de una factura
+        /// </summary>
+        [HttpGet("{id}/pdf")]
+        public async Task<IActionResult> GetVentaPDF(int id)
+        {
+            try
+            {
+                var factura = await _unitOfWork.Facturas.GetFacturaConDetallesAsync(id);
+                if (factura == null)
+                {
+                    return NotFound(new { message = $"Factura con ID {id} no encontrada" });
+                }
+
+                // Generar PDF simple con información de la factura
+                var pdfBytes = GenerarPDFFactura(factura);
+
+                return File(pdfBytes, "application/pdf", $"Factura_{factura.NumeroFactura}.pdf");
+            }
+            catch (OperationCanceledException)
+            {
+                // Cliente canceló la descarga - no es un error
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Error al generar PDF", details = ex.Message });
+            }
+        }
+
+        /// <summary>
+        /// Obtiene una venta por número de factura
+        /// </summary>
+        [HttpGet("numero/{numeroFactura}")]
+        public async Task<ActionResult<VentaDetailResponseDto>> GetVentaPorNumero(string numeroFactura)
+        {
+            try
+            {
+                var factura = await _unitOfWork.Facturas.GetByNumeroFacturaAsync(numeroFactura);
+                if (factura == null)
+                {
+                    return NotFound(new { message = $"Factura con número {numeroFactura} no encontrada" });
+                }
+
+                return Ok(MapFacturaToDetailDto(factura));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+
+        /// <summary>
+        /// Genera el PDF de una factura con base en su número
+        /// </summary>
+        [HttpGet("numero/{numeroFactura}/pdf")]
+        public async Task<IActionResult> GetVentaPDFPorNumero(string numeroFactura)
+        {
+            try
+            {
+                var factura = await _unitOfWork.Facturas.GetByNumeroFacturaAsync(numeroFactura);
+                if (factura == null)
+                {
+                    return NotFound(new { message = $"Factura con número {numeroFactura} no encontrada" });
+                }
+
+                var pdfBytes = GenerarPDFFactura(factura);
+                return File(pdfBytes, "application/pdf", $"Factura_{factura.NumeroFactura}.pdf");
+            }
+            catch (OperationCanceledException)
+            {
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Error al generar PDF", details = ex.Message });
+            }
+        }
+
+        private static VentaDetailResponseDto MapFacturaToDetailDto(Factura factura)
+        {
+            return new VentaDetailResponseDto
+            {
+                VentaId = factura.Id,
+                NumeroFactura = factura.NumeroFactura,
+                FechaVenta = factura.FechaVenta,
+                UsuarioId = factura.UsuarioId,
+                UsuarioNombre = factura.UsuarioNombre,
+                ClienteId = factura.ClienteId,
+                ClienteNombre = factura.ClienteNombre,
+                Subtotal = factura.Subtotal,
+                PorcentajeIVA = factura.PorcentajeIVA,
+                TotalImpuesto = factura.TotalImpuesto,
+                TotalVenta = factura.TotalVenta,
+                Estado = factura.Estado,
+                Observaciones = factura.Observaciones,
+                Detalles = factura.Detalles?.Select(d => new DetalleVentaResponseDto
+                {
+                    VentaId = factura.Id,
+                    ProductoId = d.ProductoId,
+                    ProductoNombre = d.ProductoNombre,
+                    Cantidad = d.Cantidad,
+                    PrecioUnitario = d.PrecioUnitario,
+                    Descuento = d.Descuento,
+                    Total = d.Total
+                }).ToList() ?? new List<DetalleVentaResponseDto>()
+            };
+        }
+
+        private byte[] GenerarPDFFactura(Factura factura)
+        {
+            try
+            {
+                // Configurar licencia de QuestPDF (Community license para uso no comercial)
+                QuestPDF.Settings.License = LicenseType.Community;
+                
+                var document = Document.Create(container =>
+                {
+                    container.Page(page =>
+                    {
+                        page.Size(PageSizes.A4);
+                        page.Margin(2, QuestPDF.Infrastructure.Unit.Centimetre);
+                        page.DefaultTextStyle(x => x.FontSize(11));
+
+                        // Header
+                        page.Header().Element(ComposeHeader);
+
+                        // Content
+                        page.Content().Element(container => ComposeContent(container, factura));
+
+                        // Footer
+                        page.Footer().AlignCenter().Text(text =>
+                        {
+                            text.Span("Gracias por su compra | ");
+                            text.Span($"Página ").FontSize(9);
+                            text.CurrentPageNumber().FontSize(9);
+                            text.Span(" de ").FontSize(9);
+                            text.TotalPages().FontSize(9);
+                        });
+                    });
+                });
+
+                using var stream = new MemoryStream();
+                document.GeneratePdf(stream);
+                return stream.ToArray();
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException($"Error al generar PDF: {ex.Message}", ex);
+            }
+        }
+
+        void ComposeHeader(IContainer container)
+        {
+            container.Row(row =>
+            {
+                row.RelativeItem().Column(column =>
+                {
+                    column.Item().Text("SISTEMA DE FACTURACIÓN")
+                        .FontSize(20)
+                        .Bold()
+                        .FontColor("#FF7713");
+
+                    column.Item().Text("Punto de Venta")
+                        .FontSize(12)
+                        .FontColor("#180A01");
+                });
+
+                row.RelativeItem().AlignRight().Column(column =>
+                {
+                    column.Item().Text("FACTURA")
+                        .FontSize(18)
+                        .Bold()
+                        .FontColor("#180A01");
+                });
+            });
+        }
+
+        void ComposeContent(IContainer container, Factura factura)
+        {
+            container.PaddingVertical(20).Column(column =>
+            {
+                column.Spacing(10);
+
+                // Información de la factura
+                column.Item().Row(row =>
+                {
+                    row.RelativeItem().Column(col =>
+                    {
+                        col.Item().Text($"Número de Factura: {factura.NumeroFactura}").Bold();
+                        col.Item().Text($"Fecha: {factura.FechaVenta:dd/MM/yyyy HH:mm}");
+                        col.Item().Text($"Estado: {factura.Estado}");
+                    });
+
+                    row.RelativeItem().Column(col =>
+                    {
+                        col.Item().Text($"Cliente: {factura.ClienteNombre ?? "Consumidor Final"}").Bold();
+                        col.Item().Text($"Atendido por: {factura.UsuarioNombre}");
+                    });
+                });
+
+                column.Item().LineHorizontal(1).LineColor("#FF7713");
+
+                // Tabla de productos
+                column.Item().PaddingTop(10).Table(table =>
+                {
+                    table.ColumnsDefinition(columns =>
+                    {
+                        columns.RelativeColumn(3); // Producto
+                        columns.RelativeColumn(1); // Cantidad
+                        columns.RelativeColumn(1); // P. Unit
+                        columns.RelativeColumn(1); // Total
+                    });
+
+                    // Header de la tabla
+                    table.Header(header =>
+                    {
+                        header.Cell().Background("#FF7713").Padding(5)
+                            .Text("Producto").FontColor("#FFFFFF").Bold();
+                        header.Cell().Background("#FF7713").Padding(5)
+                            .Text("Cant.").FontColor("#FFFFFF").Bold();
+                        header.Cell().Background("#FF7713").Padding(5)
+                            .Text("P. Unit.").FontColor("#FFFFFF").Bold();
+                        header.Cell().Background("#FF7713").Padding(5)
+                            .Text("Total").FontColor("#FFFFFF").Bold();
+                    });
+
+                    // Detalles de productos
+                    if (factura.Detalles != null && factura.Detalles.Any())
+                    {
+                        foreach (var detalle in factura.Detalles)
+                        {
+                            table.Cell().BorderBottom(0.5f).BorderColor("#E0E0E0").Padding(5)
+                                .Text(detalle.ProductoNombre);
+                            table.Cell().BorderBottom(0.5f).BorderColor("#E0E0E0").Padding(5)
+                                .AlignCenter().Text(detalle.Cantidad.ToString());
+                            table.Cell().BorderBottom(0.5f).BorderColor("#E0E0E0").Padding(5)
+                                .AlignRight().Text($"${detalle.PrecioUnitario:F2}");
+                            table.Cell().BorderBottom(0.5f).BorderColor("#E0E0E0").Padding(5)
+                                .AlignRight().Text($"${detalle.Total:F2}").Bold();
+                        }
+                    }
+                });
+
+                // Totales
+                column.Item().PaddingTop(10).AlignRight().Column(col =>
+                {
+                    col.Item().Row(row =>
+                    {
+                        row.AutoItem().Width(150).Text("Subtotal:");
+                        row.AutoItem().Width(100).AlignRight().Text($"${factura.Subtotal:F2}");
+                    });
+
+                    col.Item().Row(row =>
+                    {
+                        row.AutoItem().Width(150).Text($"IVA ({factura.PorcentajeIVA}%):");
+                        row.AutoItem().Width(100).AlignRight().Text($"${factura.TotalImpuesto:F2}");
+                    });
+
+                    col.Item().LineHorizontal(1).LineColor("#FF7713");
+
+                    col.Item().Row(row =>
+                    {
+                        row.AutoItem().Width(150).Text("TOTAL:").Bold().FontSize(14);
+                        row.AutoItem().Width(100).AlignRight().Text($"${factura.TotalVenta:F2}")
+                            .Bold().FontSize(14).FontColor("#FF7713");
+                    });
+                });
+
+                // Observaciones
+                if (!string.IsNullOrEmpty(factura.Observaciones))
+                {
+                    column.Item().PaddingTop(15).Column(col =>
+                    {
+                        col.Item().Text("Observaciones:").Bold();
+                        col.Item().Text(factura.Observaciones).FontSize(10);
+                    });
+                }
+            });
         }
     }
 }

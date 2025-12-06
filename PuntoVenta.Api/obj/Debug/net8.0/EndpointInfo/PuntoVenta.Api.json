@@ -68,6 +68,68 @@
         }
       }
     },
+    "/api/Auth/setup": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SetupInicialDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SetupInicialDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/SetupInicialDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/Auth/crear-rol": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CrearRolDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CrearRolDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/CrearRolDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
     "/api/Clientes": {
       "get": {
         "tags": [
@@ -163,7 +225,8 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "string"
+              "type": "integer",
+              "format": "int32"
             }
           }
         ],
@@ -200,7 +263,8 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "string"
+              "type": "integer",
+              "format": "int32"
             }
           }
         ],
@@ -306,7 +370,8 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "string"
+              "type": "integer",
+              "format": "int32"
             }
           }
         ],
@@ -330,6 +395,126 @@
                 }
               }
             }
+          }
+        }
+      }
+    },
+    "/api/EliminacionesUsuarios": {
+      "get": {
+        "tags": [
+          "EliminacionesUsuarios"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/EliminacionesUsuarios/{id}": {
+      "get": {
+        "tags": [
+          "EliminacionesUsuarios"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/EliminacionesUsuarios/buscar/{termino}": {
+      "get": {
+        "tags": [
+          "EliminacionesUsuarios"
+        ],
+        "parameters": [
+          {
+            "name": "termino",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/EliminacionesUsuarios/por-fecha": {
+      "get": {
+        "tags": [
+          "EliminacionesUsuarios"
+        ],
+        "parameters": [
+          {
+            "name": "desde",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "hasta",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/EliminacionesUsuarios/pdf": {
+      "get": {
+        "tags": [
+          "EliminacionesUsuarios"
+        ],
+        "parameters": [
+          {
+            "name": "termino",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/EliminacionesUsuarios/estadisticas": {
+      "get": {
+        "tags": [
+          "EliminacionesUsuarios"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
           }
         }
       }
@@ -409,7 +594,8 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "string"
+              "type": "integer",
+              "format": "int32"
             }
           }
         ],
@@ -431,7 +617,8 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "string"
+              "type": "integer",
+              "format": "int32"
             }
           }
         ],
@@ -683,7 +870,8 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "string"
+              "type": "integer",
+              "format": "int32"
             }
           }
         ],
@@ -703,7 +891,8 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "string"
+              "type": "integer",
+              "format": "int32"
             }
           }
         ],
@@ -742,7 +931,8 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "string"
+              "type": "integer",
+              "format": "int32"
             }
           }
         ],
@@ -763,6 +953,35 @@
             "description": "Success"
           }
         }
+      },
+      "post": {
+        "tags": [
+          "Usuarios"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateUsuarioRequestDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateUsuarioRequestDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateUsuarioRequestDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
       }
     },
     "/api/Usuarios/{id}": {
@@ -776,7 +995,8 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "string"
+              "type": "integer",
+              "format": "int32"
             }
           }
         ],
@@ -796,7 +1016,8 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "string"
+              "type": "integer",
+              "format": "int32"
             }
           }
         ],
@@ -834,6 +1055,14 @@
             "name": "id",
             "in": "path",
             "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "motivo",
+            "in": "query",
             "schema": {
               "type": "string"
             }
@@ -857,7 +1086,8 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "string"
+              "type": "integer",
+              "format": "int32"
             }
           }
         ],
@@ -916,7 +1146,8 @@
             "name": "usuarioId",
             "in": "query",
             "schema": {
-              "type": "string"
+              "type": "integer",
+              "format": "int32"
             }
           },
           {
@@ -1013,6 +1244,18 @@
                 }
               }
             }
+          }
+        }
+      }
+    },
+    "/api/Ventas/debug/raw": {
+      "get": {
+        "tags": [
+          "Ventas"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
           }
         }
       }
@@ -1151,6 +1394,90 @@
           }
         }
       }
+    },
+    "/api/Ventas/{id}/pdf": {
+      "get": {
+        "tags": [
+          "Ventas"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/Ventas/numero/{numeroFactura}": {
+      "get": {
+        "tags": [
+          "Ventas"
+        ],
+        "parameters": [
+          {
+            "name": "numeroFactura",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/VentaDetailResponseDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VentaDetailResponseDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VentaDetailResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Ventas/numero/{numeroFactura}/pdf": {
+      "get": {
+        "tags": [
+          "Ventas"
+        ],
+        "parameters": [
+          {
+            "name": "numeroFactura",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
     }
   },
   "components": {
@@ -1159,8 +1486,8 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
-            "nullable": true
+            "type": "integer",
+            "format": "int32"
           },
           "nombre": {
             "type": "string",
@@ -1188,6 +1515,30 @@
           "fechaCreacion": {
             "type": "string",
             "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
+      "CrearRolDto": {
+        "required": [
+          "nombre"
+        ],
+        "type": "object",
+        "properties": {
+          "nombre": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "descripcion": {
+            "type": "string",
+            "nullable": true
+          },
+          "permisos": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -1270,11 +1621,15 @@
             "type": "string",
             "nullable": true
           },
-          "codigoBarra": {
+          "codigo": {
             "type": "string",
             "nullable": true
           },
-          "precioVenta": {
+          "precio": {
+            "type": "number",
+            "format": "double"
+          },
+          "precioCompra": {
             "type": "number",
             "format": "double"
           },
@@ -1307,25 +1662,25 @@
       },
       "CreateUsuarioDto": {
         "required": [
-          "cedula",
           "contrasena",
-          "correo",
-          "nombreCompleto",
+          "email",
+          "nombre",
+          "nombreUsuario",
           "rolId"
         ],
         "type": "object",
         "properties": {
-          "cedula": {
-            "minLength": 1,
-            "pattern": "^\\d{6,10}$",
+          "nombreUsuario": {
+            "maxLength": 50,
+            "minLength": 3,
             "type": "string"
           },
-          "correo": {
+          "email": {
             "minLength": 1,
             "type": "string",
             "format": "email"
           },
-          "nombreCompleto": {
+          "nombre": {
             "maxLength": 150,
             "minLength": 3,
             "type": "string"
@@ -1337,8 +1692,50 @@
             "type": "string"
           },
           "rolId": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "CreateUsuarioRequestDto": {
+        "required": [
+          "contrasena",
+          "rolId"
+        ],
+        "type": "object",
+        "properties": {
+          "nombreUsuario": {
+            "type": "string",
+            "nullable": true
+          },
+          "email": {
+            "type": "string",
+            "nullable": true
+          },
+          "nombre": {
+            "type": "string",
+            "nullable": true
+          },
+          "cedula": {
+            "type": "string",
+            "nullable": true
+          },
+          "nombreCompleto": {
+            "type": "string",
+            "nullable": true
+          },
+          "correo": {
+            "type": "string",
+            "nullable": true
+          },
+          "contrasena": {
             "minLength": 1,
             "type": "string"
+          },
+          "rolId": {
+            "type": "integer",
+            "format": "int32"
           }
         },
         "additionalProperties": false
@@ -1350,8 +1747,6 @@
         "type": "object",
         "properties": {
           "clienteId": {
-            "maximum": 2147483647,
-            "minimum": 0,
             "type": "integer",
             "format": "int32",
             "nullable": true
@@ -1409,11 +1804,11 @@
       "LoginDto": {
         "required": [
           "contrasena",
-          "correo"
+          "email"
         ],
         "type": "object",
         "properties": {
-          "correo": {
+          "email": {
             "minLength": 1,
             "type": "string",
             "format": "email"
@@ -1426,12 +1821,39 @@
         },
         "additionalProperties": false
       },
+      "SetupInicialDto": {
+        "required": [
+          "contrasena",
+          "email"
+        ],
+        "type": "object",
+        "properties": {
+          "email": {
+            "minLength": 1,
+            "type": "string",
+            "format": "email"
+          },
+          "contrasena": {
+            "minLength": 6,
+            "type": "string"
+          },
+          "nombreUsuario": {
+            "type": "string",
+            "nullable": true
+          },
+          "nombre": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "UpdateClienteDto": {
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
-            "nullable": true
+            "type": "integer",
+            "format": "int32"
           },
           "nombre": {
             "maxLength": 200,
@@ -1488,8 +1910,8 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
-            "nullable": true
+            "type": "integer",
+            "format": "int32"
           },
           "nombre": {
             "maxLength": 100,
@@ -1514,22 +1936,23 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
-            "nullable": true
+            "type": "integer",
+            "format": "int32"
           },
-          "nombreCompleto": {
+          "nombre": {
             "maxLength": 150,
             "minLength": 3,
             "type": "string",
             "nullable": true
           },
-          "correo": {
+          "email": {
             "type": "string",
             "format": "email",
             "nullable": true
           },
           "rolId": {
-            "type": "string",
+            "type": "integer",
+            "format": "int32",
             "nullable": true
           },
           "activo": {
@@ -1573,8 +1996,8 @@
             "format": "date-time"
           },
           "usuarioId": {
-            "type": "string",
-            "nullable": true
+            "type": "integer",
+            "format": "int32"
           },
           "usuarioNombre": {
             "type": "string",
@@ -1639,8 +2062,8 @@
             "format": "date-time"
           },
           "usuarioId": {
-            "type": "string",
-            "nullable": true
+            "type": "integer",
+            "format": "int32"
           },
           "usuarioNombre": {
             "type": "string",
@@ -1682,6 +2105,19 @@
         },
         "additionalProperties": false
       }
+    },
+    "securitySchemes": {
+      "Bearer": {
+        "type": "http",
+        "description": "Ingresa el token JWT en el formato: Bearer {tu token}",
+        "scheme": "Bearer",
+        "bearerFormat": "JWT"
+      }
     }
-  }
+  },
+  "security": [
+    {
+      "Bearer": [ ]
+    }
+  ]
 }
