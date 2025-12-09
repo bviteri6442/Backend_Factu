@@ -106,6 +106,33 @@ namespace PuntoVenta.Api.Controllers
         }
 
         /// <summary>
+        /// Obtiene el total de ventas del mes actual
+        /// </summary>
+        [HttpGet("mes-actual")]
+        public async Task<ActionResult<int>> GetVentasMesActual()
+        {
+            try
+            {
+                var facturas = await _unitOfWork.Facturas.GetAllAsync();
+                var mesActual = DateTime.UtcNow.Month;
+                var anioActual = DateTime.UtcNow.Year;
+                
+                var ventasMes = facturas.Count(f => 
+                    f.FechaVenta.Month == mesActual && 
+                    f.FechaVenta.Year == anioActual &&
+                    f.Estado != "Cancelada" &&
+                    f.Estado != "Anulada"
+                );
+                
+                return Ok(ventasMes);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+
+        /// <summary>
         /// Endpoint temporal de diagnóstico para inspeccionar directamente las facturas almacenadas
         /// </summary>
         [HttpGet("debug/raw")]

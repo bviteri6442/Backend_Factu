@@ -1136,6 +1136,26 @@
   },
   {
     "ContainingType": "PuntoVenta.Api.Controllers.VentasController",
+    "Method": "GetVentasMesActual",
+    "RelativePath": "api/Ventas/mes-actual",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Int32",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "PuntoVenta.Api.Controllers.VentasController",
     "Method": "GetVentaPorNumero",
     "RelativePath": "api/Ventas/numero/{numeroFactura}",
     "HttpMethod": "GET",
