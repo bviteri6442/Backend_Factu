@@ -299,37 +299,20 @@ namespace PuntoVenta.Api.Controllers
         {
             try
             {
-                Console.WriteLine($"[PDF] === INICIO SOLICITUD PDF ===");
-                Console.WriteLine($"[PDF] Numero de factura solicitado: {numeroFactura}");
+                Console.WriteLine($"[PDF] Solicitando PDF para factura: {numeroFactura}");
                 
                 var factura = await _unitOfWork.Facturas.GetByNumeroFacturaAsync(numeroFactura);
                 if (factura == null)
                 {
-                    Console.WriteLine($"[PDF] ERROR: Factura no encontrada: {numeroFactura}");
+                    Console.WriteLine($"[PDF] Factura no encontrada: {numeroFactura}");
                     return NotFound(new { message = $"Factura con número {numeroFactura} no encontrada" });
                 }
 
-                Console.WriteLine($"[PDF] Factura encontrada. ID: {factura.Id}, Detalles: {factura.Detalles?.Count ?? 0}");
-                Console.WriteLine($"[PDF] Llamando a GenerarPDFFactura...");
+                Console.WriteLine($"[PDF] Factura encontrada, generando PDF...");
+                var pdfBytes = GenerarPDFFactura(factura);
                 
-                byte[] pdfBytes;
-                try
-                {
-                    pdfBytes = GenerarPDFFactura(factura);
-                    Console.WriteLine($"[PDF] PDF generado correctamente. Tamaño: {pdfBytes.Length} bytes");
-                }
-                catch (Exception pdfEx)
-                {
-                    Console.WriteLine($"[PDF ERROR en GenerarPDFFactura] {pdfEx.GetType().Name}: {pdfEx.Message}");
-                    Console.WriteLine($"[PDF ERROR StackTrace] {pdfEx.StackTrace}");
-                    throw;
-                }
-                
-                Console.WriteLine($"[PDF] Creando FileResult...");
-                var fileResult = File(pdfBytes, "application/pdf", $"Factura_{factura.NumeroFactura}.pdf");
-                
-                Console.WriteLine($"[PDF] === FIN SOLICITUD PDF (EXITOSO) ===");
-                return fileResult;
+                Console.WriteLine($"[PDF] PDF generado exitosamente. Tamaño: {pdfBytes.Length} bytes");
+                return File(pdfBytes, "application/pdf", $"Factura_{factura.NumeroFactura}.pdf");
             }
             catch (OperationCanceledException ex)
             {
@@ -338,18 +321,9 @@ namespace PuntoVenta.Api.Controllers
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"[PDF ERROR FATAL] Tipo: {ex.GetType().Name}");
-                Console.WriteLine($"[PDF ERROR FATAL] Mensaje: {ex.Message}");
-                Console.WriteLine($"[PDF ERROR FATAL] StackTrace: {ex.StackTrace}");
-                
-                if (ex.InnerException != null)
-                {
-                    Console.WriteLine($"[PDF ERROR Inner] Tipo: {ex.InnerException.GetType().Name}");
-                    Console.WriteLine($"[PDF ERROR Inner] Mensaje: {ex.InnerException.Message}");
-                    Console.WriteLine($"[PDF ERROR Inner] StackTrace: {ex.InnerException.StackTrace}");
-                }
-                
-                Console.WriteLine($"[PDF] === FIN SOLICITUD PDF (CON ERROR) ===");
+                Console.WriteLine($"[PDF ERROR] Tipo: {ex.GetType().Name}");
+                Console.WriteLine($"[PDF ERROR] Mensaje: {ex.Message}");
+                Console.WriteLine($"[PDF ERROR] StackTrace: {ex.StackTrace}");
                 
                 return StatusCode(500, new { 
                     message = "Error al generar PDF", 
@@ -391,6 +365,7 @@ namespace PuntoVenta.Api.Controllers
 
         private byte[] GenerarPDFFactura(Factura factura)
         {
+            MemoryStream? stream = null;
             try
             {
                 Console.WriteLine("[PDF] Iniciando generación de PDF...");
@@ -433,14 +408,9 @@ namespace PuntoVenta.Api.Controllers
                 });
 
                 Console.WriteLine("[PDF] Generando bytes del PDF...");
-                
-                // Generar PDF en memoria y obtener los bytes
-                byte[] pdfBytes;
-                using (var stream = new MemoryStream())
-                {
-                    document.GeneratePdf(stream);
-                    pdfBytes = stream.ToArray();
-                }
+                stream = new MemoryStream();
+                document.GeneratePdf(stream);
+                var pdfBytes = stream.ToArray();
                 
                 Console.WriteLine($"[PDF] PDF generado correctamente. Tamaño: {pdfBytes.Length} bytes");
                 
@@ -459,6 +429,12 @@ namespace PuntoVenta.Api.Controllers
                 }
                 
                 throw new InvalidOperationException($"Error al generar PDF: {ex.Message}", ex);
+            }
+            finally
+            {
+                // Asegurar que el stream se disponga correctamente
+                stream?.Dispose();
+                Console.WriteLine("[PDF] Stream de memoria liberado");
             }
         }
 
@@ -574,6 +550,52 @@ namespace PuntoVenta.Api.Controllers
                     col.Item().Row(row =>
                     {
                         row.AutoItem().Width(150).Text($"IVA ({factura.PorcentajeIVA:F0}%):");
+                        row.AutoItem().Width(100).AlignRight().Text($"${factura.TotalImpuesto:F2}");
+                    });
+
+                    col.Item().LineHorizontal(1).LineColor("#FF7713");
+
+                    col.Item().Row(row =>
+                    {
+                        row.AutoItem().Width(150).Text("TOTAL:").Bold().FontSize(14);
+                        row.AutoItem().Width(100).AlignRight().Text($"${factura.TotalVenta:F2}")
+                            .Bold().FontSize(14).FontColor("#FF7713");
+                    });
+                });
+
+                // Observaciones
+                if (!string.IsNullOrEmpty(factura.Observaciones))
+                {
+                    column.Item().PaddingTop(15).Column(col =>
+                    {
+                        col.Item().Text("Observaciones:").Bold();
+                        col.Item().Text(factura.Observaciones).FontSize(10);
+                    });
+                }
+            });
+        }
+                            table.Cell().BorderBottom(0.5f).BorderColor("#E0E0E0").Padding(5)
+                                .AlignCenter().Text(detalle.Cantidad.ToString());
+                            table.Cell().BorderBottom(0.5f).BorderColor("#E0E0E0").Padding(5)
+                                .AlignRight().Text($"${detalle.PrecioUnitario:F2}");
+                            table.Cell().BorderBottom(0.5f).BorderColor("#E0E0E0").Padding(5)
+                                .AlignRight().Text($"${detalle.Total:F2}").Bold();
+                        }
+                    }
+                });
+
+                // Totales
+                column.Item().PaddingTop(10).AlignRight().Column(col =>
+                {
+                    col.Item().Row(row =>
+                    {
+                        row.AutoItem().Width(150).Text("Subtotal:");
+                        row.AutoItem().Width(100).AlignRight().Text($"${factura.Subtotal:F2}");
+                    });
+
+                    col.Item().Row(row =>
+                    {
+                        row.AutoItem().Width(150).Text($"IVA ({factura.PorcentajeIVA}%):");
                         row.AutoItem().Width(100).AlignRight().Text($"${factura.TotalImpuesto:F2}");
                     });
 

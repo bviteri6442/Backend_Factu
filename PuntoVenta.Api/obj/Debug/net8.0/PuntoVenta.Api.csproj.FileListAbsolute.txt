@@ -489,7 +489,7 @@ C:\Users\LEGIO\Documents\QUINTO\TECNOLO. Y DESA. WEB\PFINAL\Backend_Factu\PuntoV
 C:\Users\LEGIO\Documents\QUINTO\TECNOLO. Y DESA. WEB\PFINAL\Backend_Factu\PuntoVenta.Api\bin\Debug\net8.0\LatoFont\OFL.txt
 C:\Users\LEGIO\Documents\QUINTO\TECNOLO. Y DESA. WEB\PFINAL\Backend_Factu\PuntoVenta.Api\bin\Debug\net8.0\PuntoVenta.Api.deps.json
 C:\Users\LEGIO\Documents\QUINTO\TECNOLO. Y DESA. WEB\PFINAL\Backend_Factu\PuntoVenta.Api\bin\Debug\net8.0\PuntoVenta.Api.runtimeconfig.json
-C:\Users\LEGIO\Documents\QUINTO\TECNOLO. Y DESA. WEB\PFINAL\Backend_Factu\PuntoVenta.Api\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt
 C:\Users\LEGIO\Documents\QUINTO\TECNOLO. Y DESA. WEB\PFINAL\Backend_Factu\PuntoVenta.Api\obj\Debug\net8.0\PuntoVen.3D125C9D.Up2Date
 C:\Users\LEGIO\Documents\QUINTO\TECNOLO. Y DESA. WEB\PFINAL\Backend_Factu\PuntoVenta.Api\obj\Debug\net8.0\PuntoVenta.Api.genruntimeconfig.cache
 C:\Users\LEGIO\Documents\QUINTO\TECNOLO. Y DESA. WEB\PFINAL\Backend_Factu\PuntoVenta.Api\obj\Debug\net8.0\ref\PuntoVenta.Api.dll
+C:\Users\LEGIO\Documents\QUINTO\TECNOLO. Y DESA. WEB\PFINAL\Backend_Factu\PuntoVenta.Api\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt

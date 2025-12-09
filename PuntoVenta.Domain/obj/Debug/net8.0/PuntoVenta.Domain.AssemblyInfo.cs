@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("PuntoVenta.Domain")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e1851a227fec3cffe01aceb5faa5398eb30c98ae")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e1ff0613e7cc32f9bb93220c4e1bdad9e83e4a44")]
 [assembly: System.Reflection.AssemblyProductAttribute("PuntoVenta.Domain")]
 [assembly: System.Reflection.AssemblyTitleAttribute("PuntoVenta.Domain")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
