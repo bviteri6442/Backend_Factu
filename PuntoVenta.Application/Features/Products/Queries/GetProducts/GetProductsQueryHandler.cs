@@ -21,7 +21,9 @@ namespace PuntoVenta.Application.Features.Products.Queries.GetProducts
 		{
 			var productos = await _unitOfWork.Productos.GetAllAsync();
 
-			return productos.Select(p => new ProductoResponseDto
+			return productos
+				.Where(p => p.Activo)
+				.Select(p => new ProductoResponseDto
 			{
 				Id = p.Id,
 				Codigo = p.Codigo,

@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using PuntoVenta.Infrastructure.Persistencia;
 using PuntoVenta.Application.Interfaces;
 using PuntoVenta.Infrastructure.Repositories;
+using PuntoVenta.Infrastructure.Services;
 
 namespace PuntoVenta.Infrastructure
 {
@@ -25,6 +26,9 @@ namespace PuntoVenta.Infrastructure
             services.AddScoped<IFacturaRepository, FacturaRepository>();
             services.AddScoped<IErrorLogRepository, ErrorLogRepository>();
             services.AddScoped<IIntentosLoginRepository, IntentosLoginRepository>();
+            
+            // Register Services
+            services.AddScoped<ILoggingService, LoggingService>();
             
             // Register Unit of Work
             services.AddScoped<IUnitOfWork, UnitOfWork>();

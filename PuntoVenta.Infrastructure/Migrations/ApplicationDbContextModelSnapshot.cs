@@ -115,6 +115,69 @@ namespace PuntoVenta.Infrastructure.Migrations
                     b.ToTable("detalles_venta", (string)null);
                 });
 
+            modelBuilder.Entity("PuntoVenta.Domain.Entities.EliminacionProducto", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("AdministradorId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("CodigoProductoEliminado")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<string>("DescripcionProductoEliminado")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
+                    b.Property<DateTime>("FechaEliminacion")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("IpAddress")
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.Property<string>("MotivoEliminacion")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
+                    b.Property<string>("NombreAdministrador")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
+
+                    b.Property<string>("NombreProductoEliminado")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
+
+                    b.Property<decimal>("PrecioCostoProductoEliminado")
+                        .HasColumnType("numeric");
+
+                    b.Property<decimal>("PrecioVentaProductoEliminado")
+                        .HasColumnType("numeric");
+
+                    b.Property<int>("ProductoEliminadoId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("StockProductoEliminado")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("TipoEliminacion")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("eliminaciones_productos");
+                });
+
             modelBuilder.Entity("PuntoVenta.Domain.Entities.EliminacionUsuario", b =>
                 {
                     b.Property<int>("Id")

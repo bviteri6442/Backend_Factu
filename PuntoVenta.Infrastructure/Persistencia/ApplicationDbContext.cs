@@ -19,6 +19,7 @@ namespace PuntoVenta.Infrastructure.Persistencia
         public DbSet<ErrorLog> ErrorLogs { get; set; }
         public DbSet<IntentosLogin> IntentosLogin { get; set; }
         public DbSet<EliminacionUsuario> EliminacionesUsuarios { get; set; }
+        public DbSet<EliminacionProducto> EliminacionesProductos { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

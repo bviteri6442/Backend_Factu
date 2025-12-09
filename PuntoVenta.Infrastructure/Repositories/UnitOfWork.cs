@@ -22,6 +22,7 @@ namespace PuntoVenta.Infrastructure.Repositories
         private IErrorLogRepository? _errorLogRepository;
         private IIntentosLoginRepository? _intentosLoginRepository;
         private IEliminacionUsuarioRepository? _eliminacionUsuarioRepository;
+        private IEliminacionProductoRepository? _eliminacionProductoRepository;
 
         public UnitOfWork(ApplicationDbContext context)
         {
@@ -89,6 +90,14 @@ namespace PuntoVenta.Infrastructure.Repositories
             get
             {
                 return _eliminacionUsuarioRepository ??= new EliminacionUsuarioRepository(_context);
+            }
+        }
+
+        public IEliminacionProductoRepository EliminacionesProductos
+        {
+            get
+            {
+                return _eliminacionProductoRepository ??= new EliminacionProductoRepository(_context);
             }
         }
 

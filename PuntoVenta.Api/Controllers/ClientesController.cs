@@ -56,6 +56,57 @@ namespace PuntoVenta.Api.Controllers
         }
 
         /// <summary>
+        /// Busca clientes por término (nombre, documento, teléfono o email)
+        /// Optimizado para autocompletado con miles de registros
+        /// </summary>
+        [HttpGet("search")]
+        public async Task<ActionResult<List<ClienteResponseDto>>> SearchClientes(
+            [FromQuery] string term, 
+            [FromQuery] int limit = 20)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(term) || term.Length < 2)
+                {
+                    return Ok(new List<ClienteResponseDto>());
+                }
+
+                // Limitar el número de resultados para performance
+                if (limit > 50) limit = 50;
+
+                var clientes = await _unitOfWork.Clientes.GetAllAsync();
+                
+                var termLower = term.ToLower().Trim();
+                var result = clientes
+                    .Where(c => c.Activo && (
+                        c.Nombre.ToLower().Contains(termLower) ||
+                        c.Documento.ToLower().Contains(termLower) ||
+                        (c.Telefono != null && c.Telefono.ToLower().Contains(termLower)) ||
+                        (c.Email != null && c.Email.ToLower().Contains(termLower))
+                    ))
+                    .Take(limit)
+                    .Select(c => new ClienteResponseDto
+                    {
+                        Id = c.Id,
+                        Nombre = c.Nombre,
+                        Documento = c.Documento,
+                        Email = c.Email,
+                        Telefono = c.Telefono,
+                        Direccion = c.Direccion,
+                        Activo = c.Activo,
+                        FechaCreacion = c.FechaCreacion
+                    })
+                    .ToList();
+
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+
+        /// <summary>
         /// Obtiene un cliente específico por ID
         /// </summary>
         [HttpGet("{id}")]

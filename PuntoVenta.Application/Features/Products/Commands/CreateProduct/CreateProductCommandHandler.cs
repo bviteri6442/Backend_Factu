@@ -32,10 +32,11 @@ namespace PuntoVenta.Application.Features.Products.Commands.CreateProduct
                 {
                     Nombre = request.Nombre ?? string.Empty,
                     Codigo = request.Codigo ?? string.Empty,
+                    Descripcion = request.Descripcion ?? string.Empty,
                     Precio = request.Precio,
                     PrecioCompra = request.PrecioCompra,
                     Stock = request.StockInicial,
-                    StockMinimo = 10,
+                    StockMinimo = request.StockMinimo > 0 ? request.StockMinimo : 10,
                     Activo = true,
                     FechaCreacion = DateTime.UtcNow
                 };

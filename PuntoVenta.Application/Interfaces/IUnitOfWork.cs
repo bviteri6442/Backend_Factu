@@ -17,6 +17,7 @@ namespace PuntoVenta.Application.Interfaces
         IErrorLogRepository ErrorLogs { get; }
         IIntentosLoginRepository IntentosLogin { get; }
         IEliminacionUsuarioRepository EliminacionesUsuarios { get; }
+        IEliminacionProductoRepository EliminacionesProductos { get; }
 
         Task<int> SaveChangesAsync();
         Task BeginTransactionAsync();

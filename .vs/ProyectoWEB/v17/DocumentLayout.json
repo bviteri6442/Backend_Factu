@@ -131,8 +131,7 @@
               "RelativeToolTip": "PuntoVenta.Api\\Middleware\\ExceptionHandlingMiddleware.cs",
               "ViewState": "AgIAACoAAAAAAAAAAAAIwC0AAAARAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-03T16:28:05.638Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-12-03T16:28:05.638Z"
             },
             {
               "$type": "Document",
@@ -144,8 +143,7 @@
               "RelativeToolTip": "PuntoVenta.Api\\Controllers\\VentasController.cs",
               "ViewState": "AgIAADkAAAAAAAAAAAAIwEQAAAAtAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-03T16:28:01.984Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-12-03T16:28:01.984Z"
             },
             {
               "$type": "Document",
@@ -157,8 +155,7 @@
               "RelativeToolTip": "PuntoVenta.Api\\Controllers\\UsuariosController.cs",
               "ViewState": "AgIAAA4AAAAAAAAAAAAxwCcAAAAUAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-03T16:27:54.221Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-12-03T16:27:54.221Z"
             },
             {
               "$type": "Document",
@@ -170,8 +167,7 @@
               "RelativeToolTip": "PuntoVenta.Api\\Controllers\\ErrorLogsController.cs",
               "ViewState": "AgIAAEAAAAAAAAAAAAAUwEUAAAAqAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-03T16:18:16.222Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-12-03T16:18:16.222Z"
             },
             {
               "$type": "Document",
@@ -183,8 +179,7 @@
               "RelativeToolTip": "PuntoVenta.Api\\Controllers\\ClientesController.cs",
               "ViewState": "AgIAADIAAAAAAAAAAAAgwEEAAABGAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-03T16:17:45.97Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-12-03T16:17:45.97Z"
             },
             {
               "$type": "Document",
@@ -196,8 +191,7 @@
               "RelativeToolTip": "PuntoVenta.Infrastructure\\Repositories\\GenericRepository.cs",
               "ViewState": "AgIAABgAAAAAAAAAAAAYwAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-03T16:11:36.618Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-12-03T16:11:36.618Z"
             },
             {
               "$type": "Document",
@@ -209,8 +203,7 @@
               "RelativeToolTip": "PuntoVenta.Domain\\Entities\\ErrorLog.cs",
               "ViewState": "AgIAAAMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-03T16:10:14.812Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-12-03T16:10:14.812Z"
             },
             {
               "$type": "Document",
@@ -222,8 +215,7 @@
               "RelativeToolTip": "PuntoVenta.Application\\Features\\Products\\Commands\\CreateProduct\\CreateProductCommandHandler.cs",
               "ViewState": "AgIAAAoAAAAAAAAAAADwvxMAAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-21T18:01:28.159Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-21T18:01:28.159Z"
             },
             {
               "$type": "Document",
@@ -235,8 +227,7 @@
               "RelativeToolTip": "PuntoVenta.Api\\Program.cs",
               "ViewState": "AgIAADgAAAAAAAAAAAAAAEcAAABNAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-21T15:58:52.25Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-21T15:58:52.25Z"
             },
             {
               "$type": "Document",
@@ -284,8 +275,7 @@
               "RelativeToolTip": "PuntoVenta.Api\\Controllers\\RolesController.cs",
               "ViewState": "AgIAACsAAAAAAAAAAAAjwDUAAAANAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-21T14:23:46.054Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-21T14:23:46.054Z"
             },
             {
               "$type": "Document",
@@ -297,8 +287,7 @@
               "RelativeToolTip": "PuntoVenta.Application\\Features\\Ventas\\Commands\\DeleteVentaCommandHandler.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-21T14:21:46.552Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-21T14:21:46.552Z"
             },
             {
               "$type": "Document",
